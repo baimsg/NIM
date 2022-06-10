@@ -339,4 +339,10 @@
     <color name="material_brown_700">#5d4037</color>
     <color name="material_brown_800">#4e342e</color>
     <color name="material_brown_900">#3e2723</color>
+
+
+    <color name="turntable_background">#FF2C272F</color>
+    <color name="turntable_background_shadow">#50666666</color>
+    <color name="turntable_select_shadow">#BF000000</color>
+
 </resources>

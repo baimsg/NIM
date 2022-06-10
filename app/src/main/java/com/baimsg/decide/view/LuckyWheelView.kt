@@ -19,7 +19,7 @@ import com.baimsg.decide.R
  *
  **/
 class LuckyWheelView : View {
-    private var awardsList: ArrayList<AwardModel>? = ArrayList()
+    private var awardsList: List<AwardModel>? = ArrayList()
     private var itemTitleTextPaint: Paint? = null
     private var itemContentTextPaint: Paint? = null
     private var circleLinePaint: Paint? = null
@@ -51,7 +51,7 @@ class LuckyWheelView : View {
     private var circleStrokeWidth = 20
 
     //    private int[] countList = {0, 0, 0, 0, 0, 0};
-    fun setAwardsList(awardsList: ArrayList<AwardModel>?) {
+    fun setAwardsList(awardsList: List<AwardModel>?) {
         this.awardsList = awardsList
     }
 

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="names">
+        <item>action</item>
+        <item>adventure</item>
+        <item>combat</item>
+        <item>moba</item>
+        <item>other</item>
+        <item>role</item>
+        <item>sports</item>
+        <item>words</item>
+
+    </string-array>
+
+    <string-array name="icons">
+        <item>action</item>
+        <item>adventure</item>
+        <item>combat</item>
+        <item>moba</item>
+        <item>other</item>
+        <item>role</item>
+        <item>sports</item>
+        <item>words</item>
+
+    </string-array>
+
+
+    <integer-array name="colors">
+        <item>@color/material_red_200</item>
+        <item>@color/material_red_400</item>
+    </integer-array>
+
+</resources>
