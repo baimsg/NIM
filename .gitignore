@@ -1,15 +1,21 @@
-*.iml
+# Gradle
 .gradle
+
+# IntelliJ .idea folder
+.idea/
+gradle.xml
+*.iml
 /local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
+
 .DS_Store
 /build
 /captures
 .externalNativeBuild
 .cxx
 local.properties
+
+# VS Code config
+org.eclipse.buildship.core.prefs
+.classpath
+.project
+bin/
