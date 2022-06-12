@@ -17,7 +17,7 @@ android {
     }
 
     buildFeatures {
-        dataBinding = true
+        viewBinding = true
     }
 
     compileOptions {
@@ -57,6 +57,10 @@ dependencies {
     api(Dep.AndroidX.splashscreen)
     api(Dep.AndroidX.media)
     api(Dep.AndroidX.palette)
+
+    //navigation
+    api(Dep.AndroidX.Navigation.fragmentKtx)
+    api(Dep.AndroidX.Navigation.uiKtx)
 
     implementation(Dep.Hilt.library)
     //hilt

@@ -29,6 +29,10 @@ android {
         }
     }
 
+    buildFeatures {
+        viewBinding = true
+    }
+
     defaultConfig {
         applicationId = Dep.packageName
         minSdk = Dep.minSdk
