@@ -1,6 +1,5 @@
 package com.baimsg.decide.util
 
-import android.annotation.TargetApi
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
@@ -17,6 +16,10 @@ object DrawableHelper {
     private val sCanvas = Canvas()
 
 
+    /**
+     * 通过view创建bitmap
+     * @param view 要创建的view
+     */
     fun createBitmapFromView(view: View): Bitmap? {
         return createBitmapFromView(view, 1f)
     }
@@ -99,11 +102,11 @@ object DrawableHelper {
     fun createBitmapSafely(
         width: Int,
         height: Int,
-        config: Bitmap.Config?,
+        config: Bitmap.Config,
         retryCount: Int
     ): Bitmap? {
         return try {
-            Bitmap.createBitmap(width, height, config!!)
+            Bitmap.createBitmap(width, height, config)
         } catch (e: OutOfMemoryError) {
             e.printStackTrace()
             if (retryCount > 0) {
@@ -158,7 +161,7 @@ object DrawableHelper {
      * 设置Drawable的颜色
      * **这里不对Drawable进行mutate()，会影响到所有用到这个Drawable的地方，如果要避免，请先自行mutate()**
      *
-     * please use [DrawableCompat.setTint] replace this.
+     * please use [androidx.core.graphics.drawable.DrawableCompat.setTint] replace this.
      */
     @Deprecated("")
     fun setDrawableTintColor(drawable: Drawable?, @ColorInt tintColor: Int): ColorFilter {
@@ -172,8 +175,8 @@ object DrawableHelper {
     /**
      * 由一个drawable生成bitmap
      */
-    fun drawableToBitmap(drawable: Drawable?): Bitmap? {
-        if (drawable == null) return null else if (drawable is BitmapDrawable) {
+    fun drawableToBitmap(drawable: Drawable): Bitmap? {
+        if (drawable is BitmapDrawable) {
             return drawable.bitmap
         }
         val intrinsicWidth = drawable.intrinsicWidth
@@ -202,7 +205,6 @@ object DrawableHelper {
      * @param centerY    渐变中心点 Y 轴坐标
      * @return 返回所创建的渐变图片。
      */
-    @TargetApi(16)
     fun createCircleGradientDrawable(
         @ColorInt startColor: Int,
         @ColorInt endColor: Int, radius: Int,

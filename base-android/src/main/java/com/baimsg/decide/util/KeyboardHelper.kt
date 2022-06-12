@@ -22,7 +22,7 @@ object KeyboardHelper {
     const val KEYBOARD_VISIBLE_THRESHOLD_DP = 100
 
 
-    fun showKeyboard(editText: EditText?, delay: Boolean) {
+    fun showKeyboard(editText: EditText, delay: Boolean) {
         showKeyboard(editText, if (delay) SHOW_KEYBOARD_DELAY_TIME else 0)
     }
 
@@ -31,14 +31,13 @@ object KeyboardHelper {
      * 针对给定的editText显示软键盘（editText会先获得焦点）. 可以和[hideKeyboard]
      * 搭配使用，进行键盘的显示隐藏控制。
      */
-    fun showKeyboard(editText: EditText?, delay: Int) {
-        if (null == editText) return
+    fun showKeyboard(editText: EditText, delay: Int) {
         if (!editText.requestFocus()) {
             Log.w(TAG, "showSoftInput() can not get focus")
             return
         }
         if (delay > 0) {
-            editText.postDelayed(Runnable {
+            editText.postDelayed({
                 val imm = editText.context.applicationContext
                     .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
@@ -72,15 +71,9 @@ object KeyboardHelper {
      * @param listener KeyboardVisibilityEventListener
      */
     fun setVisibilityEventListener(
-        activity: Activity?,
-        listener: KeyboardVisibilityEventListener?
+        activity: Activity,
+        listener: KeyboardVisibilityEventListener
     ) {
-        if (activity == null) {
-            throw NullPointerException("Parameter:activity must not be null")
-        }
-        if (listener == null) {
-            throw NullPointerException("Parameter:listener must not be null")
-        }
         val activityRoot: View = activity.getActivityRoot()
         val layoutListener: OnGlobalLayoutListener = object : OnGlobalLayoutListener {
             private val r = Rect()

@@ -62,8 +62,8 @@ fun Window.translucent() {
  * 沉浸状态栏
  */
 fun Window.translucent(@ColorInt colorOn5x: Int) {
+    // 版本小于4.4，绝对不考虑沉浸式
     if (!supportTranslucent()) {
-        // 版本小于4.4，绝对不考虑沉浸式
         return
     }
 

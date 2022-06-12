@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
-import android.content.res.Resources
 import android.graphics.Point
 import android.net.ConnectivityManager
 import android.os.Build
@@ -23,16 +22,6 @@ import java.util.*
  *
  **/
 
-/**
- * 屏幕密度,系统源码注释不推荐使用
- */
-private val DENSITY = Resources.getSystem()
-    .displayMetrics.density
-
-/**
- * 是否有摄像头
- */
-private var sHasCamera: Boolean? = null
 
 /**
  * 单位转换: dp -> px
@@ -122,6 +111,32 @@ fun Context.getNavMenuHeight(): Int {
 }
 
 /**
+ * 通过判断设备是否有返回键、菜单键(不是虚拟键,是手机屏幕外的按键)来确定是否有navigation bar
+ */
+fun Context.isNavMenuExist(): Boolean {
+    val hasMenuKey = ViewConfiguration.get(this).hasPermanentMenuKey()
+    val hasBackKey = KeyCharacterMap.deviceHasKey(KeyEvent.KEYCODE_BACK)
+    return !hasMenuKey && !hasBackKey
+}
+
+/**
+ * navigation_bar_height 的值
+ * 小米4没有nav bar, 而 navigation_bar_height 有值
+ */
+private fun Context.getResourceNavHeight(): Int {
+    val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
+    return if (resourceId > 0) {
+        resources.getDimensionPixelSize(resourceId)
+    } else -1
+}
+
+
+/**
+ * 是否有摄像头
+ */
+private var sHasCamera: Boolean? = null
+
+/**
  * 是否有相机
  */
 fun Context.hasCamera(): Boolean {
@@ -179,7 +194,7 @@ fun Context.isPackageExist(pckName: String): Boolean {
 }
 
 /**
- * 判断 SD Card 是否 ready
+ * 判断 SDCard 是否加载结束
  *
  */
 fun isSdcardReady(): Boolean {
@@ -240,13 +255,6 @@ fun Activity.cancelFullScreen() {
 }
 
 /**
- * 是否高版本 21 android 5.0
- */
-fun isElevationSupported(): Boolean {
-    return Build.VERSION.SDK_INT >= 21
-}
-
-/**
  * 是否有导航栏
  */
 fun Context.hasNavigationBar(): Boolean {
@@ -264,6 +272,7 @@ fun Context.hasNavigationBar(): Boolean {
  *
  * @return true 存在, false 不存在
  */
+@SuppressLint("PrivateApi")
 private fun deviceHasNavigationBar(): Boolean {
     var haveNav = false
     try {
@@ -296,26 +305,6 @@ private fun deviceHasNavigationBar(): Boolean {
  */
 fun Context.getDisplayMetrics(): DisplayMetrics {
     return resources.displayMetrics
-}
-
-/**
- * 把以 dp 为单位的值，转化为以 px 为单位的值
- *
- * @param dpValue 以 dp 为单位的值
- * @return px value
- */
-fun dpToPx(dpValue: Int): Int {
-    return (dpValue * DENSITY + 0.5f).toInt()
-}
-
-/**
- * 把以 px 为单位的值，转化为以 dp 为单位的值
- *
- * @param pxValue 以 px 为单位的值
- * @return dp值
- */
-fun pxToDp(pxValue: Float): Int {
-    return (pxValue / DENSITY + 0.5f).toInt()
 }
 
 
@@ -400,32 +389,6 @@ private fun Context.doGetRealScreenSize(): IntArray {
     return size
 }
 
-/**
- * 通过判断设备是否有返回键、菜单键(不是虚拟键,是手机屏幕外的按键)来确定是否有navigation bar
- */
-fun Context.isNavMenuExist(): Boolean {
-    val hasMenuKey = ViewConfiguration.get(this).hasPermanentMenuKey()
-    val hasBackKey = KeyCharacterMap.deviceHasKey(KeyEvent.KEYCODE_BACK)
-    return !hasMenuKey && !hasBackKey
-}
-
-/**
- * navigation_bar_height 的值
- * 小米4没有nav bar, 而 navigation_bar_height 有值
- */
-private fun Context.getResourceNavHeight(): Int {
-    val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
-    return if (resourceId > 0) {
-        resources.getDimensionPixelSize(resourceId)
-    } else -1
-}
-
-
-// ====================== Setting ===========================
-private const val VIVO_NAVIGATION_GESTURE = "navigation_gesture_on"
-private const val HUAWAI_DISPLAY_NOTCH_STATUS = "display_notch_status"
-private const val XIAOMI_DISPLAY_NOTCH_STATUS = "force_black"
-private const val XIAOMI_FULLSCREEN_GESTURE = "force_fsg_nav_bar"
 
 /**
  * 获取vivo手机设置中的"navigation_gesture_on"值，判断当前系统是使用导航键还是手势导航操作
@@ -433,10 +396,10 @@ private const val XIAOMI_FULLSCREEN_GESTURE = "force_fsg_nav_bar"
  * @return false 表示使用的是虚拟导航键(NavigationBar)， true 表示使用的是手势， 默认是false
  */
 fun Context.vivoNavigationGestureEnabled(): Boolean {
-    return Settings.Secure.getInt(contentResolver, VIVO_NAVIGATION_GESTURE, 0) != 0
+    return Settings.Secure.getInt(contentResolver, "navigation_gesture_on", 0) != 0
 }
 
 
 fun Context.xiaomiNavigationGestureEnabled(): Boolean {
-    return Settings.Global.getInt(contentResolver, XIAOMI_FULLSCREEN_GESTURE, 0) != 0
+    return Settings.Global.getInt(contentResolver, "force_fsg_nav_bar", 0) != 0
 }

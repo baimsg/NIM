@@ -26,7 +26,8 @@ import java.util.regex.Pattern
  **/
 @SuppressLint("PrivateApi")
 object DeviceHelper {
-    private val MEIZUBOARD = arrayOf("m9", "M9", "mx", "MX")
+    private val MEIZU_BOARD = arrayOf("m9", "M9", "mx", "MX")
+
     private const val KEY_MIUI_VERSION_NAME = "ro.miui.ui.version.name"
     private const val KEY_FLYME_VERSION_NAME = "ro.build.display.id"
     private const val CPU_FILE_PATH_0 = "/sys/devices/system/cpu/"
@@ -39,8 +40,8 @@ object DeviceHelper {
     private val BRAND = Build.BRAND.lowercase()
 
     private const val FLYME = "flyme"
-    private const val ZTEC2016 = "zte c2016"
-    private const val ZUKZ1 = "zuk z1"
+    private const val ZTE_C2016 = "zte c2016"
+    private const val ZUK_Z1 = "zuk z1"
     private var sMiuiVersionName: String? = null
     private var sFlymeVersionName: String? = null
     private var sIsTabletChecked = false
@@ -64,7 +65,7 @@ object DeviceHelper {
     init {
         val properties = Properties()
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            // android 8.0，读取 /system/uild.prop 会报 permission denied
+            // android 8.0，读取 /system/build.prop 会报 permission denied
             var stream: FileInputStream? = null
             try {
                 stream =
@@ -98,19 +99,24 @@ object DeviceHelper {
         }
     }
 
-    private fun _isTablet(context: Context): Boolean {
+    /**
+     * 判断是否是平板（私有方法仅加载一次）
+     * @param context 上下文
+     */
+    private fun initTablet(context: Context): Boolean {
         return context.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK >=
                 Configuration.SCREENLAYOUT_SIZE_LARGE
     }
 
     /**
      * 判断是否为平板设备
+     * @param context 上下文
      */
     fun isTablet(context: Context): Boolean {
         if (sIsTabletChecked) {
             return sIsTabletValue
         }
-        sIsTabletValue = _isTablet(context)
+        sIsTabletValue = initTablet(context)
         sIsTabletChecked = true
         return sIsTabletValue
     }
@@ -119,9 +125,7 @@ object DeviceHelper {
      * 判断是否是flyme系统
      */
     fun isFlyme(): Boolean {
-        return !sFlymeVersionName.isNullOrBlank() && sFlymeVersionName?.contains(
-            FLYME
-        ) == true
+        return !sFlymeVersionName.isNullOrBlank() && sFlymeVersionName?.contains(FLYME) == true
     }
 
     /**
@@ -132,9 +136,15 @@ object DeviceHelper {
         return isFlymeLowerThan(majorVersion, 0, 0)
     }
 
+    /**
+     * 是否低于flyme版本
+     * @param majorVersion 主要版本
+     * @param minorVersion 最低版本
+     * @param patchVersion 匹配版本
+     */
     fun isFlymeLowerThan(majorVersion: Int, minorVersion: Int, patchVersion: Int): Boolean {
         var isLower = false
-        if (sFlymeVersionName != null && sFlymeVersionName != "") {
+        if (!sFlymeVersionName.isNullOrBlank()) {
             try {
                 val pattern = Pattern.compile("(\\d+\\.){2}\\d")
                 val matcher =
@@ -142,7 +152,7 @@ object DeviceHelper {
                 if (matcher.find()) {
                     val versionString = matcher.group()
                     if (versionString.isNotEmpty()) {
-                        val version = versionString.split("\\.".toRegex()).toTypedArray()
+                        val version = versionString.split(".")
                         if (version.isNotEmpty()) {
                             if (version[0].toInt() < majorVersion) {
                                 isLower = true
@@ -166,6 +176,12 @@ object DeviceHelper {
         return isMeizu() && isLower
     }
 
+    /**
+     * 获取小写的名称
+     * @param p
+     * @param get
+     * @param key
+     */
     private fun getLowerCaseName(p: Properties, get: Method, key: String): String? {
         var name = p.getProperty(key)
         if (name == null) {
@@ -178,7 +194,6 @@ object DeviceHelper {
         return name
     }
 
-
     /**
      * 是否是官方认证的刘海
      */
@@ -187,12 +202,11 @@ object DeviceHelper {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
     }
 
-
     /**
      * 判断是否是MIUI系统
      */
     fun isMIUI(): Boolean {
-        return !TextUtils.isEmpty(sMiuiVersionName)
+        return !sMiuiVersionName.isNullOrBlank()
     }
 
     fun isMIUIV5(): Boolean {
@@ -221,8 +235,7 @@ object DeviceHelper {
      */
     fun isZUKZ1(): Boolean {
         val board = Build.MODEL
-        return board != null && board.lowercase()
-            .contains(ZUKZ1)
+        return !board.isNullOrBlank() && board.lowercase().contains(ZUK_Z1)
     }
 
     /**
@@ -230,15 +243,14 @@ object DeviceHelper {
      */
     fun isZTKC2016(): Boolean {
         val board = Build.MODEL
-        return board != null && board.lowercase()
-            .contains(ZTEC2016)
+        return !board.isNullOrBlank() && board.lowercase().contains(ZTE_C2016)
     }
 
     /**
      * 判断是否是魅族
      */
     fun isMeizu(): Boolean {
-        return isPhone(MEIZUBOARD) || isFlyme()
+        return isPhone(MEIZU_BOARD) || isFlyme()
     }
 
     fun isXiaomi(): Boolean {
@@ -246,9 +258,7 @@ object DeviceHelper {
     }
 
     fun isVivo(): Boolean {
-        return BRAND.contains("vivo") || BRAND.contains(
-            "bbk"
-        )
+        return BRAND.contains("vivo") || BRAND.contains("bbk")
     }
 
     fun isOppo(): Boolean {
@@ -256,9 +266,7 @@ object DeviceHelper {
     }
 
     fun isHuawei(): Boolean {
-        return BRAND.contains("huawei") || BRAND.contains(
-            "honor"
-        )
+        return BRAND.contains("huawei") || BRAND.contains("honor")
     }
 
     /**
@@ -453,6 +461,5 @@ object DeviceHelper {
         }
         return false
     }
-
 
 }
