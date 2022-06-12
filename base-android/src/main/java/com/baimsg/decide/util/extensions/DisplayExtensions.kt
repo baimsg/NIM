@@ -29,8 +29,8 @@ import java.util.*
  * @param dp
  * @return
  */
-fun Context.dp2px(dp: Int): Double {
-    return (getDensity() * dp + 0.5)
+fun Context.dp2px(dp: Float): Float {
+    return (getDensity() * dp + 0.5f)
 }
 
 
@@ -40,8 +40,8 @@ fun Context.dp2px(dp: Int): Double {
  * @param sp
  * @return
  */
-fun Context.sp2px(sp: Int): Double {
-    return (getFontDensity() * sp + 0.5)
+fun Context.sp2px(sp: Float): Float {
+    return (getFontDensity() * sp + 0.5f)
 }
 
 /**
@@ -50,8 +50,8 @@ fun Context.sp2px(sp: Int): Double {
  * @param px
  * @return
  */
-fun Context.px2dp(px: Int): Double {
-    return (px / getDensity() + 0.5)
+fun Context.px2dp(px: Float): Float {
+    return (px / getDensity() + 0.5f)
 }
 
 /**
@@ -60,8 +60,8 @@ fun Context.px2dp(px: Int): Double {
  * @param px
  * @return
  */
-fun Context.px2sp(px: Int): Double {
-    return (px / getFontDensity() + 0.5)
+fun Context.px2sp(px: Float): Float {
+    return (px / getFontDensity() + 0.5f)
 }
 
 /**

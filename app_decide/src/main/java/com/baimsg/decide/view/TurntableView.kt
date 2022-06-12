@@ -18,7 +18,7 @@ import android.widget.Scroller
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import com.baimsg.decide.R
-import com.baimsg.decide.dip2px
+import com.baimsg.decide.util.extensions.dp2px
 import java.util.*
 
 
@@ -81,16 +81,16 @@ class TurntableView @JvmOverloads constructor(
         }
     }
 
-    var f3704b = context.dip2px(10.0f)
+    var f3704b = context.dp2px(10.0f)
 
-    var f3705c = context.dip2px(8.0f)
+    var f3705c = context.dp2px(8.0f)
 
     var f3706d: RectF = RectF()
     var e1: RectF = RectF()
     var f: MutableList<TurntableData> = mutableListOf()
 
     var animatedValue = 0f
-    var h = context.dip2px(1.5f)
+    var h = context.dp2px(1.5f)
 
     val valueAnimator1: ValueAnimator by lazy {
         ValueAnimator().apply {
@@ -128,8 +128,8 @@ class TurntableView @JvmOverloads constructor(
         }
     }
 
-    var x = context.dip2px(65.0f)
-    var y = context.dip2px(8.0f)
+    var mX = context.dp2px(65.0f)
+    var mY = context.dp2px(8.0f)
     var turntableBackground = 0
 
 
@@ -265,7 +265,7 @@ class TurntableView @JvmOverloads constructor(
     }
 
     fun setFling(bVar: TurntableData, str: String): StaticLayout {
-        val width = (f3706d.width() / 2.0f - x.toFloat() - context.dip2px(6.0f).toFloat()).toInt()
+        val width = (f3706d.width() / 2.0f - mX - context.dp2px(6.0f)).toInt()
         val i2 = if (width < 0) 0 else width
         val f2 = bVar.f3711d - bVar.f3710c
         var dimensionPixelSize =
@@ -376,7 +376,7 @@ class TurntableView @JvmOverloads constructor(
         f3703a.style = Paint.Style.FILL
         f3703a.color = turntableBackground
         f3703a.setShadowLayer(
-            context.dip2px(4.0f).toFloat(),
+            context.dp2px(4.0f).toFloat(),
             0.0f,
             0.0f,
             turntableBackgroundShadow
@@ -540,7 +540,7 @@ class TurntableView @JvmOverloads constructor(
             }
             val save: Int = canvas.save()
             canvas.translate(
-                (getWidth() - f3704b - f3705c).toFloat() - rectF.width() - y.toFloat(),
+                (getWidth() - f3704b - f3705c) - rectF.width() - mY,
                 height - rectF.height() / 2.0f
             )
             var i6 = -1

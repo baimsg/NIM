@@ -19,7 +19,7 @@ object KeyboardHelper {
      */
     private const val SHOW_KEYBOARD_DELAY_TIME = 200
     private const val TAG = "KeyboardHelper"
-    const val KEYBOARD_VISIBLE_THRESHOLD_DP = 100
+    const val KEYBOARD_VISIBLE_THRESHOLD_DP = 100f
 
 
     fun showKeyboard(editText: EditText, delay: Boolean) {
