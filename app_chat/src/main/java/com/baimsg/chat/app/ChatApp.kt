@@ -21,8 +21,7 @@ class ChatApp : Application() {
     private fun loginInfo(): LoginInfo {
         return LoginInfo(
             "60975798",
-            "4bc69983fd080918abbf06e4b01dce9f",
-            "8d3e6faf3fb7ce8c678b2b2900cbb6c9"
+            "4bc69983fd080918abbf06e4b01dce9f"
         )
     }
 

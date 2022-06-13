@@ -10,6 +10,9 @@ import com.netease.nimlib.sdk.StatusCode
 import com.netease.nimlib.sdk.auth.AuthService
 import com.netease.nimlib.sdk.auth.AuthServiceObserver
 import com.netease.nimlib.sdk.auth.LoginInfo
+import com.netease.nimlib.sdk.team.TeamService
+import com.netease.nimlib.sdk.team.model.Team
+import java.lang.StringBuilder
 
 
 class HomeFragment : BaseFragment<FragmnetHomeBinding>(R.layout.fragmnet_home) {
@@ -33,14 +36,14 @@ class HomeFragment : BaseFragment<FragmnetHomeBinding>(R.layout.fragmnet_home) {
         }, true)
 
         binding.btnLogin.setOnClickListener {
-            val account = binding.tvAccount.text
-            val token = binding.tvToken.text
+            val account = binding.editAccount.text
+            val token = binding.editToken.text
             if (account.isNullOrBlank() || token.isNullOrBlank()) {
                 showShort("参数不可以为空")
                 return@setOnClickListener
             }
             val info =
-                LoginInfo(account.toString(), token.toString(), "8d3e6faf3fb7ce8c678b2b2900cbb6c9")
+                LoginInfo(account.toString(), token.toString())
             val callback: RequestCallback<LoginInfo> = object : RequestCallback<LoginInfo> {
                 override fun onSuccess(param: LoginInfo) {
                     showShort("登录成功")
@@ -50,7 +53,7 @@ class HomeFragment : BaseFragment<FragmnetHomeBinding>(R.layout.fragmnet_home) {
                     if (code == 302) {
                         showShort("账号密码错误")
                     } else {
-                        showShort("未知错误：$code-${info.appKey}")
+                        showShort("未知错误：$code")
                     }
                 }
 
@@ -60,6 +63,37 @@ class HomeFragment : BaseFragment<FragmnetHomeBinding>(R.layout.fragmnet_home) {
             }
             NIMClient.getService(AuthService::class.java).login(info).setCallback(callback)
         }
+
+        binding.btnGroupList.setOnClickListener {
+            NIMClient.getService(TeamService::class.java).queryTeamList()
+                .setCallback(object : RequestCallback<List<Team>> {
+                    override fun onSuccess(list: List<Team>?) {
+                        val sb = StringBuilder()
+                        list?.forEach {
+                            sb.append("name=${it.name}\n")
+                            sb.append("id=${it.id}\n")
+                            sb.append("announcement=${it.announcement}\n")
+                            sb.append("creator=${it.creator}\n")
+                            sb.append("createTime=${it.createTime}\n")
+                            sb.append("extServer=${it.extServer}\n")
+                            sb.append("icon=${it.icon}\n")
+                            sb.append("memberLimit=${it.memberLimit}\n")
+                            sb.append("memberCount=${it.memberCount}\n")
+                        }
+                        binding.tvStatus.text = sb
+                    }
+
+                    override fun onFailed(code: Int) {
+                        showShort("未知错误：$code")
+                    }
+
+                    override fun onException(e: Throwable?) {
+                        binding.tvStatus.text = e?.message
+                    }
+                })
+        }
+
     }
+
 
 }
