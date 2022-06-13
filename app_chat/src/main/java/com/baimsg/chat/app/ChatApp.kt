@@ -20,8 +20,8 @@ class ChatApp : Application() {
 
     private fun loginInfo(): LoginInfo {
         return LoginInfo(
-            "60975798",
-            "4bc69983fd080918abbf06e4b01dce9f"
+            "583130164",
+            "3a132c50a86bc443b946fbac7083168a"
         )
     }
 
@@ -29,7 +29,7 @@ class ChatApp : Application() {
         val sDKOptions = SDKOptions()
         sDKOptions.sdkStorageRootPath = "${context.cacheDir.canonicalPath}/nim"
         sDKOptions.preloadAttach = true
-        sDKOptions.appKey = "8d3e6faf3fb7ce8c678b2b2900cbb6c9"
+        sDKOptions.appKey = "96e60d1d45c959069333ad8308b5799b"
         sDKOptions.sessionReadAck = true
         sDKOptions.animatedImageThumbnailEnabled = true
         sDKOptions.asyncInitSDK = true

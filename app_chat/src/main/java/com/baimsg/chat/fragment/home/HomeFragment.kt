@@ -10,12 +10,20 @@ import com.netease.nimlib.sdk.StatusCode
 import com.netease.nimlib.sdk.auth.AuthService
 import com.netease.nimlib.sdk.auth.AuthServiceObserver
 import com.netease.nimlib.sdk.auth.LoginInfo
+import com.netease.nimlib.sdk.friend.FriendService
+import com.netease.nimlib.sdk.friend.constant.VerifyType
+import com.netease.nimlib.sdk.friend.model.AddFriendData
 import com.netease.nimlib.sdk.team.TeamService
 import com.netease.nimlib.sdk.team.model.Team
+import com.netease.nimlib.sdk.team.model.TeamMember
 import java.lang.StringBuilder
 
 
 class HomeFragment : BaseFragment<FragmnetHomeBinding>(R.layout.fragmnet_home) {
+    private val teams = mutableListOf<Team>()
+
+    private val members = mutableListOf<TeamMember>()
+
     override fun initView() {
         NIMClient.getService(AuthServiceObserver::class.java).observeOnlineStatus({ status ->
             binding.tvStatus.text = when (status) {
@@ -68,19 +76,10 @@ class HomeFragment : BaseFragment<FragmnetHomeBinding>(R.layout.fragmnet_home) {
             NIMClient.getService(TeamService::class.java).queryTeamList()
                 .setCallback(object : RequestCallback<List<Team>> {
                     override fun onSuccess(list: List<Team>?) {
-                        val sb = StringBuilder()
-                        list?.forEach {
-                            sb.append("name=${it.name}\n")
-                            sb.append("id=${it.id}\n")
-                            sb.append("announcement=${it.announcement}\n")
-                            sb.append("creator=${it.creator}\n")
-                            sb.append("createTime=${it.createTime}\n")
-                            sb.append("extServer=${it.extServer}\n")
-                            sb.append("icon=${it.icon}\n")
-                            sb.append("memberLimit=${it.memberLimit}\n")
-                            sb.append("memberCount=${it.memberCount}\n")
+                        list?.let {
+                            teams.addAll(it)
+                            binding.tvStatus.text = "${it.size}个群"
                         }
-                        binding.tvStatus.text = sb
                     }
 
                     override fun onFailed(code: Int) {
@@ -92,6 +91,60 @@ class HomeFragment : BaseFragment<FragmnetHomeBinding>(R.layout.fragmnet_home) {
                     }
                 })
         }
+
+        binding.btnMemberList.setOnClickListener {
+            if (teams.isEmpty()) {
+                showShort("没有找到群哦！")
+                return@setOnClickListener
+            }
+            NIMClient.getService(TeamService::class.java).queryMemberList(teams[0].id)
+                .setCallback(object : RequestCallback<List<TeamMember>> {
+                    override fun onSuccess(list: List<TeamMember>?) {
+                        if (list != null) {
+                            members.addAll(list)
+                            binding.tvStatus.text =
+                                "${list.size}个成员\n${list[0].account}-${list[0].tid}"
+                        }
+                    }
+
+                    override fun onFailed(code: Int) {
+                        showShort("未知错误：$code")
+                    }
+
+                    override fun onException(e: Throwable?) {
+                        binding.tvStatus.text = e?.message
+                    }
+                })
+        }
+
+        binding.btnTest.setOnClickListener {
+            if (members.isEmpty()) {
+                showShort("没有找好友哦！")
+                return@setOnClickListener
+            }
+            val verifyType = VerifyType.DIRECT_ADD
+//            members.forEachIndexed { index, teamMember ->
+            val teamMember = members[1]
+            binding.tvStatus.text = "正在添加${teamMember.type.name}"
+            NIMClient.getService(FriendService::class.java)
+                .addFriend(AddFriendData(teamMember.account, verifyType))
+                .setCallback(object : RequestCallback<Void> {
+                    override fun onSuccess(p0: Void?) {
+                        binding.tvStatus.text = "${teamMember.type.name}添加成功"
+                    }
+
+                    override fun onFailed(code: Int) {
+                        binding.tvStatus.text =
+                            "${teamMember.type.name}添加失败-$code"
+                    }
+
+                    override fun onException(e: Throwable?) {
+                        binding.tvStatus.text = e?.message
+                    }
+                })
+//            }
+        }
+
 
     }
 
