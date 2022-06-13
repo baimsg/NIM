@@ -10,4 +10,4 @@ pluginManagement {
 includeBuild("./plugin")
 include(":base")
 include(":base-android")
-include(":app_decide")
+include(":app_chat")

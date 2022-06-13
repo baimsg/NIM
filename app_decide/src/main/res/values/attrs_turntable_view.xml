@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <declare-styleable name="TurntableView">
-        <attr name="turntable_background" format="color" />
-        <attr name="turntable_background_shadow" format="color" />
-        <attr name="turntable_select_shadow" format="color" />
-    </declare-styleable>
-</resources>

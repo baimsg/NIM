@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Chat</string>
+    <string name="account">account</string>
+    <string name="token">token</string>
+    <string name="nav_home">首页</string>
+    <string name="nav_setting">设置</string>
+    <string name="login">登录</string>
+</resources>

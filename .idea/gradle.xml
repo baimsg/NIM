@@ -22,7 +22,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/app_decide" />
+            <option value="$PROJECT_DIR$/app_chat" />
             <option value="$PROJECT_DIR$/base" />
             <option value="$PROJECT_DIR$/base-android" />
             <option value="$PROJECT_DIR$/plugin" />
