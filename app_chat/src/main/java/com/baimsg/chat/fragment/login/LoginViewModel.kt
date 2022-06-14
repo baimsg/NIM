@@ -34,7 +34,7 @@ internal class LoginViewModel constructor(application: Application) :
         viewModelScope.launch {
             pending.collectLatest { action ->
                 when (action) {
-                    is LoginAction.SetStatusCode -> {
+                    is LoginAction.UpdateStatusCode -> {
                         statusCode.value = action.statusCode
                     }
                 }

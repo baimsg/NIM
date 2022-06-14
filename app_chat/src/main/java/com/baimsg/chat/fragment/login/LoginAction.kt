@@ -7,5 +7,5 @@ import com.netease.nimlib.sdk.StatusCode
  *
  **/
 internal sealed class LoginAction {
-    data class SetStatusCode(val statusCode: StatusCode) : LoginAction()
+    data class UpdateStatusCode(val statusCode: StatusCode) : LoginAction()
 }

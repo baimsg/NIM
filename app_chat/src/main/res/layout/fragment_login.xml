@@ -1,6 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/bg">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/color_primary"
+        app:layout_constraintBottom_toBottomOf="@id/tvStatus"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:lines="1"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="12dp"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/login" />
+
+    <View
+        android:id="@+id/vTop"
+        android:layout_width="match_parent"
+        android:layout_height=".5dp"
+        android:background="@color/line_color"
+        app:layout_constraintTop_toBottomOf="@id/tvStatus" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="@id/editToken"
+        app:layout_constraintTop_toBottomOf="@id/vTop" />
+
+    <TextView
+        android:id="@+id/tvAppKey"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="12dp"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@id/vTop"
+        tools:text="@string/setting_key" />
+
+    <ImageView
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_right"
+        app:layout_constraintBottom_toBottomOf="@id/tvAppKey"
+        app:layout_constraintEnd_toEndOf="@id/tvAppKey"
+        app:layout_constraintTop_toTopOf="@id/tvAppKey" />
+
+    <View
+        android:id="@+id/vLineKey"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/line_color"
+        app:layout_constraintTop_toBottomOf="@id/tvAppKey" />
+
+    <TextView
+        android:id="@+id/tvAccount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="12dp"
+        android:text="@string/account"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vLineKey" />
+
+    <EditText
+        android:id="@+id/editAccount"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="16dp"
+        android:background="@null"
+        android:hint="@string/account"
+        android:lines="1"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@id/tvAccount"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tvAccount"
+        app:layout_constraintTop_toTopOf="@id/tvAccount" />
+
+    <View
+        android:id="@+id/vLineAccount"
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:background="@color/line_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/editAccount"
+        app:layout_constraintTop_toBottomOf="@id/tvAccount" />
+
+    <TextView
+        android:id="@+id/tvToken"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="12dp"
+        android:text="@string/token"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vLineAccount" />
+
+    <EditText
+        android:id="@+id/editToken"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="16dp"
+        android:background="@null"
+        android:hint="@string/token"
+        android:lines="1"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@id/tvToken"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/editAccount"
+        app:layout_constraintTop_toTopOf="@id/tvToken" />
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="12dp"
+        android:text="@string/login"
+        app:layout_constraintTop_toBottomOf="@id/tvToken" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

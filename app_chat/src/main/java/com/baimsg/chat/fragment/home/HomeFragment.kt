@@ -6,11 +6,11 @@ import com.baimsg.chat.R
 import com.baimsg.chat.base.BaseFragment
 import com.baimsg.chat.databinding.FragmentHomeBinding
 import com.baimsg.chat.fragment.login.LoginViewModel
+import com.baimsg.chat.util.extensions.message
 import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
 import com.baimsg.chat.util.extensions.showShort
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.RequestCallback
-import com.netease.nimlib.sdk.StatusCode
 import com.netease.nimlib.sdk.auth.AuthService
 import com.netease.nimlib.sdk.auth.LoginInfo
 import com.netease.nimlib.sdk.friend.FriendService
@@ -38,27 +38,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     override fun initView() {
         repeatOnLifecycleStarted {
             loginViewModel.statusCode.collectLatest { status ->
-                binding.tvStatus.text = when (status) {
-                    StatusCode.LOGINING -> "正在登录中"
-                    StatusCode.SYNCING -> "正在同步数据"
-                    StatusCode.LOGINED -> "已成功登录"
-                    StatusCode.UNLOGIN -> "未登录/登录失败"
-                    StatusCode.NET_BROKEN -> "网络连接已断开"
-                    StatusCode.CONNECTING -> "正在连接服务器"
-                    StatusCode.KICKOUT -> {
-                        openLogin
-                        "被其他端的登录踢掉"
-                    }
-                    StatusCode.KICK_BY_OTHER_CLIENT -> {
-                        openLogin
-                        "被同时在线的其他端主动踢掉"
-                    }
-                    StatusCode.FORBIDDEN -> "被服务器禁止登录"
-                    StatusCode.VER_ERROR -> "客户端版本错误"
-                    StatusCode.PWD_ERROR -> "用户名或密码错误"
-                    StatusCode.DATA_UPGRADE -> "数据库需要迁移到加密状态"
-                    else -> "未定义"
-                }
+                binding.tvStatus.text = status.message()
+                if (status.wontAutoLogin()) openLogin
             }
         }
 

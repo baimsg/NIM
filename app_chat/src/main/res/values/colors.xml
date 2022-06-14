@@ -7,7 +7,7 @@
     <color name="color_primary_variant">#ff94c2</color>
     <color name="color_secondary">#5C6BC0</color>
     <color name="color_secondary_variant">#26418f</color>
-
+    <color name="line_color">#1A000000</color>
     <color name="amber_500">#FFC107</color>
     <color name="amber_600">#FFB330</color>
     <color name="amber_700">#FFA000</color>

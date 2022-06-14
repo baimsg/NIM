@@ -12,11 +12,8 @@ import com.baimsg.chat.fragment.login.LoginViewModel
 import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
 import com.baimsg.chat.util.extensions.showShort
 import com.netease.nimlib.sdk.NIMClient
-import com.netease.nimlib.sdk.StatusCode
-import com.netease.nimlib.sdk.auth.AuthService
 import com.netease.nimlib.sdk.auth.AuthServiceObserver
 import com.netease.nimlib.sdk.lifecycle.SdkLifecycleObserver
-import kotlinx.coroutines.launch
 
 /**
  * Create by Baimsg on 2022/6/10
@@ -53,7 +50,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         //监听登录状态
         NIMClient.getService(AuthServiceObserver::class.java).observeOnlineStatus({ status ->
             repeatOnLifecycleStarted {
-                loginViewModel.submit(LoginAction.SetStatusCode(status))
+                loginViewModel.submit(LoginAction.UpdateStatusCode(status))
             }
         }, true)
     }

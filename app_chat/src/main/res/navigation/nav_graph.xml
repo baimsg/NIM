@@ -37,11 +37,34 @@
         android:id="@+id/settingFragment"
         android:name="com.baimsg.chat.fragment.setting.SettingFragment"
         android:label="SettingFragment"
-        tools:layout="@layout/fragment_setting" />
+        tools:layout="@layout/fragment_setting">
+        <action
+            android:id="@+id/action_settingFragment_to_appKeyFragment"
+            app:destination="@id/appKeyFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
+            app:popExitAnim="@anim/fragment_open_exit" />
+    </fragment>
+
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.baimsg.chat.fragment.login.LoginFragment"
         android:label="LoginFragment"
-        tools:layout="@layout/fragment_login" />
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_loginFragment_to_appKeyFragment"
+            app:destination="@id/appKeyFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
+            app:popExitAnim="@anim/fragment_open_exit" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/appKeyFragment"
+        android:name="com.baimsg.chat.fragment.setting.appkey.AppKeyFragment"
+        android:label="AppKeyFragment"
+        tools:layout="@layout/fragment_appkey" />
 
 </navigation>
