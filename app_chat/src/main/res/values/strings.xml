@@ -3,8 +3,10 @@
     <string name="account">account</string>
     <string name="token">token</string>
     <string name="nav_home">首页</string>
+    <string name="nav_my">我的</string>
     <string name="nav_setting">设置</string>
     <string name="login">登录</string>
     <string name="group_list">群列表</string>
     <string name="member_list">群成员</string>
+    <string name="setting_key">设置 AppKey</string>
 </resources>

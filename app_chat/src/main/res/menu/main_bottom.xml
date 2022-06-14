@@ -4,14 +4,13 @@
     tools:showIn="navigation_view">
 
     <item
-        android:id="@+id/navHome"
+        android:id="@+id/homeFragment"
         android:icon="@drawable/ic_home"
         android:title="@string/nav_home" />
 
     <item
-        android:id="@+id/navSetting"
-        android:icon="@drawable/ic_setting"
-        android:title="@string/nav_setting" />
-
+        android:id="@+id/myFragment"
+        android:icon="@drawable/ic_my"
+        android:title="@string/nav_my" />
 
 </menu>

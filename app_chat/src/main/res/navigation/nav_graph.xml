@@ -1,18 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph.xml"
-    app:startDestination="@id/navHome">
+    app:startDestination="@id/homeFragment">
 
     <fragment
-        android:id="@+id/navHome"
+        android:id="@+id/homeFragment"
         android:name="com.baimsg.chat.fragment.home.HomeFragment"
-        android:label="HomeFragment" />
+        android:label="HomeFragment"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_homeFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
+            app:popExitAnim="@anim/fragment_open_exit" />
+    </fragment>
 
     <fragment
-        android:id="@+id/navSetting"
-        android:name="com.baimsg.chat.fragment.turntable.TurntableFragment"
-        android:label="TurntableFragment" />
+        android:id="@+id/myFragment"
+        android:name="com.baimsg.chat.fragment.my.MyFragment"
+        android:label="MyFragment"
+        tools:layout="@layout/fragment_my">
+        <action
+            android:id="@+id/action_myFragment_to_settingFragment"
+            app:destination="@id/settingFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
+            app:popExitAnim="@anim/fragment_open_exit" />
+    </fragment>
 
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.baimsg.chat.fragment.setting.SettingFragment"
+        android:label="SettingFragment"
+        tools:layout="@layout/fragment_setting" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.baimsg.chat.fragment.login.LoginFragment"
+        android:label="LoginFragment"
+        tools:layout="@layout/fragment_login" />
 
 </navigation>
