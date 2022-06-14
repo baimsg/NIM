@@ -10,8 +10,8 @@ object Dep {
     const val compileSdk = 31
     const val minSdk = 21
     const val targetSdk = 30
-    const val group = "com.baimsg.decide"
-    const val packageName = "com.baimsg.decide"
+    const val group = "com.baimsg.chat"
+    const val packageName = "com.baimsg.chat"
     const val version = "1.0.0"
 
     object MaterialDesign {
