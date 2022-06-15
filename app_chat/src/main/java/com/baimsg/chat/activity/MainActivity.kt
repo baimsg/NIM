@@ -1,7 +1,7 @@
 package com.baimsg.chat.activity
 
 import android.view.View
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.baimsg.chat.R
@@ -26,6 +26,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     override fun initView() {
+
         //绑定bottomNavigation
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment

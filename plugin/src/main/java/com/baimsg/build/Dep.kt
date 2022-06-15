@@ -145,6 +145,7 @@ object Dep {
     //第三方库
     object Libs {
         const val mmkv = "com.tencent:mmkv-static:1.2.10"
+        const val desugar = "com.android.tools:desugar_jdk_libs:1.1.5"
     }
 
 }
