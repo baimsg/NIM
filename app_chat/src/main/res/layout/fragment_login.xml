@@ -42,14 +42,25 @@
         app:layout_constraintBottom_toBottomOf="@id/editToken"
         app:layout_constraintTop_toBottomOf="@id/vTop" />
 
+    <ImageView
+        android:id="@+id/ivKey"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/ic_key"
+        app:layout_constraintBottom_toBottomOf="@id/tvAppKey"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvAppKey" />
+
     <TextView
         android:id="@+id/tvAppKey"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="16dp"
         android:paddingVertical="12dp"
         android:textColor="@color/black"
         android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/editAccount"
         app:layout_constraintTop_toBottomOf="@id/vTop"
         tools:text="@string/setting_key" />
 
