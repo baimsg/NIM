@@ -25,7 +25,6 @@
             <option value="$PROJECT_DIR$/app_chat" />
             <option value="$PROJECT_DIR$/base" />
             <option value="$PROJECT_DIR$/base-android" />
-            <option value="$PROJECT_DIR$/jadx" />
             <option value="$PROJECT_DIR$/plugin" />
           </set>
         </option>
