@@ -3,6 +3,8 @@
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="bg">#F4F4F4</color>
+    <color name="background">#FFFFFF</color>
+    <color name="background_pressed">#80F6F6F6</color>
     <color name="color_primary">#F06292</color>
     <color name="color_primary_variant">#ff94c2</color>
     <color name="color_secondary">#5C6BC0</color>
@@ -13,10 +15,11 @@
     <color name="amber_700">#FFA000</color>
     <color name="amber_800">#FF8F00</color>
     <color name="amber_900">#FF6F00</color>
-
+    <color name="title_color">#000000</color>
+    <color name="subtitle_color">#666666</color>
     <color name="grey_0">#ffffff</color>
-    <color name="grey_50">#fafafa</color>
-    <color name="grey_100">#f5f5f5</color>
+    <color name="grey_50">#FAFAFA</color>
+    <color name="grey_100">#F5F5F5</color>
     <color name="grey_200">#eeeeee</color>
     <color name="grey_300">#e0e0e0</color>
     <color name="grey_400">#bdbdbd</color>

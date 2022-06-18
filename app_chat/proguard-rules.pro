@@ -36,7 +36,12 @@
 -dontwarn org.apache.lucene.**
 -keep class org.apache.lucene.** {*;}
 
-
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public class * extends com.bumptech.glide.module.AppGlideModule
+-keep public enum com.bumptech.glide.load.ImageHeaderParser$** {
+  **[] $VALUES;
+  public *;
+}
 
 #如果你开启数据库功能，需要加入
 -keep class net.sqlcipher.** {*;}

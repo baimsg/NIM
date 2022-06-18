@@ -1,6 +1,7 @@
 package com.baimsg.chat.fragment.login
 
 import androidx.activity.addCallback
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.baimsg.base.util.KvUtils
@@ -8,8 +9,11 @@ import com.baimsg.chat.Constant
 import com.baimsg.chat.R
 import com.baimsg.chat.base.BaseFragment
 import com.baimsg.chat.databinding.FragmentLoginBinding
-import com.baimsg.chat.util.KeyboardHelper
 import com.baimsg.chat.util.extensions.*
+import com.netease.nimlib.sdk.NIMClient
+import com.netease.nimlib.sdk.RequestCallback
+import com.netease.nimlib.sdk.auth.AuthService
+import com.netease.nimlib.sdk.auth.LoginInfo
 import kotlinx.coroutines.flow.collectLatest
 
 /**
@@ -18,33 +22,65 @@ import kotlinx.coroutines.flow.collectLatest
  **/
 class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login) {
 
+    private var account: String = Constant.ACCOUNT
+
+    private var token: String = Constant.TOKEN
+
     private val loginViewModel by lazy {
         ViewModelProvider(requireActivity())[LoginViewModel::class.java]
     }
 
     override fun initView() {
 
-        binding.tvAppKey.text = KvUtils.getString(Constant.KEY_APP_KEY, Constant.DEFAULT_APP_KEY)
+        binding.tvAppKey.text = Constant.APP_KEY.run { ifBlank { "点击设置appKey" } }
 
         binding.editAccount.apply {
-            setText(
-                KvUtils.getString(
-                    Constant.KEY_ACCOUNT,
-                    Constant.DEFAULT_ACCOUNT
-                )
-            )
+            setText(Constant.ACCOUNT)
             showKeyboard(true)
+            addTextChangedListener {
+                account = it.toString()
+            }
         }
 
-        binding.editToken.setText(
-            KvUtils.getString(
-                Constant.KEY_TOKEN,
-                Constant.DEFAULT_TOKEN
-            )
-        )
+        binding.editToken.apply {
+            setText(Constant.TOKEN)
+            addTextChangedListener {
+                token = it.toString()
+            }
+        }
 
         binding.tvAppKey.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_appKeyFragment)
+        }
+
+        binding.btnLogin.setOnClickListener {
+            if (account.isNullOrBlank() || token.isNullOrBlank()) {
+                showShort("账号或密码为空")
+                return@setOnClickListener
+            }
+            KvUtils.put(Constant.KEY_ACCOUNT, account ?: "")
+            KvUtils.put(Constant.KEY_TOKEN, token ?: "")
+            val info =
+                LoginInfo(account, token, Constant.APP_KEY)
+            val callback: RequestCallback<LoginInfo> = object : RequestCallback<LoginInfo> {
+                override fun onSuccess(param: LoginInfo) {
+                    findNavController().navigateUp()
+                    showShort("登录成功")
+                }
+
+                override fun onFailed(code: Int) {
+                    if (code == 302) {
+                        showShort("账号密码错误")
+                    } else {
+                        showShort("未知错误：$code")
+                    }
+                }
+
+                override fun onException(exception: Throwable) {
+                    binding.tvStatus.text = exception.message
+                }
+            }
+            NIMClient.getService(AuthService::class.java).login(info).setCallback(callback)
         }
 
         repeatOnLifecycleStarted {
@@ -56,12 +92,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
         //拦截返回事件
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             requireActivity().finish()
-        }
-
-        repeatOnLifecycleStarted {
-            loginViewModel.statusCode.collectLatest {
-
-            }
         }
 
     }

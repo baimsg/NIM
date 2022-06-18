@@ -1,5 +1,6 @@
 package com.baimsg.chat.fragment.login
 
+import com.baimsg.chat.bean.NIMUserInfo
 import com.netease.nimlib.sdk.StatusCode
 
 /**
@@ -8,4 +9,5 @@ import com.netease.nimlib.sdk.StatusCode
  **/
 internal sealed class LoginAction {
     data class UpdateStatusCode(val statusCode: StatusCode) : LoginAction()
+    data class UpdateUserInfo(val nimUserInfo: NIMUserInfo) : LoginAction()
 }

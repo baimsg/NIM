@@ -26,6 +26,14 @@ object ViewHelper {
 
 }
 
+fun View.show() {
+    visibility = View.VISIBLE
+}
+
+fun View.hide() {
+    visibility = View.GONE
+}
+
 /**
  * 获取activity的根view
  */

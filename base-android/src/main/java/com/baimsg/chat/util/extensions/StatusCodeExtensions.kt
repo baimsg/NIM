@@ -7,9 +7,9 @@ import com.netease.nimlib.sdk.StatusCode
  *
  **/
 fun StatusCode.message(): String = when (this) {
-    StatusCode.LOGINING -> "正在登录中"
+    StatusCode.LOGINING -> "正在登录"
     StatusCode.SYNCING -> "正在同步数据"
-    StatusCode.LOGINED -> "已成功登录"
+    StatusCode.LOGINED -> "登录成功"
     StatusCode.UNLOGIN -> "未登录/登录失败"
     StatusCode.NET_BROKEN -> "网络连接已断开"
     StatusCode.CONNECTING -> "正在连接服务器"

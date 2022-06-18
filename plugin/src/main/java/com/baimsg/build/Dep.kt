@@ -47,6 +47,7 @@ object Dep {
         const val documentFile = "androidx.documentfile:documentfile:1.1.0-alpha01"
         const val dataStore = "androidx.datastore:datastore-preferences:1.0.0"
 
+        const val swipeRefreshLayout = "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
         const val exoPlayer = "com.google.android.exoplayer:exoplayer-core:2.15.1"
         const val exoPlayerOkhttp = "com.google.android.exoplayer:extension-okhttp:2.15.0"
@@ -146,6 +147,8 @@ object Dep {
     object Libs {
         const val mmkv = "com.tencent:mmkv-static:1.2.10"
         const val desugar = "com.android.tools:desugar_jdk_libs:1.1.5"
+        const val baseAdapter = "com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.7"
+        const val glide = "com.github.bumptech.glide:glide:4.11.0"
     }
 
 }

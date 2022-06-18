@@ -46,6 +46,65 @@
         android:background="@color/line_color"
         app:layout_constraintTop_toBottomOf="@id/ivBack" />
 
+    <TextView
+        android:id="@+id/tvFinish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:text="@string/finish"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/ivBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/ivBack" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="@id/tvAppKey"
+        app:layout_constraintTop_toTopOf="@id/tvAppKey" />
+
+    <TextView
+        android:id="@+id/tvAppKey"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:padding="16dp"
+        android:text="@string/key"
+        android:textColor="@color/material_black"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vTop" />
+
+    <View
+        android:id="@+id/vLine"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:layout_marginVertical="16dp"
+        android:layout_marginStart="16dp"
+        android:background="@color/line_color"
+        app:layout_constraintBottom_toBottomOf="@id/tvAppKey"
+        app:layout_constraintStart_toEndOf="@id/tvAppKey"
+        app:layout_constraintTop_toTopOf="@id/tvAppKey" />
+
+    <EditText
+        android:id="@+id/editAppKey"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="16dp"
+        android:background="@null"
+        android:hint="@string/app_key_hint"
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        android:maxLines="1"
+        android:textCursorDrawable="@drawable/bg_cursor"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@id/tvAppKey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/vLine"
+        app:layout_constraintTop_toTopOf="@id/tvAppKey" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

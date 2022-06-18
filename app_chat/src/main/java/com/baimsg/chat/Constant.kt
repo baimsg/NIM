@@ -1,5 +1,7 @@
 package com.baimsg.chat
 
+import com.baimsg.base.util.KvUtils
+
 /**
  * Create by Baimsg on 2022/6/13
  *
@@ -11,9 +13,13 @@ object Constant {
 
     const val KEY_TOKEN = "token"
 
-    const val DEFAULT_APP_KEY = "96e60d1d45c959069333ad8308b5799b"
+    val ACCOUNT: String
+        get() = KvUtils.getString(KEY_ACCOUNT, "")
 
-    const val DEFAULT_ACCOUNT = "583130164"
+    val APP_KEY: String
+        get() = KvUtils.getString(KEY_APP_KEY, "")
 
-    const val DEFAULT_TOKEN = "3a132c50a86bc443b946fbac7083168a"
+    val TOKEN: String
+        get() = KvUtils.getString(KEY_TOKEN, "")
+
 }

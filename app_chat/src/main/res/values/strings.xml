@@ -11,4 +11,8 @@
     <string name="member_list">群成员</string>
     <string name="setting_key">设置 appKey</string>
     <string name="key">key</string>
+    <string name="finish">完成</string>
+    <string name="app_key_hint">请输入appKey</string>
+    <string name="digits_key">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="logout">退出登录</string>
 </resources>

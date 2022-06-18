@@ -12,96 +12,35 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
         android:gravity="center"
-        android:paddingVertical="4dp"
-        android:textColor="@color/black"
+        android:paddingVertical="16dp"
+        android:textColor="@color/title_color"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="登录成功" />
 
-    <TextView
-        android:id="@+id/tvAccount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:text="@string/account"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
+    <View
+        android:id="@+id/vLine"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/line_color"
         app:layout_constraintTop_toBottomOf="@id/tvStatus" />
 
-    <EditText
-        android:id="@+id/editAccount"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/srContent"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:background="@color/white"
-        android:hint="@string/account"
-        android:lines="1"
-        app:layout_constraintBottom_toBottomOf="@id/tvAccount"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/tvAccount"
-        app:layout_constraintTop_toTopOf="@id/tvAccount" />
-
-    <TextView
-        android:id="@+id/tvToken"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:text="@string/token"
-        android:textColor="@color/black"
-        android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvAccount" />
+        app:layout_constraintTop_toBottomOf="@id/vLine">
 
-    <EditText
-        android:id="@+id/editToken"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:background="@color/white"
-        android:hint="@string/token"
-        android:lines="1"
-        app:layout_constraintBottom_toBottomOf="@id/tvToken"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/editAccount"
-        app:layout_constraintTop_toTopOf="@id/tvToken" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/ryContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-    <Button
-        android:id="@+id/btnLogin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="12dp"
-        android:text="@string/login"
-        app:layout_constraintTop_toBottomOf="@id/tvToken" />
-
-    <Button
-        android:id="@+id/btnGroupList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="12dp"
-        android:text="@string/group_list"
-        app:layout_constraintTop_toBottomOf="@id/btnLogin" />
-
-    <Button
-        android:id="@+id/btnMemberList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="12dp"
-        android:text="@string/member_list"
-        app:layout_constraintTop_toBottomOf="@id/btnGroupList" />
-
-    <Button
-        android:id="@+id/btnTest"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="12dp"
-        android:text="@string/app_name"
-        app:layout_constraintTop_toBottomOf="@id/btnMemberList" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

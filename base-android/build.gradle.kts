@@ -43,6 +43,7 @@ dependencies {
     api(Dep.AndroidX.coreKtx)
     api(Dep.AndroidX.appcompat)
     api(Dep.AndroidX.annotation)
+    api(Dep.AndroidX.swipeRefreshLayout)
     api(Dep.MaterialDesign.material)
 
     //协程
@@ -67,5 +68,6 @@ dependencies {
     kapt(Dep.Hilt.compiler)
 
     api(Dep.AndroidX.multiDex)
-
+    api(Dep.Libs.glide)
+    api(Dep.Libs.baseAdapter)
 }
