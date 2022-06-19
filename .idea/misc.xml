@@ -14,11 +14,24 @@
         <entry key="..\:/Projects/StudioProjects/decide/app_decide/src/main/res/menu/activity_main_drawer.xml" value="0.2734375" />
         <entry key="..\:/Projects/StudioProjects/nim/app_chat/src/main/res/drawable/bg_avatar_round.xml" value="0.173" />
         <entry key="..\:/Projects/StudioProjects/nim/app_chat/src/main/res/drawable/bg_cursor.xml" value="0.173" />
+        <entry key="..\:/Projects/StudioProjects/nim/app_chat/src/main/res/drawable/edit_bg_search.xml" value="0.173" />
+        <entry key="..\:/Projects/StudioProjects/nim/app_chat/src/main/res/drawable/ic_add.xml" value="0.173" />
+        <entry key="..\:/Projects/StudioProjects/nim/app_chat/src/main/res/drawable/ic_back.xml" value="0.173" />
+        <entry key="..\:/Projects/StudioProjects/nim/app_chat/src/main/res/drawable/ic_edit.xml" value="0.173" />
+        <entry key="..\:/Projects/StudioProjects/nim/app_chat/src/main/res/drawable/ic_new_friend.xml" value="0.173" />
         <entry key="..\:/Projects/StudioProjects/nim/app_chat/src/main/res/drawable/ic_right.xml" value="0.173" />
+        <entry key="..\:/Projects/StudioProjects/nim/app_chat/src/main/res/drawable/ic_search.xml" value="0.173" />
+        <entry key="..\:/Projects/StudioProjects/nim/app_chat/src/main/res/drawable/ic_setting.xml" value="0.173" />
+        <entry key="..\:/Projects/StudioProjects/nim/app_chat/src/main/res/drawable/ic_team_chat.xml" value="0.173" />
+        <entry key="..\:/Projects/StudioProjects/nim/app_chat/src/main/res/layout/dialog_load.xml" value="0.22826086956521738" />
+        <entry key="..\:/Projects/StudioProjects/nim/app_chat/src/main/res/layout/fragment_add_friend.xml" value="0.22826086956521738" />
         <entry key="..\:/Projects/StudioProjects/nim/app_chat/src/main/res/layout/fragment_appkey.xml" value="0.22826086956521738" />
         <entry key="..\:/Projects/StudioProjects/nim/app_chat/src/main/res/layout/fragment_home.xml" value="0.22826086956521738" />
         <entry key="..\:/Projects/StudioProjects/nim/app_chat/src/main/res/layout/fragment_login.xml" value="0.22826086956521738" />
         <entry key="..\:/Projects/StudioProjects/nim/app_chat/src/main/res/layout/fragment_my.xml" value="0.22826086956521738" />
+        <entry key="..\:/Projects/StudioProjects/nim/app_chat/src/main/res/layout/fragment_search_user.xml" value="0.22826086956521738" />
+        <entry key="..\:/Projects/StudioProjects/nim/app_chat/src/main/res/layout/fragment_setting.xml" value="0.22826086956521738" />
+        <entry key="..\:/Projects/StudioProjects/nim/app_chat/src/main/res/layout/header_home.xml" value="0.22826086956521738" />
         <entry key="..\:/Projects/StudioProjects/nim/app_chat/src/main/res/layout/item_friend.xml" value="0.264" />
         <entry key="app/src/main/res/drawable/hit_backgroud.xml" value="0.4205" />
         <entry key="app/src/main/res/drawable/indicator.xml" value="0.4205" />

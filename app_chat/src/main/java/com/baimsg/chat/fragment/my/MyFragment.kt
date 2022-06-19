@@ -43,7 +43,7 @@ class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
                 Glide.with(this@MyFragment).load(avatar).apply(
                     RequestOptions()
                         .transform(
-                            CenterCrop(), RoundedCorners(requireContext().dp2px(4.0f).toInt())
+                            CenterCrop(), RoundedCorners(requireContext().dp2px(88.0f).toInt())
                         )
                 ).into(binding.ivAvatar)
             }

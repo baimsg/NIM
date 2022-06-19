@@ -8,8 +8,6 @@ import com.baimsg.chat.bean.NIMTeam
 import com.baimsg.chat.bean.NIMUserInfo
 import com.baimsg.chat.bean.asTeam
 import com.baimsg.chat.bean.asUser
-import com.baimsg.chat.type.ErrorRouter
-import com.baimsg.chat.type.ExecutionStatus
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.RequestCallback
 import com.netease.nimlib.sdk.StatusCode
@@ -54,8 +52,7 @@ internal class LoginViewModel constructor(val app: Application) :
     /**
      * 好友列表
      */
-    private var friends = emptyList<String?>()
-
+    var friends = emptyList<String?>()
 
     /**
      * 群列表
@@ -64,19 +61,18 @@ internal class LoginViewModel constructor(val app: Application) :
         MutableStateFlow(emptyList<NIMTeam>())
     }
 
-    val executionStatus by lazy {
-        MutableSharedFlow<ErrorRouter>()
-    }
-
     private val pending by lazy {
         MutableSharedFlow<LoginAction>()
     }
 
     init {
-        if (!userInfo.value.loaded) {
-            loadUserInfo()
-            loadFriends()
-            loadGroupList()
+        viewModelScope.launch {
+            statusCode.collectLatest { statusCode ->
+                if (statusCode == StatusCode.LOGINED) {
+                    loadUserInfo()
+                    loadFriends()
+                }
+            }
         }
 
         viewModelScope.launch {
@@ -117,24 +113,12 @@ internal class LoginViewModel constructor(val app: Application) :
 
                 override fun onFailed(code: Int) {
                     viewModelScope.launch {
-                        executionStatus.emit(
-                            ErrorRouter.UserInfo(
-                                "获取用户信息失败:$code",
-                                ExecutionStatus.FAIL
-                            )
-                        )
+
                     }
                 }
 
                 override fun onException(e: Throwable?) {
-                    viewModelScope.launch {
-                        executionStatus.emit(
-                            ErrorRouter.UserInfo(
-                                "获取用户信息失败:${e?.message}",
-                                ExecutionStatus.FAIL
-                            )
-                        )
-                    }
+
                 }
             })
     }
@@ -142,7 +126,7 @@ internal class LoginViewModel constructor(val app: Application) :
     /**
      * 加载好友列表
      */
-    private fun loadFriends() {
+    fun loadFriends() {
         viewModelScope.launch {
             friends = NIMClient.getService(FriendService::class.java).friendAccounts
             getUserInfo()
@@ -160,30 +144,17 @@ internal class LoginViewModel constructor(val app: Application) :
                         mTeams?.run {
                             teams.emit(this.map { it.asTeam() })
                         }
-                        executionStatus.emit(ErrorRouter.Teams())
                     }
                 }
 
                 override fun onFailed(code: Int) {
                     viewModelScope.launch {
-                        executionStatus.emit(
-                            ErrorRouter.Teams(
-                                "获取群列表失败:$code",
-                                ExecutionStatus.FAIL
-                            )
-                        )
+
                     }
                 }
 
                 override fun onException(e: Throwable?) {
-                    viewModelScope.launch {
-                        executionStatus.emit(
-                            ErrorRouter.Teams(
-                                "获取群列表失败:${e?.message}",
-                                ExecutionStatus.FAIL
-                            )
-                        )
-                    }
+
                 }
             })
     }
@@ -197,30 +168,15 @@ internal class LoginViewModel constructor(val app: Application) :
                 override fun onSuccess(users: List<NimUserInfo>?) {
                     viewModelScope.launch {
                         userInfo.emit(users?.firstOrNull().asUser())
-                        executionStatus.emit(ErrorRouter.UserInfo())
                     }
                 }
 
                 override fun onFailed(code: Int) {
-                    viewModelScope.launch {
-                        executionStatus.emit(
-                            ErrorRouter.UserInfo(
-                                "获取用户信息失败:$code",
-                                ExecutionStatus.FAIL
-                            )
-                        )
-                    }
+
                 }
 
                 override fun onException(e: Throwable?) {
-                    viewModelScope.launch {
-                        executionStatus.emit(
-                            ErrorRouter.UserInfo(
-                                "获取用户信息失败:${e?.message}",
-                                ExecutionStatus.FAIL
-                            )
-                        )
-                    }
+
                 }
             })
     }

@@ -11,6 +11,8 @@ object Constant {
 
     const val KEY_APP_KEY = "appKey"
 
+    const val KEY_SEARCH_COUNT = "key_search_count"
+
     const val KEY_TOKEN = "token"
 
     val ACCOUNT: String
@@ -22,4 +24,6 @@ object Constant {
     val TOKEN: String
         get() = KvUtils.getString(KEY_TOKEN, "")
 
+    val SEARCH_COUNT: Long
+        get() = KvUtils.getLong(KEY_SEARCH_COUNT, 100000)
 }

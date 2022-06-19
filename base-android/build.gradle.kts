@@ -70,4 +70,12 @@ dependencies {
     api(Dep.AndroidX.multiDex)
     api(Dep.Libs.glide)
     api(Dep.Libs.baseAdapter)
+    api(Dep.Libs.toasty)
+    api(Dep.Libs.Dialog.core)
+    api(Dep.Libs.Dialog.input)
+    api(Dep.Libs.Dialog.datetime)
+    api(Dep.Libs.Dialog.color)
+    api(Dep.Libs.Dialog.files)
+    api(Dep.Libs.Dialog.bottomSheets)
+    api(Dep.Libs.Dialog.lifecycle)
 }

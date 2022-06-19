@@ -149,6 +149,18 @@ object Dep {
         const val desugar = "com.android.tools:desugar_jdk_libs:1.1.5"
         const val baseAdapter = "com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.7"
         const val glide = "com.github.bumptech.glide:glide:4.11.0"
+        const val toasty = "com.github.GrenderG:Toasty:1.5.2"
+
+        object Dialog {
+            private const val ver = "3.3.0"
+            const val core = "com.afollestad.material-dialogs:core:$ver"
+            const val input = "com.afollestad.material-dialogs:input:$ver"
+            const val files = "com.afollestad.material-dialogs:files:$ver"
+            const val color = "com.afollestad.material-dialogs:color:$ver"
+            const val datetime = "com.afollestad.material-dialogs:datetime:$ver"
+            const val bottomSheets = "com.afollestad.material-dialogs:bottomsheets:$ver"
+            const val lifecycle = "com.afollestad.material-dialogs:lifecycle:$ver"
+        }
     }
 
 }

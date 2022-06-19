@@ -1,20 +1,20 @@
 package com.baimsg.chat.fragment.home
 
+import android.view.View
 import android.widget.LinearLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.baimsg.chat.Constant
 import com.baimsg.chat.R
 import com.baimsg.chat.adapter.FriendAdapter
 import com.baimsg.chat.base.BaseFragment
 import com.baimsg.chat.databinding.FragmentHomeBinding
+import com.baimsg.chat.databinding.HeaderHomeBinding
 import com.baimsg.chat.fragment.login.LoginViewModel
-import com.baimsg.chat.type.ErrorRouter
 import com.baimsg.chat.util.extensions.message
 import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
-import com.baimsg.chat.util.extensions.showShort
+import com.baimsg.chat.util.extensions.showInfo
 import kotlinx.coroutines.flow.collectLatest
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
@@ -27,21 +27,35 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
     }
 
-    private val adapter by lazy {
+    private val friendAdapter by lazy {
         FriendAdapter()
     }
 
     override fun initView() {
+        binding.ivAdd.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_addFriendFragment)
+        }
+
         binding.srContent.apply {
             setColorSchemeResources(R.color.color_primary)
             setOnRefreshListener {
-                loginViewModel.loadGroupList()
+                loginViewModel.loadFriends()
             }
         }
 
         binding.ryContent.apply {
+            val headerView = View.inflate(requireContext(), R.layout.header_home, null)
+            HeaderHomeBinding.bind(headerView).apply {
+                friendAdapter.setHeaderView(headerView)
+                vNewFriend.setOnClickListener {
+                    showInfo("unknown 该功能待开发")
+                }
+                vTeamChat.setOnClickListener {
+                    showInfo("unknown 该功能待开发")
+                }
+            }
             layoutManager = LinearLayoutManager(requireContext(), LinearLayout.VERTICAL, false)
-            this.adapter = this@HomeFragment.adapter
+            adapter = friendAdapter
         }
     }
 
@@ -49,32 +63,22 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         repeatOnLifecycleStarted {
             loginViewModel.statusCode.collectLatest { status ->
                 binding.tvStatus.text = status.message()
-                if (status.wontAutoLogin() || Constant.APP_KEY.isBlank() || Constant.ACCOUNT.isBlank()) openLogin
+                Constant.apply {
+                    if (status.wontAutoLogin() || APP_KEY.isBlank() || ACCOUNT.isBlank() || TOKEN.isBlank()) openLogin
+                }
             }
         }
 
         repeatOnLifecycleStarted {
             loginViewModel.users.collectLatest {
-                adapter.setList(it)
-                adapter.notifyDataSetChanged()
+                binding.srContent.isRefreshing = false
+                friendAdapter.setList(it)
+                friendAdapter.notifyDataSetChanged()
             }
         }
-        repeatOnLifecycleStarted {
-            loginViewModel.executionStatus.collectLatest { error ->
-                when (error) {
-                    is ErrorRouter.UserInfo -> {
-                        if (error.isFail()) showShort(error.message)
-                    }
-                    is ErrorRouter.Teams -> {
-                        binding.srContent.isRefreshing = false
-                        if (error.isFail()) showShort(error.message)
-                    }
-                }
-            }
-        }
+
 
     }
-
 
     override fun onPause() {
         super.onPause()

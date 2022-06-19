@@ -15,4 +15,9 @@
     <string name="app_key_hint">请输入appKey</string>
     <string name="digits_key">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
     <string name="logout">退出登录</string>
+    <string name="friend_requests">好友申请</string>
+    <string name="team_chat">群聊</string>
+    <string name="add">添加</string>
+    <string name="search">搜索</string>
+    <string name="edit">编辑</string>
 </resources>
