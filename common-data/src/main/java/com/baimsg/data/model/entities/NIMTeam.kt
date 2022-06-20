@@ -1,4 +1,4 @@
-package com.baimsg.chat.bean
+package com.baimsg.data.model.entities
 
 import com.netease.nimlib.sdk.team.constant.*
 import com.netease.nimlib.sdk.team.model.Team

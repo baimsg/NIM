@@ -1,7 +1,10 @@
-package com.baimsg.chat.bean
+package com.baimsg.data.model
 
 import com.netease.nimlib.sdk.friend.model.Friend
 
+/**
+ * 好友简略信息
+ */
 data class NIMFriend(
     val account: String = "",
     val alias: String = "",

@@ -1,6 +1,6 @@
 package com.baimsg.chat.fragment.login
 
-import com.baimsg.chat.bean.NIMUserInfo
+import com.baimsg.data.model.entities.NIMUserInfo
 import com.netease.nimlib.sdk.StatusCode
 
 /**

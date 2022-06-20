@@ -2,22 +2,30 @@ package com.baimsg.chat.app
 
 import android.app.Application
 import android.content.Context
+import androidx.multidex.MultiDex
 import com.baimsg.chat.Constant
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.SDKOptions
 import com.netease.nimlib.sdk.auth.LoginInfo
 import com.tencent.mmkv.MMKV
+import dagger.hilt.android.HiltAndroidApp
 
 /**
  * Create by Baimsg on 2022/6/13
  *
  **/
+@HiltAndroidApp
 class ChatApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
         MMKV.initialize(this)
         NIMClient.init(this, loginInfo(), options(this))
+    }
+
+    override fun attachBaseContext(base: Context) {
+        super.attachBaseContext(base)
+        MultiDex.install(this)
     }
 
     private fun loginInfo(): LoginInfo {

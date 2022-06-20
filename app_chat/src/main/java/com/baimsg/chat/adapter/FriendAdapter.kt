@@ -1,8 +1,8 @@
 package com.baimsg.chat.adapter
 
-import com.baimsg.chat.bean.NIMUserInfo
 import com.baimsg.chat.databinding.ItemFriendBinding
 import com.baimsg.chat.util.extensions.dp2px
+import com.baimsg.data.model.entities.NIMUserInfo
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
