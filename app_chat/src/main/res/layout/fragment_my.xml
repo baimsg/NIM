@@ -15,17 +15,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/ivSetting"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="45dp"
-        android:contentDescription="@string/nav_setting"
-        android:src="@drawable/ic_setting"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
         android:id="@+id/ivAvatar"
         android:layout_width="68dp"
         android:layout_height="68dp"
@@ -85,19 +74,97 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-
-            <TextView
-                android:id="@+id/tvLogout"
+            <View
+                android:id="@+id/vSetting"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@color/background_click"
-                android:gravity="center"
-                android:text="@string/logout"
-                android:textColor="@color/title_color"
-                android:textSize="16sp"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <ImageView
+                android:id="@+id/ivSetting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:contentDescription="@string/setting"
+                android:src="@drawable/ic_setting"
+                app:layout_constraintBottom_toBottomOf="@id/vSetting"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/vSetting" />
+
+            <TextView
+                android:id="@+id/tvLogout"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="16dp"
+                android:gravity="center_vertical"
+                android:text="@string/setting"
+                android:textColor="@color/title_color"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@id/vSetting"
+                app:layout_constraintStart_toEndOf="@id/ivSetting"
+                app:layout_constraintTop_toTopOf="@id/vSetting" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:contentDescription="@string/enter"
+                android:src="@drawable/ic_right"
+                app:layout_constraintBottom_toBottomOf="@id/vSetting"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/vSetting" />
+
+
+            <View
+                android:id="@+id/vLineSetting"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                app:layout_constraintTop_toBottomOf="@id/vSetting" />
+
+            <View
+                android:id="@+id/vAbout"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/background_click"
+                app:layout_constraintTop_toBottomOf="@id/vLineSetting" />
+
+            <ImageView
+                android:id="@+id/ivAbout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:contentDescription="@string/setting"
+                android:src="@drawable/ic_about"
+                app:layout_constraintBottom_toBottomOf="@id/vAbout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/vAbout" />
+
+            <TextView
+                android:id="@+id/tvAbout"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="16dp"
+                android:gravity="center_vertical"
+                android:text="@string/about"
+                android:textColor="@color/title_color"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@id/vAbout"
+                app:layout_constraintStart_toEndOf="@id/ivSetting"
+                app:layout_constraintTop_toTopOf="@id/vAbout" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:contentDescription="@string/enter"
+                android:src="@drawable/ic_right"
+                app:layout_constraintBottom_toBottomOf="@id/vAbout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/vAbout" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

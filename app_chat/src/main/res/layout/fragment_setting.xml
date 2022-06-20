@@ -22,7 +22,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/nav_setting"
+        android:text="@string/setting"
         android:textColor="@color/title_color"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -48,7 +48,7 @@
         android:id="@+id/tvAppKeyValue"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginEnd="8sp"
+        android:layout_marginEnd="8dp"
         android:gravity="center"
         android:textColor="@color/subtitle_color"
         android:textSize="14sp"
@@ -85,7 +85,7 @@
         android:id="@+id/tvPrefixValue"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginEnd="8sp"
+        android:layout_marginEnd="8dp"
         android:gravity="center"
         android:textColor="@color/subtitle_color"
         android:textSize="14sp"
@@ -129,7 +129,7 @@
         android:id="@+id/tvScopeValue"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginEnd="8sp"
+        android:layout_marginEnd="8dp"
         android:gravity="center"
         android:textColor="@color/subtitle_color"
         android:textSize="14sp"
@@ -148,5 +148,110 @@
         app:layout_constraintBottom_toBottomOf="@id/tvScope"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/tvScope" />
+
+    <View
+        android:id="@+id/vScope"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginStart="16dp"
+        android:background="@color/line_color"
+        app:layout_constraintTop_toBottomOf="@id/tvScope" />
+
+    <TextView
+        android:id="@+id/tvVerify"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/background_click"
+        android:gravity="start|center_vertical"
+        android:maxLines="1"
+        android:paddingHorizontal="16dp"
+        android:text="@string/dictionary_verify"
+        android:textColor="@color/title_color"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/vScope" />
+
+    <TextView
+        android:id="@+id/tvVerifyValue"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="end|center_vertical"
+        android:maxLines="1"
+        android:paddingStart="90dp"
+        android:paddingEnd="8dp"
+        android:textColor="@color/subtitle_color"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@id/tvVerify"
+        app:layout_constraintEnd_toStartOf="@id/ivScope"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvVerify"
+        tools:text="你哈" />
+
+    <ImageView
+        android:id="@+id/ivVerify"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginEnd="16dp"
+        android:contentDescription="@string/enter"
+        android:src="@drawable/ic_right"
+        app:layout_constraintBottom_toBottomOf="@id/tvVerify"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvVerify" />
+
+    <View
+        android:id="@+id/vVerify"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginStart="16dp"
+        android:background="@color/line_color"
+        app:layout_constraintTop_toBottomOf="@id/tvVerify" />
+
+    <TextView
+        android:id="@+id/tvFilter"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/background_click"
+        android:gravity="start|center_vertical"
+        android:paddingHorizontal="16dp"
+        android:text="@string/dictionary_filter"
+        android:textColor="@color/title_color"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/vVerify" />
+
+    <ImageView
+        android:id="@+id/ivFilter"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginEnd="16dp"
+        android:contentDescription="@string/enter"
+        android:src="@drawable/ic_right"
+        app:layout_constraintBottom_toBottomOf="@id/tvFilter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvFilter" />
+
+    <TextView
+        android:id="@+id/tvSwitchAccount"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/background_click"
+        android:gravity="center"
+        android:paddingHorizontal="16dp"
+        android:text="@string/switch_account"
+        android:textColor="@color/title_color"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/tvFilter" />
+
+    <TextView
+        android:id="@+id/tvQuit"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/background_click"
+        android:gravity="center"
+        android:paddingHorizontal="16dp"
+        android:text="@string/logout"
+        android:textColor="@color/title_color"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/tvSwitchAccount" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

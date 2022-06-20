@@ -52,6 +52,20 @@
             app:exitAnim="@anim/fragment_open_exit"
             app:popEnterAnim="@anim/fragment_open_enter"
             app:popExitAnim="@anim/fragment_open_exit" />
+        <action
+            android:id="@+id/action_settingFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
+            app:popExitAnim="@anim/fragment_open_exit" />
+        <action
+            android:id="@+id/action_settingFragment_to_filterFragment"
+            app:destination="@id/filterFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
+            app:popExitAnim="@anim/fragment_open_exit" />
     </fragment>
 
     <fragment
@@ -87,5 +101,10 @@
             app:popEnterAnim="@anim/fragment_open_enter"
             app:popExitAnim="@anim/fragment_open_exit" />
     </fragment>
+    <fragment
+        android:id="@+id/filterFragment"
+        android:name="com.baimsg.chat.fragment.setting.filter.FilterFragment"
+        android:label="FilterFragment"
+        tools:layout="@layout/fragment_filter" />
 
 </navigation>

@@ -15,6 +15,10 @@ object Constant {
 
     const val KEY_SEARCH_PREFIX = "key_search_prefix"
 
+    const val KEY_ADD_VERIFY = "key_key_add_verify"
+
+    const val kEY_ADD_FILTER = "key_add_filter"
+
     const val KEY_TOKEN = "token"
 
     val ACCOUNT: String
@@ -31,4 +35,11 @@ object Constant {
 
     val SEARCH_PREFIX: String
         get() = KvUtils.getString(KEY_SEARCH_PREFIX, "659")
+
+    val ADD_VERIFY: String
+        get() = KvUtils.getString(KEY_ADD_VERIFY, "你好！")
+
+    val ADD_FILTER: String
+        get() = KvUtils.getString(kEY_ADD_FILTER, "")
+
 }

@@ -33,6 +33,18 @@ fun Fragment.showInfo(msg: String) {
     }
 }
 
+fun Fragment.showSuccess(msg: String) {
+    Toasty.success(requireContext(), msg, Toast.LENGTH_SHORT, true).apply {
+        show()
+    }
+}
+
+fun Fragment.showWarning(msg: String) {
+    Toasty.warning(requireContext(), msg, Toast.LENGTH_SHORT, true).apply {
+        show()
+    }
+}
+
 fun Fragment.showError(msg: String) {
     Toasty.error(requireContext(), msg, Toast.LENGTH_SHORT, true).apply {
         show()

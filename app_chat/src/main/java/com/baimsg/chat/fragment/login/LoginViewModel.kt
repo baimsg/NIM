@@ -76,7 +76,7 @@ internal class LoginViewModel constructor() :
     init {
         viewModelScope.launch {
             statusCode.collectLatest { statusCode ->
-                if (statusCode == StatusCode.LOGINED) {
+                if (statusCode == StatusCode.LOGINED && !userInfo.value.loaded) {
                     loadUserInfo()
                     loadFriends()
                 }
@@ -111,8 +111,14 @@ internal class LoginViewModel constructor() :
          * 重制页码
          */
         friendPage = 0
-        friends.value = NIMClient.getService(FriendService::class.java).friendAccounts
-        getUserInfo()
+        val list = NIMClient.getService(FriendService::class.java)?.friendAccounts
+        if (list == null) {
+            friendViewState.value =
+                FriendViewState.EMPTY.copy(executionStatus = ExecutionStatus.FAIL)
+        } else {
+            friends.value = list
+            getUserInfo()
+        }
     }
 
     fun nextPageUserInfo() {
