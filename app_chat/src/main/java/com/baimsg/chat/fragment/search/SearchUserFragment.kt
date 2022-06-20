@@ -33,23 +33,20 @@ class SearchUserFragment : BaseFragment<FragmentSearchUserBinding>(R.layout.frag
         }
 
         binding.ivStart.setOnClickListener {
-            if (searchUserViewModel.searchUserParam.value.running) {
 
-            }
-            searchUserViewModel.searchUser()
         }
 
     }
 
     override fun initLiveData() {
 
-        repeatOnLifecycleStarted {
-            searchUserViewModel.searchUserParam.collectLatest {
-                binding.ivStart.setImageResource(if (it.running) R.drawable.ic_pause else R.drawable.ic_start)
-                binding.tvProgress.text =
-                    if (it.index >= Constant.SEARCH_COUNT) "已完成" else "(${it.index}/${Constant.SEARCH_COUNT})"
-            }
-        }
+//        repeatOnLifecycleStarted {
+//            searchUserViewModel.searchUserViewState.collectLatest {
+//                binding.ivStart.setImageResource(if (it.running) R.drawable.ic_pause else R.drawable.ic_start)
+//                binding.tvProgress.text =
+//                    if (it.index >= Constant.SEARCH_COUNT) "已完成" else "(${it.index}/${Constant.SEARCH_COUNT})"
+//            }
+//        }
     }
 
     override fun onPause() {

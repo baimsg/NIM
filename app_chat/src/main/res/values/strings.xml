@@ -10,14 +10,18 @@
     <string name="group_list">群列表</string>
     <string name="member_list">群成员</string>
     <string name="setting_key">设置 appKey</string>
-    <string name="key">key</string>
+    <string name="app_key">appKey</string>
     <string name="finish">完成</string>
     <string name="app_key_hint">请输入appKey</string>
     <string name="digits_key">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="quit">退出</string>
     <string name="logout">退出登录</string>
     <string name="friend_requests">好友申请</string>
     <string name="team_chat">群聊</string>
     <string name="add">添加</string>
     <string name="search">搜索</string>
     <string name="edit">编辑</string>
+    <string name="enter">进入</string>
+    <string name="dictionary_prefix">字典前缀</string>
+    <string name="dictionary_scope">字典范围</string>
 </resources>

@@ -4,9 +4,149 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg"
-    android:orientation="vertical">
+    android:background="@color/bg">
+
+    <ImageView
+        android:id="@+id/ivBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:contentDescription="@string/back"
+        android:padding="16dp"
+        android:src="@drawable/ic_back"
+        android:tint="@color/icon_click"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="UseAppTint" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/nav_setting"
+        android:textColor="@color/title_color"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/ivBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/ivBack" />
 
 
+    <TextView
+        android:id="@+id/tvAppKey"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/background_click"
+        android:gravity="start|center_vertical"
+        android:paddingHorizontal="16dp"
+        android:text="@string/app_key"
+        android:textColor="@color/title_color"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/ivBack" />
+
+    <TextView
+        android:id="@+id/tvAppKeyValue"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8sp"
+        android:gravity="center"
+        android:textColor="@color/subtitle_color"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@id/tvAppKey"
+        app:layout_constraintEnd_toStartOf="@id/ivAppKey"
+        app:layout_constraintTop_toTopOf="@id/tvAppKey"
+        tools:text="0985263902383746" />
+
+    <ImageView
+        android:id="@+id/ivAppKey"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginEnd="16dp"
+        android:contentDescription="@string/enter"
+        android:src="@drawable/ic_right"
+        app:layout_constraintBottom_toBottomOf="@id/tvAppKey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvAppKey" />
+
+    <TextView
+        android:id="@+id/tvPrefix"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/background_click"
+        android:gravity="start|center_vertical"
+        android:paddingHorizontal="16dp"
+        android:text="@string/dictionary_prefix"
+        android:textColor="@color/title_color"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/tvAppKey" />
+
+    <TextView
+        android:id="@+id/tvPrefixValue"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8sp"
+        android:gravity="center"
+        android:textColor="@color/subtitle_color"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@id/tvPrefix"
+        app:layout_constraintEnd_toStartOf="@id/ivPrefix"
+        app:layout_constraintTop_toTopOf="@id/tvPrefix"
+        tools:text="659" />
+
+    <ImageView
+        android:id="@+id/ivPrefix"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginEnd="16dp"
+        android:contentDescription="@string/enter"
+        android:src="@drawable/ic_right"
+        app:layout_constraintBottom_toBottomOf="@id/tvPrefix"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvPrefix" />
+
+    <View
+        android:id="@+id/vPrefix"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginStart="16dp"
+        android:background="@color/line_color"
+        app:layout_constraintTop_toBottomOf="@id/tvPrefix" />
+
+    <TextView
+        android:id="@+id/tvScope"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/background_click"
+        android:gravity="start|center_vertical"
+        android:paddingHorizontal="16dp"
+        android:text="@string/dictionary_scope"
+        android:textColor="@color/title_color"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/vPrefix" />
+
+    <TextView
+        android:id="@+id/tvScopeValue"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8sp"
+        android:gravity="center"
+        android:textColor="@color/subtitle_color"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@id/tvScope"
+        app:layout_constraintEnd_toStartOf="@id/ivScope"
+        app:layout_constraintTop_toTopOf="@id/tvScope"
+        tools:text="100000" />
+
+    <ImageView
+        android:id="@+id/ivScope"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginEnd="16dp"
+        android:contentDescription="@string/enter"
+        android:src="@drawable/ic_right"
+        app:layout_constraintBottom_toBottomOf="@id/tvScope"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvScope" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

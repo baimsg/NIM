@@ -46,6 +46,7 @@
         <entry key="app_chat/src/main/res/drawable/ic_back.xml" value="0.4205" />
         <entry key="app_chat/src/main/res/drawable/ic_home.xml" value="0.4205" />
         <entry key="app_chat/src/main/res/drawable/ic_my.xml" value="0.4205" />
+        <entry key="app_chat/src/main/res/drawable/ic_right.xml" value="0.334" />
         <entry key="app_chat/src/main/res/drawable/ic_setting.xml" value="0.4205" />
         <entry key="app_chat/src/main/res/layout/activity_main.xml" value="0.5760416666666667" />
         <entry key="app_chat/src/main/res/layout/content_main.xml" value="0.32864583333333336" />

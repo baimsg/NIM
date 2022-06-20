@@ -14,12 +14,11 @@ import kotlinx.coroutines.launch
 
 class SearchUserViewModel : ViewModel() {
 
-    val searchUserParam by lazy {
-        MutableStateFlow(SearchUserParam())
-    }
+//    val searchUserViewState by lazy {
+//        MutableStateFlow(SearchUserViewState())
+//    }
 
-    val isSearchUser
-        get() = searchUserParam.value.running
+
 
     val account by lazy {
         MutableStateFlow<String?>(null)
@@ -31,20 +30,19 @@ class SearchUserViewModel : ViewModel() {
 
     fun updateAccount(newAccount: String?) {
         viewModelScope.launch {
-            searchUserParam.emit(SearchUserParam())
             account.emit(newAccount)
         }
     }
 
     fun searchUser() {
         viewModelScope.launch {
-            searchUserParam.emit(SearchUserParam(running = true))
+
         }
         account.value?.toLong()?.let { searchUser(it) }
     }
 
     private fun searchUser(account: Long) {
-        var index = searchUserParam.value.index
+        var index = 0
         if (index >= Constant.SEARCH_COUNT) {
             return
         }
@@ -60,7 +58,6 @@ class SearchUserViewModel : ViewModel() {
                 override fun onSuccess(mUsers: List<NimUserInfo>?) {
                     viewModelScope.launch {
                         mUsers?.map { it.asUser() }?.let { users.emit(it) }
-                        searchUserParam.emit(searchUserParam.value.copy(index = index))
                     }
                     searchUser(account + index)
                 }

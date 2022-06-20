@@ -73,7 +73,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:padding="16dp"
-        android:text="@string/key"
+        android:text="@string/app_key"
         android:textColor="@color/material_black"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
