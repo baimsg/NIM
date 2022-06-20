@@ -6,6 +6,7 @@
     <color name="background">#FFFFFF</color>
     <color name="background_pressed">#80F6F6F6</color>
     <color name="color_primary">#F06292</color>
+    <color name="color_primary_translucent">#80F06292</color>
     <color name="icon_tint">#000000</color>
     <color name="icon_tint_pressed">#80F6F6F6</color>
     <color name="color_primary_variant">#ff94c2</color>
