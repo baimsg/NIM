@@ -32,7 +32,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
         binding.bottomNav.setupWithNavController(navController)
-
         //监听导航事件
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {

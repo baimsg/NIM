@@ -18,8 +18,8 @@
             app:popEnterAnim="@anim/fade_no_change"
             app:popExitAnim="@anim/slide_out_bottom" />
         <action
-            android:id="@+id/action_homeFragment_to_addFriendFragment"
-            app:destination="@id/addFriendFragment"
+            android:id="@+id/action_homeFragment_to_searchUserFragment"
+            app:destination="@id/searchUserFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/fade_no_change"
             app:popEnterAnim="@anim/fade_no_change"
@@ -90,24 +90,25 @@
         android:id="@+id/appKeyFragment"
         android:name="com.baimsg.chat.fragment.setting.appkey.AppKeyFragment"
         android:label="AppKeyFragment"
-        tools:layout="@layout/fragment_appkey" />
+        tools:layout="@layout/fragment_app_key" />
+
 
     <fragment
-        android:id="@+id/addFriendFragment"
+        android:id="@+id/filterFragment"
+        android:name="com.baimsg.chat.fragment.setting.filter.FilterFragment"
+        android:label="FilterFragment"
+        tools:layout="@layout/fragment_filter" />
+    <fragment
+        android:id="@+id/searchUserFragment"
         android:name="com.baimsg.chat.fragment.search.SearchUserFragment"
-        android:label="AddFriendFragment"
+        android:label="SearchUserFragment"
         tools:layout="@layout/fragment_search_user">
         <action
-            android:id="@+id/action_addFriendFragment_to_settingFragment"
+            android:id="@+id/action_searchUserFragment_to_settingFragment"
             app:destination="@id/settingFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/fade_no_change"
             app:popEnterAnim="@anim/fade_no_change"
             app:popExitAnim="@anim/slide_out_left" />
     </fragment>
-    <fragment
-        android:id="@+id/filterFragment"
-        android:name="com.baimsg.chat.fragment.setting.filter.FilterFragment"
-        android:label="FilterFragment"
-        tools:layout="@layout/fragment_filter" />
 </navigation>

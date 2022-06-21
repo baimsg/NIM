@@ -1,6 +1,9 @@
 package com.baimsg.chat.fragment.home
 
+import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
@@ -45,9 +48,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private var tvFriendCount: TextView? = null
 
+
     override fun initView() {
         binding.ivAdd.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_addFriendFragment)
+            findNavController().navigate(R.id.action_homeFragment_to_searchUserFragment)
         }
 
         binding.srContent.apply {

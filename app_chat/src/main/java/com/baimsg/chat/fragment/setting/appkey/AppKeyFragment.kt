@@ -6,14 +6,17 @@ import com.baimsg.base.util.KvUtils
 import com.baimsg.chat.Constant
 import com.baimsg.chat.R
 import com.baimsg.chat.base.BaseFragment
-import com.baimsg.chat.databinding.FragmentAppkeyBinding
-import com.baimsg.chat.util.extensions.*
+import com.baimsg.chat.databinding.FragmentAppKeyBinding
+import com.baimsg.chat.util.extensions.hide
+import com.baimsg.chat.util.extensions.show
+import com.baimsg.chat.util.extensions.showKeyboard
+import com.baimsg.chat.util.extensions.showShort
 
 /**
  * Create by Baimsg on 2022/6/14
  *
  **/
-class AppKeyFragment : BaseFragment<FragmentAppkeyBinding>(R.layout.fragment_appkey) {
+class AppKeyFragment : BaseFragment<FragmentAppKeyBinding>(R.layout.fragment_app_key) {
 
     private var appKey: String = ""
 
