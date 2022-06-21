@@ -39,7 +39,6 @@ class FilterFragment : BaseFragment<FragmentFilterBinding>(R.layout.fragment_fil
         filterAdapter.onRemove = { position ->
             filters.removeAt(position)
             filterAdapter.removeAt(position)
-            filterAdapter.notifyItemChanged(position - 1)
             update()
         }
 
@@ -47,7 +46,6 @@ class FilterFragment : BaseFragment<FragmentFilterBinding>(R.layout.fragment_fil
             setColorSchemeResources(R.color.color_primary)
             setOnRefreshListener {
                 filterAdapter.setList(filters)
-                filterAdapter.notifyDataSetChanged()
                 isRefreshing = false
                 update()
             }
@@ -64,7 +62,6 @@ class FilterFragment : BaseFragment<FragmentFilterBinding>(R.layout.fragment_fil
                     MaterialDialog(requireContext()).show {
                         input(hint = "请输入过滤关键词") { _, charSequence ->
                             filterAdapter.addData(charSequence.toString())
-                            filterAdapter.notifyItemChanged(filters.size - 1)
                             filters.add(charSequence.toString())
                             update()
                         }
