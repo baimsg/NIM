@@ -5,6 +5,7 @@ import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
+import com.baimsg.base.util.KvUtils
 import com.baimsg.chat.Constant
 import com.baimsg.chat.R
 import com.baimsg.chat.adapter.FilterAdapter
@@ -32,6 +33,8 @@ class FilterFragment : BaseFragment<FragmentFilterBinding>(R.layout.fragment_fil
     }
 
     override fun initView() {
+        filterAdapter.setList(filters)
+        update()
 
         filterAdapter.onRemove = { position ->
             filters.removeAt(position)
@@ -75,5 +78,13 @@ class FilterFragment : BaseFragment<FragmentFilterBinding>(R.layout.fragment_fil
 
     private fun update() {
         binding.tvTitle.text = "过滤词(${filters.size})"
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        KvUtils.put(
+            Constant.kEY_ADD_FILTER,
+            DEFAULT_JSON_FORMAT.encodeToString(ListSerializer(String.serializer()), filters)
+        )
     }
 }

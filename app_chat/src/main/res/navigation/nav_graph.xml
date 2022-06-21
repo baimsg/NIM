@@ -13,17 +13,17 @@
         <action
             android:id="@+id/action_homeFragment_to_loginFragment"
             app:destination="@id/loginFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_open_enter"
-            app:popExitAnim="@anim/fragment_open_exit" />
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@anim/fade_no_change"
+            app:popEnterAnim="@anim/fade_no_change"
+            app:popExitAnim="@anim/slide_out_bottom" />
         <action
             android:id="@+id/action_homeFragment_to_addFriendFragment"
             app:destination="@id/addFriendFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_open_enter"
-            app:popExitAnim="@anim/fragment_open_exit" />
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/fade_no_change"
+            app:popEnterAnim="@anim/fade_no_change"
+            app:popExitAnim="@anim/slide_out_left" />
     </fragment>
 
     <fragment
@@ -34,10 +34,10 @@
         <action
             android:id="@+id/action_myFragment_to_settingFragment"
             app:destination="@id/settingFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_open_enter"
-            app:popExitAnim="@anim/fragment_open_exit" />
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/fade_no_change"
+            app:popEnterAnim="@anim/fade_no_change"
+            app:popExitAnim="@anim/slide_out_left" />
     </fragment>
 
     <fragment
@@ -48,24 +48,24 @@
         <action
             android:id="@+id/action_settingFragment_to_appKeyFragment"
             app:destination="@id/appKeyFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_open_enter"
-            app:popExitAnim="@anim/fragment_open_exit" />
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/fade_no_change"
+            app:popEnterAnim="@anim/fade_no_change"
+            app:popExitAnim="@anim/slide_out_left" />
         <action
             android:id="@+id/action_settingFragment_to_loginFragment"
             app:destination="@id/loginFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_open_enter"
-            app:popExitAnim="@anim/fragment_open_exit" />
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@anim/fade_no_change"
+            app:popEnterAnim="@anim/fade_no_change"
+            app:popExitAnim="@anim/slide_out_bottom" />
         <action
             android:id="@+id/action_settingFragment_to_filterFragment"
             app:destination="@id/filterFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_open_enter"
-            app:popExitAnim="@anim/fragment_open_exit" />
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/fade_no_change"
+            app:popEnterAnim="@anim/fade_no_change"
+            app:popExitAnim="@anim/slide_out_left" />
     </fragment>
 
     <fragment
@@ -73,13 +73,17 @@
         android:name="com.baimsg.chat.fragment.login.LoginFragment"
         android:label="LoginFragment"
         tools:layout="@layout/fragment_login">
+        <argument
+            android:name="tough"
+            android:defaultValue="false"
+            app:argType="boolean" />
         <action
             android:id="@+id/action_loginFragment_to_appKeyFragment"
             app:destination="@id/appKeyFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_open_enter"
-            app:popExitAnim="@anim/fragment_open_exit" />
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/fade_no_change"
+            app:popEnterAnim="@anim/fade_no_change"
+            app:popExitAnim="@anim/slide_out_left" />
     </fragment>
 
     <fragment
@@ -96,15 +100,14 @@
         <action
             android:id="@+id/action_addFriendFragment_to_settingFragment"
             app:destination="@id/settingFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_open_enter"
-            app:popExitAnim="@anim/fragment_open_exit" />
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/fade_no_change"
+            app:popEnterAnim="@anim/fade_no_change"
+            app:popExitAnim="@anim/slide_out_left" />
     </fragment>
     <fragment
         android:id="@+id/filterFragment"
         android:name="com.baimsg.chat.fragment.setting.filter.FilterFragment"
         android:label="FilterFragment"
         tools:layout="@layout/fragment_filter" />
-
 </navigation>

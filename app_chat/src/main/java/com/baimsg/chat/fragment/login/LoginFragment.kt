@@ -4,6 +4,7 @@ import androidx.activity.addCallback
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.baimsg.base.util.KvUtils
 import com.baimsg.chat.Constant
 import com.baimsg.chat.R
@@ -21,6 +22,15 @@ import kotlinx.coroutines.flow.collectLatest
  *
  **/
 class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login) {
+
+    private val args by navArgs<LoginFragmentArgs>()
+
+    //拦截返回事件
+    private val tough by lazy {
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            requireActivity().finish()
+        }
+    }
 
     private var account: String = Constant.ACCOUNT
 
@@ -89,11 +99,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
             }
         }
 
-        //拦截返回事件
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            requireActivity().finish()
-        }
-
+        if (args.tough) tough
     }
 
     override fun onPause() {

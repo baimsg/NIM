@@ -152,6 +152,7 @@ object Dep {
         const val toasty = "com.github.GrenderG:Toasty:1.5.2"
 
         object Dialog {
+            const val dialogX = "com.github.kongzue.DialogX:DialogX:0.0.45.beta12"
             private const val ver = "3.3.0"
             const val core = "com.afollestad.material-dialogs:core:$ver"
             const val input = "com.afollestad.material-dialogs:input:$ver"

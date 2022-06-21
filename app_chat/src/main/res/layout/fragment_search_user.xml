@@ -39,6 +39,19 @@
         android:src="@drawable/ic_edit"
         android:tint="@color/icon_click"
         app:layout_constraintBottom_toBottomOf="@id/ivBack"
+        app:layout_constraintEnd_toStartOf="@id/ivSave"
+        app:layout_constraintTop_toTopOf="@id/ivBack"
+        tools:ignore="UseAppTint" />
+
+    <ImageView
+        android:id="@+id/ivSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/save"
+        android:padding="16dp"
+        android:src="@drawable/ic_save"
+        android:tint="@color/icon_click"
+        app:layout_constraintBottom_toBottomOf="@id/ivBack"
         app:layout_constraintEnd_toStartOf="@id/ivStart"
         app:layout_constraintTop_toTopOf="@id/ivBack"
         tools:ignore="UseAppTint" />

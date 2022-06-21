@@ -26,9 +26,11 @@
         android:contentDescription="@string/remove"
         android:padding="16dp"
         android:src="@drawable/ic_remove"
+        android:tint="@color/icon_click"
         app:layout_constraintBottom_toBottomOf="@id/tvFilter"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvFilter" />
+        app:layout_constraintTop_toTopOf="@id/tvFilter"
+        tools:ignore="UseAppTint" />
 
     <View
         android:layout_width="match_parent"

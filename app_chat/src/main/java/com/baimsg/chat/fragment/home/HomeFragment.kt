@@ -19,7 +19,7 @@ import com.baimsg.chat.type.ExecutionStatus
 import com.baimsg.chat.util.extensions.message
 import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
 import com.baimsg.chat.util.extensions.showInfo
-import com.chad.library.adapter.base.animation.SlideInLeftAnimation
+import com.chad.library.adapter.base.animation.AlphaInAnimation
 import kotlinx.coroutines.flow.collectLatest
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
@@ -28,7 +28,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     }
 
     private val openLogin by lazy {
-        findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
+        findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToLoginFragment(tough = true))
     }
 
     private val friendAdapter by lazy {
@@ -59,7 +59,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
         binding.ryContent.apply {
             friendAdapter.animationEnable = true
-            friendAdapter.adapterAnimation = SlideInLeftAnimation()
+            friendAdapter.adapterAnimation = AlphaInAnimation()
 
             val headerView = View.inflate(requireContext(), R.layout.header_home, null)
             HeaderHomeBinding.bind(headerView).apply {
