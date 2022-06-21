@@ -37,8 +37,8 @@ class FilterFragment : BaseFragment<FragmentFilterBinding>(R.layout.fragment_fil
         update()
 
         filterAdapter.onRemove = { position ->
-            filters.removeAt(position)
-            filterAdapter.removeAt(position)
+            filters.removeAt(position - 1)
+            filterAdapter.removeAt(position - 1)
             update()
         }
 
@@ -57,7 +57,7 @@ class FilterFragment : BaseFragment<FragmentFilterBinding>(R.layout.fragment_fil
 
             val footerView = View.inflate(requireContext(), R.layout.footer_filter, null)
             FooterFilterBinding.bind(footerView).apply {
-                filterAdapter.setFooterView(footerView)
+                filterAdapter.setHeaderView(footerView)
                 tvAdd.setOnClickListener {
                     MaterialDialog(requireContext()).show {
                         input(hint = "请输入过滤关键词") { _, charSequence ->

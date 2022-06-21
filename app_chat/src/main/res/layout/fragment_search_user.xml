@@ -19,6 +19,34 @@
         app:layout_constraintTop_toTopOf="@id/ivStart"
         tools:ignore="UseAppTint" />
 
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/proLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:indicatorColor="@color/color_primary"
+        app:indicatorSize="22dp"
+        app:layout_constraintBottom_toBottomOf="@id/ivStart"
+        app:layout_constraintStart_toEndOf="@id/ivBack"
+        app:layout_constraintTop_toTopOf="@id/ivStart"
+        app:trackColor="@color/color_primary_translucent"
+        app:trackThickness="2dp" />
+
+    <TextView
+        android:id="@+id/tvCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:textColor="@color/color_primary"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/ivBack"
+        app:layout_constraintStart_toEndOf="@id/proLoading"
+        app:layout_constraintTop_toTopOf="@id/ivBack"
+        tools:text="10个" />
+
+
     <TextView
         android:id="@+id/tvProgress"
         android:layout_width="wrap_content"
@@ -104,22 +132,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvProgress" />
 
-    <View
-        android:id="@+id/vTop"
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_marginTop="8dp"
-        android:background="@color/line_color"
-        app:layout_constraintTop_toBottomOf="@id/editAccount" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/srContent"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/vTop">
+        app:layout_constraintTop_toBottomOf="@id/editAccount">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/ryContent"
@@ -128,4 +150,17 @@
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="35dp"
+        android:contentDescription="@string/add_friend"
+        android:elevation="10dp"
+        android:src="@drawable/ic_add"
+        android:visibility="gone"
+        app:backgroundTint="@color/color_primary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

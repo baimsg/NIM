@@ -1,6 +1,9 @@
 package com.baimsg.chat
 
 import com.baimsg.base.util.KvUtils
+import com.baimsg.data.model.DEFAULT_JSON_FORMAT
+import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.builtins.serializer
 
 /**
  * Create by Baimsg on 2022/6/13
@@ -41,5 +44,12 @@ object Constant {
 
     val ADD_FILTER: String
         get() = KvUtils.getString(kEY_ADD_FILTER, "")
+
+    val ADD_FILTERS: List<String>
+        get() = if (ADD_FILTER.isNotBlank()) DEFAULT_JSON_FORMAT.decodeFromString(
+            ListSerializer(String.serializer()),
+            ADD_FILTER
+        )
+        else emptyList()
 
 }

@@ -71,6 +71,7 @@ dependencies {
     api(Dep.Libs.glide)
     api(Dep.Libs.baseAdapter)
     api(Dep.Libs.toasty)
+    api(Dep.Libs.permissionX)
     api(Dep.Libs.Dialog.core)
     api(Dep.Libs.Dialog.input)
     api(Dep.Libs.Dialog.datetime)

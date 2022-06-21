@@ -37,6 +37,7 @@
         <entry key="..\:/Projects/StudioProjects/nim/app_chat/src/main/res/layout/fragment_search_user.xml" value="0.22826086956521738" />
         <entry key="..\:/Projects/StudioProjects/nim/app_chat/src/main/res/layout/fragment_setting.xml" value="0.22826086956521738" />
         <entry key="..\:/Projects/StudioProjects/nim/app_chat/src/main/res/layout/header_home.xml" value="0.22826086956521738" />
+        <entry key="..\:/Projects/StudioProjects/nim/app_chat/src/main/res/layout/item_add_friend.xml" value="0.22826086956521738" />
         <entry key="..\:/Projects/StudioProjects/nim/app_chat/src/main/res/layout/item_filter.xml" value="0.22826086956521738" />
         <entry key="..\:/Projects/StudioProjects/nim/app_chat/src/main/res/layout/item_friend.xml" value="0.264" />
         <entry key="app/src/main/res/drawable/hit_backgroud.xml" value="0.4205" />
@@ -47,16 +48,11 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.3145833333333333" />
         <entry key="app/src/main/res/layout/activity_test.xml" value="0.5911458333333334" />
         <entry key="app/src/main/res/layout/activity_turntable.xml" value="0.575" />
-        <entry key="app_chat/src/main/res/drawable/edit_bg.xml" value="0.1415" />
-        <entry key="app_chat/src/main/res/drawable/edit_bg_disenabled.xml" value="0.1415" />
-        <entry key="app_chat/src/main/res/drawable/edit_bg_search.xml" value="0.1415" />
         <entry key="app_chat/src/main/res/drawable/ic_avatar_girl.xml" value="0.4205" />
         <entry key="app_chat/src/main/res/drawable/ic_avatar_man.xml" value="0.4205" />
         <entry key="app_chat/src/main/res/drawable/ic_back.xml" value="0.4205" />
-        <entry key="app_chat/src/main/res/drawable/ic_edit.xml" value="0.334" />
         <entry key="app_chat/src/main/res/drawable/ic_home.xml" value="0.4205" />
         <entry key="app_chat/src/main/res/drawable/ic_my.xml" value="0.4205" />
-        <entry key="app_chat/src/main/res/drawable/ic_remove.xml" value="0.334" />
         <entry key="app_chat/src/main/res/drawable/ic_setting.xml" value="0.4205" />
         <entry key="app_chat/src/main/res/layout/activity_main.xml" value="0.5760416666666667" />
         <entry key="app_chat/src/main/res/layout/content_main.xml" value="0.32864583333333336" />
@@ -64,12 +60,10 @@
         <entry key="app_chat/src/main/res/layout/fragment_home.xml" value="0.32864583333333336" />
         <entry key="app_chat/src/main/res/layout/fragment_login.xml" value="0.5760416666666667" />
         <entry key="app_chat/src/main/res/layout/fragment_my.xml" value="0.575" />
-        <entry key="app_chat/src/main/res/layout/fragment_search_user.xml" value="0.41710296684118675" />
         <entry key="app_chat/src/main/res/layout/fragment_setting.xml" value="0.5760416666666667" />
         <entry key="app_chat/src/main/res/layout/fragmnet_home.xml" value="0.5760416666666667" />
         <entry key="app_chat/src/main/res/layout/fragmnet_login.xml" value="0.32760416666666664" />
         <entry key="app_chat/src/main/res/layout/fragmnet_setting.xml" value="0.5760416666666667" />
-        <entry key="app_chat/src/main/res/layout/item_filter.xml" value="0.2801418439716312" />
         <entry key="app_chat/src/main/res/menu/activity_main_bottom.xml" value="0.5760416666666667" />
         <entry key="app_chat/src/main/res/menu/main_bottom.xml" value="0.5760416666666667" />
         <entry key="app_chat/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.331" />

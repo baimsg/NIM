@@ -11,9 +11,8 @@ data class FriendViewState(
     val executionStatus: ExecutionStatus,
     val users: List<NIMUserInfo>
 ) {
-
     companion object {
-         val EMPTY =
+        val EMPTY =
             FriendViewState(executionStatus = ExecutionStatus.UNKNOWN, users = emptyList())
     }
 }

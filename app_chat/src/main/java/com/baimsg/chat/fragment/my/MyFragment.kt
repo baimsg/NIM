@@ -7,8 +7,8 @@ import com.baimsg.chat.base.BaseFragment
 import com.baimsg.chat.databinding.FragmentMyBinding
 import com.baimsg.chat.fragment.login.LoginViewModel
 import com.baimsg.chat.util.extensions.dp2px
-import com.baimsg.chat.util.extensions.px2dp
 import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
+import com.baimsg.chat.util.extensions.showWarning
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -30,8 +30,8 @@ class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
             findNavController().navigate(R.id.action_myFragment_to_settingFragment)
         }
 
-        binding.tvLogout.setOnClickListener {
-
+        binding.vAbout.setOnClickListener {
+            showWarning("此版本为定制版本")
         }
 
     }
@@ -50,7 +50,8 @@ class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
                         Glide.with(this@MyFragment).load(avatar).apply(
                             RequestOptions()
                                 .transform(
-                                    CenterCrop(), RoundedCorners(requireContext().dp2px(88.0f).toInt())
+                                    CenterCrop(),
+                                    RoundedCorners(requireContext().dp2px(88.0f).toInt())
                                 )
                         ).into(binding.ivAvatar)
                     }

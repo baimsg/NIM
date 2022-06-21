@@ -150,6 +150,7 @@ object Dep {
         const val baseAdapter = "com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.7"
         const val glide = "com.github.bumptech.glide:glide:4.11.0"
         const val toasty = "com.github.GrenderG:Toasty:1.5.2"
+        const val permissionX = "com.guolindev.permissionx:permissionx:1.6.4"
 
         object Dialog {
             const val dialogX = "com.github.kongzue.DialogX:DialogX:0.0.45.beta12"

@@ -6,6 +6,14 @@
     android:layout_height="wrap_content"
     android:background="@color/background">
 
+    <View
+        android:id="@+id/vTop"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginHorizontal="16dp"
+        android:background="@color/line_color"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/tvFilter"
         android:layout_width="0dp"
@@ -16,7 +24,7 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vTop"
         tools:text="接待员" />
 
     <ImageView
@@ -31,12 +39,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/tvFilter"
         tools:ignore="UseAppTint" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_marginHorizontal="16dp"
-        android:background="@color/line_color"
-        app:layout_constraintTop_toBottomOf="@id/tvFilter" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

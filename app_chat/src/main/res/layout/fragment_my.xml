@@ -93,7 +93,7 @@
                 app:layout_constraintTop_toTopOf="@id/vSetting" />
 
             <TextView
-                android:id="@+id/tvLogout"
+                android:id="@+id/tvSetting"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_marginStart="16dp"

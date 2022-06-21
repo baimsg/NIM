@@ -32,4 +32,6 @@
     <string name="add_data">添加数据</string>
     <string name="save">保存</string>
     <string name="start">开始</string>
+    <string name="add_friend">一键加好友</string>
+    <string name="avatar">头像</string>
 </resources>

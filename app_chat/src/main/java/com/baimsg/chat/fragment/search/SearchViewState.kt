@@ -30,5 +30,15 @@ data class SearchViewState(
 
     fun running() = status == BatchStatus.RUNNING
 
-    fun isDestroy() = status == BatchStatus.STOP
+    fun isDestroy() = status == BatchStatus.STOP || status == BatchStatus.UNKNOWN
+}
+
+data class AddFriendViewState(
+    val index: Int,
+    val message: String,
+    val user: NIMUserInfo
+) {
+    companion object {
+        val EMPTY = AddFriendViewState(index = 0, message = "", user = NIMUserInfo())
+    }
 }
