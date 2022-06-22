@@ -79,4 +79,15 @@ dependencies {
     api(Dep.Libs.Dialog.files)
     api(Dep.Libs.Dialog.bottomSheets)
     api(Dep.Libs.Dialog.lifecycle)
+
+    //Umeng
+    api(Dep.Umeng.common)
+    api(Dep.Umeng.asms)
+    api(Dep.Umeng.apm)
+    api(Dep.Umeng.abtest)
+
+    //Bugly
+    api(Dep.Bugly.upgrade)
+    api(Dep.Bugly.native)
+
 }

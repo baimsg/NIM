@@ -24,6 +24,10 @@ object Constant {
 
     const val KEY_TOKEN = "token"
 
+    const val UMENG_APP_KEY = "62b2829b88ccdf4b7ea53d64"
+
+    const val BUGLY_KEY = "10ced88958"
+
     val ACCOUNT: String
         get() = KvUtils.getString(KEY_ACCOUNT, "")
 
@@ -51,5 +55,7 @@ object Constant {
             ADD_FILTER
         )
         else emptyList()
+
+    fun getChannel(): String = "default"
 
 }

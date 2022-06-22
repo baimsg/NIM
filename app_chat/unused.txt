@@ -29,6 +29,10 @@ com.baimsg.base.android.BuildConfig
 com.baimsg.base.android.R
 com.baimsg.chat.BuildConfig
 com.baimsg.chat.R
+com.baimsg.chat.di.BaseModule_AppAssetManagerFactory
+com.baimsg.chat.di.BaseModule_AppContextFactory
+com.baimsg.chat.di.BaseModule_AppResourcesFactory
+com.baimsg.chat.di.BaseModule_ProvideCacheDirFactory
 com.baimsg.chat.util.extensions.StatusBarType
 com.baimsg.data.BuildConfig
 com.baimsg.data.R
@@ -1300,6 +1304,7 @@ es.dmoral.toasty.Toasty:
     private static android.widget.Toast withLightTheme(android.content.Context,java.lang.CharSequence,android.graphics.drawable.Drawable,int,boolean)
 es.dmoral.toasty.ToastyUtils:
     private void <init>()
+hilt_aggregated_deps._com_baimsg_chat_di_BaseModule
 hilt_aggregated_deps._com_baimsg_data_db_DatabaseModule
 hilt_aggregated_deps._com_baimsg_data_db_daos_DaoModule
 hilt_aggregated_deps._dagger_hilt_android_flags_FragmentGetContextFix_FragmentGetContextFixEntryPoint

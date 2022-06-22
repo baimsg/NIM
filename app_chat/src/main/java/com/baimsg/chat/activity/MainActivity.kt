@@ -14,11 +14,13 @@ import com.baimsg.chat.util.extensions.showShort
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.auth.AuthServiceObserver
 import com.netease.nimlib.sdk.lifecycle.SdkLifecycleObserver
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * Create by Baimsg on 2022/6/10
  *
  **/
+@AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private val loginViewModel by lazy {

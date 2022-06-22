@@ -199,6 +199,15 @@
 #如果你开启数据库功能，需要加入
 -keep class net.sqlcipher.** {*;}
 
+
+#Umeng
+-keep class com.umeng.** {*;}
+-keep class org.repackage.** {*;}
+
+#Bugly
+-dontwarn com.tencent.bugly.**
+-keep public class com.tencent.bugly.**{*;}
+
 #实体类
 -keep class com.baimsg.data.model.** {*;}
 -dontwarn com.baimsg.data.model.**

@@ -133,6 +133,12 @@ object Dep {
         const val apm = "com.umeng.umsdk:apm:1.5.2"
     }
 
+    object Bugly {
+        private const val version = "latest.release"
+        const val upgrade = "com.tencent.bugly:crashreport_upgrade:$version"
+        const val native = "com.tencent.bugly:nativecrashreport:$version"
+    }
+
     object Logger {
         const val library = "com.orhanobut:logger:2.2.0"
     }
