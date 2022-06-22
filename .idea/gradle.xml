@@ -27,6 +27,7 @@
             <option value="$PROJECT_DIR$/base-android" />
             <option value="$PROJECT_DIR$/common-data" />
             <option value="$PROJECT_DIR$/plugin" />
+            <option value="$PROJECT_DIR$/ui-qmui" />
           </set>
         </option>
       </GradleProjectSettings>

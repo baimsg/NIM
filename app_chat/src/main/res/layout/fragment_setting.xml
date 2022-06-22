@@ -1,257 +1,268 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.baimsg.qmui.widget.pullLayout.QMUIPullLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg">
+    android:background="@color/bg"
+    app:layout_constraintTop_toTopOf="parent">
 
-    <ImageView
-        android:id="@+id/ivBack"
+    <View
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
-        android:contentDescription="@string/back"
-        android:padding="16dp"
-        android:src="@drawable/ic_back"
-        android:tint="@color/icon_click"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="UseAppTint" />
+        app:qmui_action_view_init_offset="-160dp"
+        app:qmui_can_over_pull="false"
+        app:qmui_need_receive_fling_from_target_view="true"
+        app:qmui_pull_edge="top"
+        app:qmui_pull_rate="0.5"
+        app:qmui_target_view_trigger_offset="wrap" />
 
-    <TextView
+    <View
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/setting"
-        android:textColor="@color/title_color"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/ivBack"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/ivBack" />
+        app:qmui_action_view_init_offset="-20dp"
+        app:qmui_can_over_pull="true"
+        app:qmui_need_receive_fling_from_target_view="true"
+        app:qmui_pull_edge="bottom"
+        app:qmui_pull_rate="0.5"
+        app:qmui_target_view_trigger_offset="wrap" />
 
-
-    <TextView
-        android:id="@+id/tvAppKey"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/background_click"
-        android:gravity="start|center_vertical"
-        android:paddingHorizontal="16dp"
-        android:text="@string/app_key"
-        android:textColor="@color/title_color"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/ivBack" />
+        android:layout_height="wrap_content"
+        app:qmui_is_target="true">
 
-    <TextView
-        android:id="@+id/tvAppKeyValue"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginEnd="8dp"
-        android:gravity="center"
-        android:textColor="@color/subtitle_color"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@id/tvAppKey"
-        app:layout_constraintEnd_toStartOf="@id/ivAppKey"
-        app:layout_constraintTop_toTopOf="@id/tvAppKey"
-        tools:text="0985263902383746" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/ivAppKey"
-        android:layout_width="12dp"
-        android:layout_height="12dp"
-        android:layout_marginEnd="16dp"
-        android:contentDescription="@string/enter"
-        android:src="@drawable/ic_right"
-        app:layout_constraintBottom_toBottomOf="@id/tvAppKey"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvAppKey" />
+            <ImageView
+                android:id="@+id/ivBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="35dp"
+                android:contentDescription="@string/back"
+                android:padding="16dp"
+                android:src="@drawable/ic_back"
+                android:tint="@color/icon_click"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="UseAppTint" />
 
-    <TextView
-        android:id="@+id/tvPrefix"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="12dp"
-        android:background="@color/background_click"
-        android:gravity="start|center_vertical"
-        android:paddingHorizontal="16dp"
-        android:text="@string/dictionary_prefix"
-        android:textColor="@color/title_color"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/tvAppKey" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/setting"
+                android:textColor="@color/title_color"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/ivBack"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/ivBack" />
 
-    <TextView
-        android:id="@+id/tvPrefixValue"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginEnd="8dp"
-        android:gravity="center"
-        android:textColor="@color/subtitle_color"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@id/tvPrefix"
-        app:layout_constraintEnd_toStartOf="@id/ivPrefix"
-        app:layout_constraintTop_toTopOf="@id/tvPrefix"
-        tools:text="659" />
+            <TextView
+                android:id="@+id/tvSettingLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:paddingVertical="8dp"
+                android:text="@string/setting_login"
+                android:textColor="@color/subtitle_color"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ivBack" />
 
-    <ImageView
-        android:id="@+id/ivPrefix"
-        android:layout_width="12dp"
-        android:layout_height="12dp"
-        android:layout_marginEnd="16dp"
-        android:contentDescription="@string/enter"
-        android:src="@drawable/ic_right"
-        app:layout_constraintBottom_toBottomOf="@id/tvPrefix"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvPrefix" />
+            <TextView
+                android:id="@+id/tvAppKey"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/background_click"
+                android:gravity="start|center_vertical"
+                android:paddingHorizontal="16dp"
+                android:text="@string/app_key"
+                android:textColor="@color/title_color"
+                android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@id/tvSettingLogin" />
 
-    <View
-        android:id="@+id/vPrefix"
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_marginStart="16dp"
-        android:background="@color/line_color"
-        app:layout_constraintTop_toBottomOf="@id/tvPrefix" />
+            <TextView
+                android:id="@+id/tvAppKeyValue"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginEnd="8dp"
+                android:gravity="center"
+                android:textColor="@color/subtitle_color"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/tvAppKey"
+                app:layout_constraintEnd_toStartOf="@id/ivAppKey"
+                app:layout_constraintTop_toTopOf="@id/tvAppKey"
+                tools:text="0985263902383746" />
 
-    <TextView
-        android:id="@+id/tvScope"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/background_click"
-        android:gravity="start|center_vertical"
-        android:paddingHorizontal="16dp"
-        android:text="@string/dictionary_scope"
-        android:textColor="@color/title_color"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/vPrefix" />
+            <ImageView
+                android:id="@+id/ivAppKey"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginEnd="16dp"
+                android:contentDescription="@string/enter"
+                android:src="@drawable/ic_right"
+                app:layout_constraintBottom_toBottomOf="@id/tvAppKey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tvAppKey" />
 
-    <TextView
-        android:id="@+id/tvScopeValue"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginEnd="8dp"
-        android:gravity="center"
-        android:textColor="@color/subtitle_color"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@id/tvScope"
-        app:layout_constraintEnd_toStartOf="@id/ivScope"
-        app:layout_constraintTop_toTopOf="@id/tvScope"
-        tools:text="100000" />
+            <TextView
+                android:id="@+id/tvPrefix"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="12dp"
+                android:background="@color/background_click"
+                android:gravity="start|center_vertical"
+                android:paddingHorizontal="16dp"
+                android:text="@string/dictionary_prefix"
+                android:textColor="@color/title_color"
+                android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@id/tvAppKey" />
 
-    <ImageView
-        android:id="@+id/ivScope"
-        android:layout_width="12dp"
-        android:layout_height="12dp"
-        android:layout_marginEnd="16dp"
-        android:contentDescription="@string/enter"
-        android:src="@drawable/ic_right"
-        app:layout_constraintBottom_toBottomOf="@id/tvScope"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvScope" />
+            <TextView
+                android:id="@+id/tvPrefixValue"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginEnd="8dp"
+                android:gravity="center"
+                android:textColor="@color/subtitle_color"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/tvPrefix"
+                app:layout_constraintEnd_toStartOf="@id/ivAppKey"
+                app:layout_constraintTop_toTopOf="@id/tvPrefix"
+                tools:text="659" />
 
-    <View
-        android:id="@+id/vScope"
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_marginStart="16dp"
-        android:background="@color/line_color"
-        app:layout_constraintTop_toBottomOf="@id/tvScope" />
 
-    <TextView
-        android:id="@+id/tvVerify"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/background_click"
-        android:gravity="start|center_vertical"
-        android:maxLines="1"
-        android:paddingHorizontal="16dp"
-        android:text="@string/dictionary_verify"
-        android:textColor="@color/title_color"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/vScope" />
+            <View
+                android:id="@+id/vPrefix"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginStart="16dp"
+                android:background="@color/line_color"
+                app:layout_constraintTop_toBottomOf="@id/tvPrefix" />
 
-    <TextView
-        android:id="@+id/tvVerifyValue"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:gravity="end|center_vertical"
-        android:maxLines="1"
-        android:paddingStart="90dp"
-        android:paddingEnd="8dp"
-        android:textColor="@color/subtitle_color"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@id/tvVerify"
-        app:layout_constraintEnd_toStartOf="@id/ivScope"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvVerify"
-        tools:text="你哈" />
+            <TextView
+                android:id="@+id/tvScope"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/background_click"
+                android:gravity="start|center_vertical"
+                android:paddingHorizontal="16dp"
+                android:text="@string/dictionary_scope"
+                android:textColor="@color/title_color"
+                android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@id/vPrefix" />
 
-    <ImageView
-        android:id="@+id/ivVerify"
-        android:layout_width="12dp"
-        android:layout_height="12dp"
-        android:layout_marginEnd="16dp"
-        android:contentDescription="@string/enter"
-        android:src="@drawable/ic_right"
-        app:layout_constraintBottom_toBottomOf="@id/tvVerify"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvVerify" />
+            <TextView
+                android:id="@+id/tvScopeValue"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginEnd="8dp"
+                android:gravity="center"
+                android:textColor="@color/subtitle_color"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/tvScope"
+                app:layout_constraintEnd_toStartOf="@id/ivAppKey"
+                app:layout_constraintTop_toTopOf="@id/tvScope"
+                tools:text="100000" />
 
-    <View
-        android:id="@+id/vVerify"
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_marginStart="16dp"
-        android:background="@color/line_color"
-        app:layout_constraintTop_toBottomOf="@id/tvVerify" />
 
-    <TextView
-        android:id="@+id/tvFilter"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/background_click"
-        android:gravity="start|center_vertical"
-        android:paddingHorizontal="16dp"
-        android:text="@string/dictionary_filter"
-        android:textColor="@color/title_color"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/vVerify" />
+            <View
+                android:id="@+id/vScope"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginStart="16dp"
+                android:background="@color/line_color"
+                app:layout_constraintTop_toBottomOf="@id/tvScope" />
 
-    <ImageView
-        android:id="@+id/ivFilter"
-        android:layout_width="12dp"
-        android:layout_height="12dp"
-        android:layout_marginEnd="16dp"
-        android:contentDescription="@string/enter"
-        android:src="@drawable/ic_right"
-        app:layout_constraintBottom_toBottomOf="@id/tvFilter"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvFilter" />
+            <TextView
+                android:id="@+id/tvVerify"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/background_click"
+                android:gravity="start|center_vertical"
+                android:maxLines="1"
+                android:paddingHorizontal="16dp"
+                android:text="@string/dictionary_verify"
+                android:textColor="@color/title_color"
+                android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@id/vScope" />
 
-    <TextView
-        android:id="@+id/tvSwitchAccount"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="12dp"
-        android:background="@color/background_click"
-        android:gravity="center"
-        android:paddingHorizontal="16dp"
-        android:text="@string/switch_account"
-        android:textColor="@color/title_color"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/tvFilter" />
+            <TextView
+                android:id="@+id/tvVerifyValue"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:gravity="end|center_vertical"
+                android:maxLines="1"
+                android:paddingStart="90dp"
+                android:paddingEnd="8dp"
+                android:textColor="@color/subtitle_color"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/tvVerify"
+                app:layout_constraintEnd_toStartOf="@id/ivAppKey"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tvVerify"
+                tools:text="你哈" />
 
-    <TextView
-        android:id="@+id/tvQuit"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="12dp"
-        android:background="@color/background_click"
-        android:gravity="center"
-        android:paddingHorizontal="16dp"
-        android:text="@string/logout"
-        android:textColor="@color/title_color"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/tvSwitchAccount" />
+            <View
+                android:id="@+id/vVerify"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginStart="16dp"
+                android:background="@color/line_color"
+                app:layout_constraintTop_toBottomOf="@id/tvVerify" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/tvFilter"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/background_click"
+                android:gravity="start|center_vertical"
+                android:paddingHorizontal="16dp"
+                android:text="@string/dictionary_filter"
+                android:textColor="@color/title_color"
+                android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@id/vVerify" />
+
+            <ImageView
+                android:id="@+id/ivFilter"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginEnd="16dp"
+                android:contentDescription="@string/enter"
+                android:src="@drawable/ic_right"
+                app:layout_constraintBottom_toBottomOf="@id/tvFilter"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tvFilter" />
+
+            <TextView
+                android:id="@+id/tvSwitchAccount"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="12dp"
+                android:background="@color/background_click"
+                android:gravity="center"
+                android:paddingHorizontal="16dp"
+                android:text="@string/switch_account"
+                android:textColor="@color/title_color"
+                android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@id/tvFilter" />
+
+            <TextView
+                android:id="@+id/tvQuit"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="12dp"
+                android:background="@color/background_click"
+                android:gravity="center"
+                android:paddingHorizontal="16dp"
+                android:text="@string/logout"
+                android:textColor="@color/title_color"
+                android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@id/tvSwitchAccount" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</com.baimsg.qmui.widget.pullLayout.QMUIPullLayout>
