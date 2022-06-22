@@ -1,6 +1,7 @@
 package com.baimsg.chat.fragment.search
 
 import androidx.lifecycle.ViewModel
+import com.baimsg.base.util.extensions.logE
 import com.baimsg.chat.Constant
 import com.baimsg.chat.type.BatchStatus
 import com.baimsg.data.model.entities.NIMUserInfo
@@ -43,7 +44,7 @@ class SearchUserViewModel : ViewModel() {
 
     private fun String.verified(): Boolean {
         var verified = true
-        Constant.ADD_FILTERS.forEachIndexed { index, s ->
+        Constant.ADD_FILTERS.forEachIndexed { _, s ->
             if (this.contains(s)) {
                 verified = false
                 return@forEachIndexed
@@ -137,7 +138,12 @@ class SearchUserViewModel : ViewModel() {
             val accounts = mutableListOf<String>().apply {
                 (0..149).forEach { _ ->
                     value = value.copy(count = value.count + 1, update = false)
-                    add("${Constant.SEARCH_PREFIX}${account + value.count}")
+                    val id =
+                        "${Constant.SEARCH_PREFIX}%0${Constant.SEARCH_COUNT.toString().length}d".format(
+                            account + value.count
+                        )
+                    logE(id)
+                    add(id)
                 }
             }
             NIMClient.getService(UserService::class.java).fetchUserInfo(accounts)

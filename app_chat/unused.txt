@@ -38,6 +38,52 @@ com.baimsg.data.BuildConfig
 com.baimsg.data.R
 com.baimsg.data.db.DatabaseModule_NimDatabaseFactory
 com.baimsg.data.db.daos.DaoModule_CrateUserInfoDaoFactory
+com.baimsg.qmui.BuildConfig
+com.baimsg.qmui.QMUIInterpolatorStaticHolder:
+    public void <init>()
+com.baimsg.qmui.R
+com.baimsg.qmui.util.QMUIViewOffsetHelper:
+    public int getLayoutLeft()
+    public int getLayoutTop()
+    public boolean isHorizontalOffsetEnabled()
+    public boolean isVerticalOffsetEnabled()
+    public void setHorizontalOffsetEnabled(boolean)
+    public boolean setOffset(int,int)
+    public void setVerticalOffsetEnabled(boolean)
+com.baimsg.qmui.widget.pullLayout.QMUIAlwaysFollowOffsetCalculator
+com.baimsg.qmui.widget.pullLayout.QMUICenterOffsetCalculator
+com.baimsg.qmui.widget.pullLayout.QMUIPullLayout$ActionPullWatcherView:
+    public abstract void onActionFinished()
+com.baimsg.qmui.widget.pullLayout.QMUIPullLayout$LayoutParams:
+    public void <init>(android.view.ViewGroup$MarginLayoutParams)
+com.baimsg.qmui.widget.pullLayout.QMUIPullLayout$PullAction:
+    public int getPullEdge()
+    public float getScrollSpeedPerPixel()
+    public boolean isNeedReceiveFlingFromTargetView()
+    public boolean isScrollToTriggerOffsetAfterTouchUp()
+    public boolean isTriggerUntilScrollToTriggerOffset()
+com.baimsg.qmui.widget.pullLayout.QMUIPullLayout$PullActionBuilder:
+    public com.baimsg.qmui.widget.pullLayout.QMUIPullLayout$PullActionBuilder actionViewOffsetCalculator(com.baimsg.qmui.widget.pullLayout.QMUIPullLayout$ActionViewOffsetCalculator)
+com.baimsg.qmui.widget.pullLayout.QMUIPullLayout$PullEdge
+com.baimsg.qmui.widget.pullLayout.QMUIPullLayout:
+    public static final float DEFAULT_FLING_FRACTION
+    public static final int DEFAULT_MIN_SCROLL_DURATION
+    public static final float DEFAULT_PULL_RATE
+    public static final float DEFAULT_SCROLL_SPEED_PER_PIXEL
+    public static final int PULL_EDGE_BOTTOM
+    public static final int PULL_EDGE_LEFT
+    public static final int PULL_EDGE_RIGHT
+    public static final int PULL_EDGE_TOP
+    public static final int PUL_EDGE_ALL
+    private static final int STATE_IDLE
+    private static final int STATE_PULLING
+    private static final int STATE_SETTLING_DELIVER
+    private static final int STATE_SETTLING_FLING
+    private static final int STATE_SETTLING_TO_INIT_OFFSET
+    private static final int STATE_SETTLING_TO_TRIGGER_OFFSET
+    private static final int STATE_TRIGGERING
+    public void finishActionRun(com.baimsg.qmui.widget.pullLayout.QMUIPullLayout$PullAction)
+    public void finishActionRun(com.baimsg.qmui.widget.pullLayout.QMUIPullLayout$PullAction,boolean)
 com.bumptech.glide.GenericTransitionOptions:
     public static com.bumptech.glide.GenericTransitionOptions with(int)
     public static com.bumptech.glide.GenericTransitionOptions with(com.bumptech.glide.request.transition.TransitionFactory)
