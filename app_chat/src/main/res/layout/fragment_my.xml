@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg"
+    android:background="@color/background"
     android:orientation="vertical">
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/background"
+        android:background="@color/item_bg_white_default"
         app:layout_constraintBottom_toBottomOf="@id/tvSignature"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -66,7 +66,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="12dp"
-        android:background="@color/bg"
+        android:background="@color/background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvSignature">
 
@@ -78,7 +78,7 @@
                 android:id="@+id/vSetting"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@color/background_click"
+                android:background="@drawable/bg_item_white"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
@@ -126,7 +126,7 @@
                 android:id="@+id/vAbout"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@color/background_click"
+                android:background="@drawable/bg_item_white"
                 app:layout_constraintTop_toBottomOf="@id/vLineSetting" />
 
             <ImageView

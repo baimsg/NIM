@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg">
+    android:background="@color/background">
 
     <View
         android:layout_width="match_parent"
@@ -74,7 +74,7 @@
         android:layout_marginTop="16dp"
         android:padding="16dp"
         android:text="@string/app_key"
-        android:textColor="@color/material_black"
+        android:textColor="@color/title_color"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/vTop" />
