@@ -22,7 +22,7 @@
         android:paddingHorizontal="16dp"
         android:paddingVertical="12dp"
         android:src="@drawable/ic_back"
-        android:tint="@color/white"
+        android:tint="@color/icon_tint"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="UseAppTint" />
@@ -32,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/setting_key"
-        android:textColor="@color/white"
+        android:textColor="@color/title_color"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/ivBack"
@@ -52,7 +52,7 @@
         android:layout_height="wrap_content"
         android:paddingHorizontal="16dp"
         android:text="@string/finish"
-        android:textColor="@color/white"
+        android:textColor="@color/title_color"
         android:textSize="16sp"
         android:textStyle="bold"
         android:visibility="gone"
@@ -63,7 +63,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/white"
+        android:background="@color/item_bg_white_default"
         app:layout_constraintBottom_toBottomOf="@id/tvAppKey"
         app:layout_constraintTop_toTopOf="@id/tvAppKey" />
 
