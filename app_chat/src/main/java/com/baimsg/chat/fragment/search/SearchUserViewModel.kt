@@ -136,14 +136,14 @@ class SearchUserViewModel : ViewModel() {
                 return
             }
             val accounts = mutableListOf<String>().apply {
-                (0..149).forEach { _ ->
-                    value = value.copy(count = value.count + 1, update = false)
+                (0..149).forEach { index ->
                     val id =
                         "${Constant.SEARCH_PREFIX}%0${Constant.SEARCH_COUNT.toString().length}d".format(
-                            account + value.count
+                            account + index
                         )
-                    logE(id)
                     add(id)
+//                    logE("id=$id ,count=${value.count}")
+                    value = value.copy(count = value.count + 1, update = false)
                 }
             }
             NIMClient.getService(UserService::class.java).fetchUserInfo(accounts)
@@ -151,7 +151,7 @@ class SearchUserViewModel : ViewModel() {
                     override fun onSuccess(mUsers: List<NimUserInfo>?) {
                         val newUser = mUsers?.map { it.asUser() }
                         value = value.copy(
-                            account = account + value.count,
+                            account = account + 150,
                             users = newUser ?: emptyList(),
                             update = true,
                             allUser = value.allUser.toMutableList().apply {
@@ -160,18 +160,19 @@ class SearchUserViewModel : ViewModel() {
                                 }
                             }
                         )
-                        searchUser(account + value.count)
+                        searchUser(account + 150)
                     }
 
                     override fun onFailed(code: Int) {
-                        searchUser(account + value.count)
+                        searchUser(account)
                     }
 
                     override fun onException(e: Throwable?) {
-                        searchUser(account + value.count)
+                        searchUser(account)
                     }
                 })
         }
+
     }
 
 }

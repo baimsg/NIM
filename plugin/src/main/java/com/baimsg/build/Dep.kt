@@ -12,7 +12,7 @@ object Dep {
     const val targetSdk = 30
     const val group = "com.baimsg.chat"
     const val packageName = "com.baimsg.chat"
-    const val version = "1.0.1"
+    const val version = "1.0.2"
 
     object MaterialDesign {
         const val material = "com.google.android.material:material:1.4.0"
@@ -37,6 +37,7 @@ object Dep {
         const val coreKtx = "androidx.core:core-ktx:1.7.0"
         const val appcompat = "androidx.appcompat:appcompat:1.4.1"
         const val annotation = "androidx.annotation:annotation:1.3.0"
+        const val recyclerview = "androidx.recyclerview:recyclerview:1.2.1"
         const val splashscreen = "androidx.core:core-splashscreen:1.0.0-beta02"
         const val media = "androidx.media:media:1.6.0"
         const val emoji = "androidx.emoji:emoji:1.1.0"

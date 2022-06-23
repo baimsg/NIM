@@ -148,6 +148,7 @@ class SearchUserFragment : BaseFragment<FragmentSearchUserBinding>(R.layout.frag
                             binding.proLoading.show()
                             binding.editAccount.isEnabled = false
                             if (update) friendAdapter.addData(users)
+                            binding.editAccount.setText("${value.account}")
                         }
                         BatchStatus.STOP -> {
                             binding.fabAdd.hide()

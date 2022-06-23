@@ -43,6 +43,7 @@ dependencies {
     api(Dep.AndroidX.coreKtx)
     api(Dep.AndroidX.appcompat)
     api(Dep.AndroidX.annotation)
+    api(Dep.AndroidX.recyclerview)
     api(Dep.AndroidX.swipeRefreshLayout)
     api(Dep.MaterialDesign.material)
 
