@@ -48,6 +48,14 @@ android {
         }
     }
 
+    android.applicationVariants.all {
+        outputs.all {
+            if (this is com.android.build.gradle.internal.api.ApkVariantOutputImpl) {
+                outputFileName = "chat_${versionName}_${versionCode}-${buildType.name}.apk"
+            }
+        }
+    }
+
     buildTypes {
         getByName("release") {
             // 启用代码压缩、优化和混淆（由R8或者ProGuard执行）
@@ -77,6 +85,7 @@ android {
     kotlinOptions {
         jvmTarget = Dep.kotlinJvmTarget
     }
+
 
 }
 

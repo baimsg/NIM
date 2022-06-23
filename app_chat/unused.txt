@@ -1605,9 +1605,6 @@ retrofit2.http.Tag
 retrofit2.http.Url
 retrofit2.internal.EverythingIsNonNull
 retrofit2.package-info
-androidx.core.location.LocationManagerCompat$$InternalSyntheticLambda$0$196e0315f48caa68131c5d4d780ff53e9618a06658f902ea94f753d0df163305$0
-androidx.core.location.LocationManagerCompat:
-    public static synthetic java.lang.Boolean $r8$lambda$JLIcm4BkQpukCiUbhX4BKZUICt4(android.location.LocationManager,androidx.core.location.LocationManagerCompat$GpsStatusTransport)
 com.bumptech.glide.load.engine.bitmap_recycle.AttributeStrategy$Key
 com.bumptech.glide.load.engine.bitmap_recycle.AttributeStrategy$KeyPool
 com.bumptech.glide.load.engine.bitmap_recycle.AttributeStrategy
