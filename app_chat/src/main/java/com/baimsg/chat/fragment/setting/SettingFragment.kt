@@ -42,6 +42,20 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
                 }
             }
         }
+
+        binding.tvAddFriendDelay.setOnClickListener {
+            MaterialDialog(requireContext()).show {
+                input(
+                    hint = "请输入加好友延时/单位毫秒",
+                    inputType = InputType.TYPE_CLASS_NUMBER,
+                    maxLength = 8
+                ) { _, charSequence ->
+                    KvUtils.put(Constant.KEY_ADD_FRIEND_DELAY, charSequence.toString().toLong())
+                    updateView()
+                }
+            }
+        }
+
         binding.tvScope.setOnClickListener {
             MaterialDialog(requireContext()).show {
                 input(

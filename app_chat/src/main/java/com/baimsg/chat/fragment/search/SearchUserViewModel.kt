@@ -1,6 +1,7 @@
 package com.baimsg.chat.fragment.search
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.baimsg.base.util.extensions.logE
 import com.baimsg.chat.Constant
 import com.baimsg.chat.type.BatchStatus
@@ -13,7 +14,9 @@ import com.netease.nimlib.sdk.friend.constant.VerifyType
 import com.netease.nimlib.sdk.friend.model.AddFriendData
 import com.netease.nimlib.sdk.uinfo.UserService
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 class SearchUserViewModel : ViewModel() {
 
@@ -81,13 +84,11 @@ class SearchUserViewModel : ViewModel() {
                     override fun onFailed(code: Int) {
                         addFriendViewState.value =
                             AddFriendViewState(index = value.index + 1, "添加失败：$code", nimUserInfo)
-                        next()
                     }
 
                     override fun onException(e: Throwable?) {
                         addFriendViewState.value =
                             AddFriendViewState(index = value.index + 1, "添加失败：$e", nimUserInfo)
-                        next()
                     }
                 })
             } else {
@@ -99,9 +100,12 @@ class SearchUserViewModel : ViewModel() {
     }
 
     private fun next() {
-        val allUser = searchViewState.value.allUser
-        val index = addFriendViewState.value.index
-        if (index in allUser.indices) addFriend(allUser[index])
+        viewModelScope.launch {
+            delay(Constant.ADD_FRIEND_DELAY)
+            val allUser = searchViewState.value.allUser
+            val index = addFriendViewState.value.index
+            if (index in allUser.indices) addFriend(allUser[index])
+        }
     }
 
     /**

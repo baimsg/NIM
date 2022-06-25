@@ -24,6 +24,13 @@
             app:exitAnim="@anim/fade_no_change"
             app:popEnterAnim="@anim/fade_no_change"
             app:popExitAnim="@anim/slide_out_left" />
+        <action
+            android:id="@+id/action_homeFragment_to_teamFragment"
+            app:destination="@id/teamFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/fade_no_change"
+            app:popEnterAnim="@anim/fade_no_change"
+            app:popExitAnim="@anim/slide_out_left" />
     </fragment>
 
     <fragment
@@ -111,4 +118,9 @@
             app:popEnterAnim="@anim/fade_no_change"
             app:popExitAnim="@anim/slide_out_left" />
     </fragment>
+    <fragment
+        android:id="@+id/teamFragment"
+        android:name="com.baimsg.chat.fragment.team.TeamFragment"
+        android:label="TeamFragment"
+        tools:layout="@layout/fragment_team" />
 </navigation>
