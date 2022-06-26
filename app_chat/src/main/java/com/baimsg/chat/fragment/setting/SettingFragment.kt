@@ -122,5 +122,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
         binding.tvVerifyValue.text = Constant.ADD_VERIFY
 
         binding.tvScopeValue.text = "${Constant.SEARCH_COUNT}次"
+
+        binding.tvAddFriendDelayValue.text = "${Constant.ADD_FRIEND_DELAY}毫秒"
     }
 }
