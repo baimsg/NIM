@@ -34,6 +34,11 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
             findNavController().navigate(R.id.action_settingFragment_to_appKeyFragment)
         }
 
+        binding.scAddMode.setOnCheckedChangeListener { _, isChecked ->
+            KvUtils.put(Constant.KEY_ADD_MODE, isChecked)
+            updateView()
+        }
+
         binding.tvPrefix.setOnClickListener {
             MaterialDialog(requireContext()).show {
                 input(hint = "请输入字典通用前缀") { _, charSequence ->
@@ -115,6 +120,8 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
 
 
     private fun updateView() {
+        val addMode = Constant.ADD_MODE
+
         binding.tvAppKeyValue.text = Constant.APP_KEY
 
         binding.tvPrefixValue.text = Constant.SEARCH_PREFIX
@@ -124,5 +131,11 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
         binding.tvScopeValue.text = "${Constant.SEARCH_COUNT}次"
 
         binding.tvAddFriendDelayValue.text = "${Constant.ADD_FRIEND_DELAY}毫秒"
+
+        binding.scAddMode.isChecked = addMode
+
+        binding.tvVerify.isEnabled = !addMode
+
+        binding.tvAddMode.text = if (addMode) "直接添加" else "发送验证"
     }
 }

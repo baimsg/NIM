@@ -9,7 +9,7 @@
     <color name="background">#F4F4F4</color>
 
     <color name="item_bg_white_default">#FFFFFF</color>
-    <color name="item_bg_white_disabled">#E6FFFFFF</color>
+    <color name="item_bg_white_disabled">#1A666666</color>
     <color name="item_bg_white_pressed">#CCF6F6F6</color>
 
     <color name="title_color">#000000</color>

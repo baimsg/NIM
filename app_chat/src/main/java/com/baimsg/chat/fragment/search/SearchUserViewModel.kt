@@ -68,29 +68,37 @@ class SearchUserViewModel : ViewModel() {
     private fun addFriend(nimUserInfo: NIMUserInfo) {
         addFriendViewState.apply {
             if (nimUserInfo.name.verified()) {
-                NIMClient.getService(FriendService::class.java).addFriend(
-                    AddFriendData(
-                        nimUserInfo.account,
-                        VerifyType.DIRECT_ADD,
-                        Constant.KEY_ADD_VERIFY
-                    )
-                ).setCallback(object : RequestCallback<Void> {
-                    override fun onSuccess(p0: Void?) {
-                        addFriendViewState.value =
-                            AddFriendViewState(index = value.index + 1, "添加成功", nimUserInfo)
-                        next()
-                    }
+                val friend = if (Constant.ADD_MODE) AddFriendData(
+                    nimUserInfo.account,
+                    VerifyType.DIRECT_ADD,
+                    null
+                ) else AddFriendData(
+                    nimUserInfo.account,
+                    VerifyType.VERIFY_REQUEST,
+                    Constant.KEY_ADD_VERIFY
+                )
+                NIMClient.getService(FriendService::class.java).addFriend(friend)
+                    .setCallback(object : RequestCallback<Void> {
+                        override fun onSuccess(p0: Void?) {
+                            addFriendViewState.value =
+                                AddFriendViewState(index = value.index + 1, "添加成功", nimUserInfo)
+                            next()
+                        }
 
-                    override fun onFailed(code: Int) {
-                        addFriendViewState.value =
-                            AddFriendViewState(index = value.index + 1, "添加失败：$code", nimUserInfo)
-                    }
+                        override fun onFailed(code: Int) {
+                            addFriendViewState.value =
+                                AddFriendViewState(
+                                    index = value.index + 1,
+                                    "添加失败：$code",
+                                    nimUserInfo
+                                )
+                        }
 
-                    override fun onException(e: Throwable?) {
-                        addFriendViewState.value =
-                            AddFriendViewState(index = value.index + 1, "添加失败：$e", nimUserInfo)
-                    }
-                })
+                        override fun onException(e: Throwable?) {
+                            addFriendViewState.value =
+                                AddFriendViewState(index = value.index + 1, "添加失败：$e", nimUserInfo)
+                        }
+                    })
             } else {
                 value =
                     AddFriendViewState(index = value.index + 1, "敏感词过滤", nimUserInfo)
