@@ -5,8 +5,10 @@ plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("kapt")
+    id("dagger.hilt.android.plugin")
     id("kotlin-parcelize")
     id("androidx.navigation.safeargs.kotlin")
+    kotlin("plugin.serialization")
 }
 
 android {
@@ -96,4 +98,11 @@ dependencies {
     implementation(project(":common-data"))
     implementation(project(":ui-qmui"))
 
+    implementation(Dep.Hilt.library)
+    //hilt
+    kapt(Dep.Hilt.compiler)
+    //Room
+    kapt(Dep.AndroidX.Room.compiler)
+    //Lifecycle
+    kapt(Dep.AndroidX.LifeCycle.compiler)
 }

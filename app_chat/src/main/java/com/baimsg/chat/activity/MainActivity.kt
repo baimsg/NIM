@@ -1,7 +1,7 @@
 package com.baimsg.chat.activity
 
 import android.view.View
-import androidx.lifecycle.ViewModelProvider
+import androidx.activity.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.baimsg.chat.R
@@ -23,9 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>() {
 
-    private val loginViewModel by lazy {
-        ViewModelProvider(this)[LoginViewModel::class.java]
-    }
+    private val loginViewModel by viewModels<LoginViewModel>()
 
     override fun initView() {
 

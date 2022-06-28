@@ -1,12 +1,9 @@
 package com.baimsg.chat.fragment.home
 
-import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
@@ -23,13 +20,14 @@ import com.baimsg.chat.util.extensions.message
 import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
 import com.baimsg.chat.util.extensions.showInfo
 import com.chad.library.adapter.base.animation.AlphaInAnimation
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
+@AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
-    private val loginViewModel by lazy {
-        ViewModelProvider(requireActivity())[LoginViewModel::class.java]
-    }
 
+    private val loginViewModel by activityViewModels<LoginViewModel>()
+    
     private val openLogin by lazy {
         findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToLoginFragment(tough = true))
     }

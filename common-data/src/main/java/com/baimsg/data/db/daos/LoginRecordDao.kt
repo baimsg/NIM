@@ -1,5 +1,6 @@
 package com.baimsg.data.db.daos
 
+import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
 import com.baimsg.data.db.BaseDao
@@ -10,6 +11,7 @@ import kotlinx.coroutines.flow.Flow
  * Create by Baimsg on 2022/6/28
  *
  **/
+@Dao
 abstract class LoginRecordDao : BaseDao<NIMLoginRecord>() {
     @Transaction
     @Query("DELETE FROM nim_login_record WHERE id=:id")

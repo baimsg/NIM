@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.baimsg.chat.Constant
 import com.baimsg.chat.fragment.home.FriendViewState
 import com.baimsg.chat.type.ExecutionStatus
+import com.baimsg.data.db.daos.LoginRecordDao
 import com.baimsg.data.model.entities.NIMTeam
 import com.baimsg.data.model.entities.NIMUserInfo
 import com.baimsg.data.model.entities.asTeam
@@ -17,16 +18,21 @@ import com.netease.nimlib.sdk.team.TeamService
 import com.netease.nimlib.sdk.team.model.Team
 import com.netease.nimlib.sdk.uinfo.UserService
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * Create by Baimsg on 2022/6/14
  *
  **/
-internal class LoginViewModel constructor() :
+@HiltViewModel
+internal class LoginViewModel @Inject constructor(
+    private val loginRecordDao: LoginRecordDao
+) :
     ViewModel() {
 
     /**

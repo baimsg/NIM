@@ -2,7 +2,7 @@ package com.baimsg.chat.fragment.login
 
 import androidx.activity.addCallback
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.baimsg.base.util.KvUtils
@@ -15,12 +15,14 @@ import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.RequestCallback
 import com.netease.nimlib.sdk.auth.AuthService
 import com.netease.nimlib.sdk.auth.LoginInfo
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
 /**
  * Create by Baimsg on 2022/6/13
  *
  **/
+@AndroidEntryPoint
 class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login) {
 
     private val args by navArgs<LoginFragmentArgs>()
@@ -36,9 +38,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
 
     private var token: String = Constant.TOKEN
 
-    private val loginViewModel by lazy {
-        ViewModelProvider(requireActivity())[LoginViewModel::class.java]
-    }
+    private val loginViewModel by activityViewModels<LoginViewModel>()
 
     override fun initView() {
 

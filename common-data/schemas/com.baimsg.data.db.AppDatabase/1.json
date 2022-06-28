@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "4e3133fd42da38285b58029439428dad",
+    "identityHash": "04ae9eceae0e8ae9525a72c7a68b56cd",
     "entities": [
       {
         "tableName": "nim_user_info",
@@ -83,12 +83,62 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "nim_login_record",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `appKey` TEXT NOT NULL, `account` TEXT NOT NULL, `token` TEXT NOT NULL, `createTIme` INTEGER NOT NULL, `loginTime` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "appKey",
+            "columnName": "appKey",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "account",
+            "columnName": "account",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "token",
+            "columnName": "token",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createTIme",
+            "columnName": "createTIme",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "loginTime",
+            "columnName": "loginTime",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4e3133fd42da38285b58029439428dad')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '04ae9eceae0e8ae9525a72c7a68b56cd')"
     ]
   }
 }
