@@ -71,11 +71,6 @@
             android:name="com.tencent.bugly.beta.ui.BetaActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|locale"
             android:theme="@android:style/Theme.Translucent" />
-        <!-- APP key, 可以在这里设置，也可以在 SDKOptions 中提供。
-         如果 SDKOptions 中提供了，则取 SDKOptions 中的值。 -->
-        <meta-data
-            android:name="com.netease.nim.appKey"
-            android:value="96e60d1d45c959069333ad8308b5799b" />
 
         <!-- 云信后台服务，请使用独立进程。 -->
         <service

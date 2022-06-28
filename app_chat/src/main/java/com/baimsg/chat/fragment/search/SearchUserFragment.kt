@@ -23,7 +23,7 @@ import java.io.File
 class SearchUserFragment : BaseFragment<FragmentSearchUserBinding>(R.layout.fragment_search_user) {
 
     private val searchUserViewModel by lazy {
-        ViewModelProvider(this)[SearchUserViewModel::class.java]
+        ViewModelProvider(requireActivity())[SearchUserViewModel::class.java]
     }
 
     private val friendAdapter by lazy {

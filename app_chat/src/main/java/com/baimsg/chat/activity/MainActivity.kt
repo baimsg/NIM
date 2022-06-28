@@ -1,6 +1,7 @@
 package com.baimsg.chat.activity
 
 import android.content.res.Configuration
+import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatDelegate
@@ -21,7 +22,10 @@ import com.netease.nimlib.sdk.SDKOptions
 import com.netease.nimlib.sdk.auth.AuthServiceObserver
 import com.netease.nimlib.sdk.auth.LoginInfo
 import com.netease.nimlib.sdk.lifecycle.SdkLifecycleObserver
+import com.netease.nimlib.sdk.util.NIMUtil
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 
 /**
  * Create by Baimsg on 2022/6/10
@@ -32,8 +36,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private val loginViewModel by viewModels<LoginViewModel>()
 
-
     override fun initView() {
+        /**
+         * 初始化云信
+         */
+        NIMClient.initSDK()
+
         when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
             Configuration.UI_MODE_NIGHT_NO -> {
                 setStatusBarLightMode()
@@ -42,6 +50,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 setStatusBarDarkMode()
             }
         }
+
         //绑定bottomNavigation
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
@@ -55,9 +64,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 else -> binding.bottomNav.visibility = View.GONE
             }
         }
-
-        NIMClient.init(this, LoginInfo("", ""), SDKOptions())
-
         //监听注册状态
         NIMClient.getService(SdkLifecycleObserver::class.java)
             .observeMainProcessInitCompleteResult({

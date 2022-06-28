@@ -3,6 +3,7 @@ package com.baimsg.chat.fragment.team
 import android.view.View
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +12,7 @@ import com.baimsg.chat.adapter.TeamItemAdapter
 import com.baimsg.chat.base.BaseFragment
 import com.baimsg.chat.databinding.FooterTeamChatBinding
 import com.baimsg.chat.databinding.FragmentTeamBinding
+import com.baimsg.chat.fragment.search.SearchUserViewModel
 import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
 import com.baimsg.chat.util.extensions.showError
 import com.baimsg.data.model.Fail
@@ -22,6 +24,10 @@ import kotlinx.coroutines.flow.collectLatest
 class TeamFragment : BaseFragment<FragmentTeamBinding>(R.layout.fragment_team) {
 
     private val teamViewModel by activityViewModels<TeamViewModel>()
+
+    private val searchUserViewModel by lazy {
+        ViewModelProvider(requireActivity())[SearchUserViewModel::class.java]
+    }
 
     private val teamItemAdapter by lazy {
         TeamItemAdapter()
@@ -52,11 +58,11 @@ class TeamFragment : BaseFragment<FragmentTeamBinding>(R.layout.fragment_team) {
         }
 
         teamItemAdapter.setOnItemClickListener { adapter, view, posion ->
-//            teamViewModel.addMembers(
-//                (adapter.data[posion] as NIMTeam).id ?: "",
-//                listOf("659746275"),
-//                "test"
-//            )
+            teamViewModel.addMembers(
+                (adapter.data[posion] as NIMTeam).id ?: "",
+                searchUserViewModel.searchViewState.value.allUser.map { it.account },
+                "test"
+            )
         }
 
 
