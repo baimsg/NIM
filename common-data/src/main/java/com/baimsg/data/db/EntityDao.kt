@@ -1,6 +1,5 @@
 package com.baimsg.data.db
 
-import androidx.paging.PagingSource
 import androidx.room.*
 import com.baimsg.data.model.base.BaseEntity
 import kotlinx.coroutines.flow.Flow
@@ -53,7 +52,7 @@ abstract class BaseDao<E : BaseEntity> {
      */
     @Update
     suspend fun updateOrInsert(entity: E) {
-        val entry = entriesById(entity.getIdentifier()).firstOrNull()
+        val entry = observeEntriesById(entity.getIdentifier()).firstOrNull()
         if (entry == null) {
             insert(entity)
         } else update(entity)
@@ -93,14 +92,14 @@ abstract class BaseDao<E : BaseEntity> {
      * @return Flow数据
      */
     @Transaction
-    abstract fun entries(): Flow<List<E>>
+    abstract fun entries(): List<E>
 
     /**
-     * 获取数据
-     * @return paging数据
+     * 获取所有实体
+     * @return 数据
      */
     @Transaction
-    abstract fun entriesPagingSource(): PagingSource<Int, E>
+    abstract fun observeEntries(): Flow<List<E>>
 
     /**
      * 根据条件获取数据
@@ -108,29 +107,53 @@ abstract class BaseDao<E : BaseEntity> {
      * @param offset 偏移位置
      */
     @Transaction
-    abstract fun entries(count: Int, offset: Int): Flow<List<E>>
+    abstract fun entries(count: Int, offset: Int): List<E>
+
+    /**
+     * 根据条件获取数据
+     * @param count 总数
+     * @param offset 偏移位置
+     */
+    @Transaction
+    abstract fun observeEntries(count: Int, offset: Int): Flow<List<E>>
 
     /**
      * 根据id获取数据
      * @param id id
      */
     @Transaction
-    abstract fun entriesById(id: String): Flow<E>
+    abstract fun entriesById(id: String): E
+
+    /**
+     * 根据id获取数据
+     * @param id id
+     */
+    @Transaction
+    abstract fun observeEntriesById(id: String): Flow<E>
 
     @Transaction
-    abstract fun entriesById(ids: List<String>): Flow<List<E>>
+    abstract fun entriesByIds(ids: List<String>): List<E>
+
+    @Transaction
+    abstract fun observeEntriesByIds(ids: List<String>): Flow<List<E>>
 
     /**
      * 根据id获取可空数据
      * @param id id
      */
-    abstract fun entriesNullable(id: String): Flow<E?>
+    abstract fun entriesByIdNullable(id: String): E?
+
+    /**
+     * 根据id获取可空数据
+     * @param id id
+     */
+    abstract fun observeEntriesByIdNullable(id: String): Flow<E?>
 
     abstract suspend fun count(): Int
     abstract fun observeCount(): Flow<Int>
 
-    abstract suspend fun exists(id: String): Int
-    abstract fun observeExists(id: String): Flow<Int>
+    abstract suspend fun countById(id: String): Int
+    abstract fun observeCountById(id: String): Flow<Int>
 
 }
 

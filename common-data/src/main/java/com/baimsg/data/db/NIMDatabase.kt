@@ -1,5 +1,6 @@
 package com.baimsg.data.db
 
+import com.baimsg.data.db.daos.LoginRecordDao
 import com.baimsg.data.db.daos.UserInfoDao
 
 /**
@@ -8,4 +9,6 @@ import com.baimsg.data.db.daos.UserInfoDao
  **/
 interface NIMDatabase {
     fun crateUserInfoDao(): UserInfoDao
+
+    fun crateLoginRecordDao(): LoginRecordDao
 }

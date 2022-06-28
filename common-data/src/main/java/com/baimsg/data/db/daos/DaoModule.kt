@@ -16,4 +16,8 @@ class DaoModule {
 
     @Provides
     fun crateUserInfoDao(app: AppDatabase) = app.crateUserInfoDao()
+
+    @Provides
+    fun crateLoginRecordDao(app: AppDatabase) = app.crateLoginRecordDao()
+
 }

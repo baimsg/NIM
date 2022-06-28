@@ -1,6 +1,5 @@
 package com.baimsg.data.db.daos
 
-import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
@@ -23,27 +22,43 @@ abstract class UserInfoDao : BaseDao<NIMUserInfo>() {
 
     @Transaction
     @Query("SELECT * FROM nim_user_info")
-    abstract override fun entries(): Flow<List<NIMUserInfo>>
+    abstract override fun entries(): List<NIMUserInfo>
 
     @Transaction
     @Query("SELECT * FROM nim_user_info")
-    abstract override fun entriesPagingSource(): PagingSource<Int, NIMUserInfo>
+    abstract override fun observeEntries(): Flow<List<NIMUserInfo>>
 
     @Transaction
     @Query("SELECT * FROM nim_user_info LIMIT :count OFFSET :offset")
-    abstract override fun entries(count: Int, offset: Int): Flow<List<NIMUserInfo>>
+    abstract override fun entries(count: Int, offset: Int): List<NIMUserInfo>
+
+    @Transaction
+    @Query("SELECT * FROM nim_user_info LIMIT :count OFFSET :offset")
+    abstract override fun observeEntries(count: Int, offset: Int): Flow<List<NIMUserInfo>>
 
     @Transaction
     @Query("SELECT * FROM nim_user_info WHERE account = :id")
-    abstract override fun entriesById(id: String): Flow<NIMUserInfo>
+    abstract override fun entriesById(id: String): NIMUserInfo
+
+    @Transaction
+    @Query("SELECT * FROM nim_user_info WHERE account = :id")
+    abstract override fun observeEntriesById(id: String): Flow<NIMUserInfo>
 
     @Transaction
     @Query("SELECT * FROM nim_user_info WHERE account IN (:ids)")
-    abstract override fun entriesById(ids: List<String>): Flow<List<NIMUserInfo>>
+    abstract override fun entriesByIds(ids: List<String>): List<NIMUserInfo>
+
+    @Transaction
+    @Query("SELECT * FROM nim_user_info WHERE account IN (:ids)")
+    abstract override fun observeEntriesByIds(ids: List<String>): Flow<List<NIMUserInfo>>
 
     @Transaction
     @Query("SELECT * FROM nim_user_info WHERE account = :id")
-    abstract override fun entriesNullable(id: String): Flow<NIMUserInfo?>
+    abstract override fun entriesByIdNullable(id: String): NIMUserInfo?
+
+    @Transaction
+    @Query("SELECT * FROM nim_user_info WHERE account = :id")
+    abstract override fun observeEntriesByIdNullable(id: String): Flow<NIMUserInfo?>
 
     @Query("SELECT COUNT(*) FROM nim_user_info")
     abstract override suspend fun count(): Int
@@ -52,9 +67,9 @@ abstract class UserInfoDao : BaseDao<NIMUserInfo>() {
     abstract override fun observeCount(): Flow<Int>
 
     @Query("SELECT COUNT(*) FROM nim_user_info WHERE account=:id")
-    abstract override suspend fun exists(id: String): Int
+    abstract override suspend fun countById(id: String): Int
 
     @Query("SELECT COUNT(*) FROM nim_user_info WHERE account=:id")
-    abstract override fun observeExists(id: String): Flow<Int>
+    abstract override fun observeCountById(id: String): Flow<Int>
 
 }

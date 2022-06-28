@@ -6,6 +6,7 @@ import androidx.room.TypeConverters
 import com.baimsg.data.db.converter.AppTypeConverters
 import com.baimsg.data.db.converter.BaseTypeConverters
 import com.baimsg.data.db.daos.UserInfoDao
+import com.baimsg.data.model.entities.NIMLoginRecord
 import com.baimsg.data.model.entities.NIMUserInfo
 
 /**
@@ -16,6 +17,7 @@ import com.baimsg.data.model.entities.NIMUserInfo
     version = DatabaseMigrations.DB_VERSION,
     entities = [
         NIMUserInfo::class,
+        NIMLoginRecord::class
     ],
     exportSchema = true
 )
