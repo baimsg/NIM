@@ -16,57 +16,38 @@
         android:paddingHorizontal="16dp"
         android:paddingVertical="12dp"
         android:textColor="@color/title_color"
-        android:textSize="18sp"
+        android:textSize="17sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/login" />
 
-    <View
-        android:id="@+id/vTop"
-        android:layout_width="match_parent"
-        android:layout_height=".5dp"
-        android:background="@color/line_color"
-        app:layout_constraintTop_toBottomOf="@id/tvStatus" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@color/item_bg_white_default"
-        app:layout_constraintBottom_toBottomOf="@id/editToken"
-        app:layout_constraintTop_toBottomOf="@id/vTop" />
-
-    <ImageView
-        android:id="@+id/ivKey"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
-        android:layout_marginStart="16dp"
-        android:src="@drawable/ic_key"
-        app:layout_constraintBottom_toBottomOf="@id/tvAppKey"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvAppKey" />
 
     <TextView
         android:id="@+id/tvAppKey"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@drawable/bg_item_white"
+        android:paddingHorizontal="16dp"
         android:paddingVertical="12dp"
         android:textColor="@color/title_color"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/editAccount"
-        app:layout_constraintTop_toBottomOf="@id/vTop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvStatus"
         tools:text="@string/setting_key" />
 
     <ImageView
-        android:layout_width="12dp"
-        android:layout_height="12dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:contentDescription="@string/enter"
         android:src="@drawable/ic_right"
+        android:tint="@color/icon_click"
         app:layout_constraintBottom_toBottomOf="@id/tvAppKey"
         app:layout_constraintEnd_toEndOf="@id/tvAppKey"
-        app:layout_constraintTop_toTopOf="@id/tvAppKey" />
+        app:layout_constraintTop_toTopOf="@id/tvAppKey"
+        tools:ignore="UseAppTint" />
 
     <View
         android:id="@+id/vLineKey"
@@ -74,6 +55,13 @@
         android:layout_height="0.5dp"
         android:background="@color/line_color"
         app:layout_constraintTop_toBottomOf="@id/tvAppKey" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/bg_item_white"
+        app:layout_constraintBottom_toBottomOf="@id/editToken"
+        app:layout_constraintTop_toBottomOf="@id/vLineKey" />
 
     <TextView
         android:id="@+id/tvAccount"
@@ -92,6 +80,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginEnd="16dp"
+        android:autofillHints="username"
         android:background="@null"
         android:hint="@string/account"
         android:imeOptions="actionNext"
@@ -130,6 +119,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginEnd="16dp"
+        android:autofillHints="password"
         android:background="@null"
         android:digits="@string/digits_key"
         android:hint="@string/token"
@@ -143,13 +133,18 @@
         app:layout_constraintStart_toStartOf="@id/editAccount"
         app:layout_constraintTop_toTopOf="@id/tvToken" />
 
-    <Button
+    <TextView
         android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="12dp"
+        android:background="@drawable/bg_button_pink"
+        android:gravity="center"
+        android:paddingVertical="12dp"
         android:text="@string/login"
+        android:textColor="@color/button_bg_pink_text"
+        android:textSize="16sp"
         app:layout_constraintTop_toBottomOf="@id/tvToken" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

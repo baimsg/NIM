@@ -2,7 +2,7 @@
 <resources>
     <color name="color_primary">#F06292</color>
     <color name="color_primary_translucent">#80F06292</color>
-    <color name="color_primary_variant">#ff94c2</color>
+    <color name="color_primary_variant">#FF94C2</color>
     <color name="color_secondary">#5C6BC0</color>
     <color name="color_secondary_variant">#26418f</color>
 
@@ -11,6 +11,11 @@
     <color name="item_bg_white_default">#FFFFFF</color>
     <color name="item_bg_white_disabled">#1A666666</color>
     <color name="item_bg_white_pressed">#CCF6F6F6</color>
+
+    <color name="button_bg_pink_text">#FFFFFF</color>
+    <color name="button_bg_pink_default">#F14781</color>
+    <color name="button_bg_pink_disabled">#80F14781</color>
+    <color name="button_bg_pink_pressed">#80F14781</color>
 
     <color name="title_color">#000000</color>
     <color name="subtitle_color">#666666</color>

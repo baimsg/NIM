@@ -6,12 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/background">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@color/color_primary"
-        app:layout_constraintBottom_toBottomOf="@id/ivBack"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/ivBack"
@@ -39,12 +33,6 @@
         app:layout_constraintStart_toEndOf="@id/ivBack"
         app:layout_constraintTop_toTopOf="@id/ivBack" />
 
-    <View
-        android:id="@+id/vTop"
-        android:layout_width="match_parent"
-        android:layout_height=".5dp"
-        android:background="@color/line_color"
-        app:layout_constraintTop_toBottomOf="@id/ivBack" />
 
     <TextView
         android:id="@+id/tvFinish"
@@ -77,7 +65,7 @@
         android:textColor="@color/title_color"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/vTop" />
+        app:layout_constraintTop_toBottomOf="@id/ivBack" />
 
     <View
         android:id="@+id/vLine"
@@ -95,6 +83,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginHorizontal="16dp"
+        android:autofillHints="appKey"
         android:background="@null"
         android:hint="@string/app_key_hint"
         android:imeOptions="actionDone"

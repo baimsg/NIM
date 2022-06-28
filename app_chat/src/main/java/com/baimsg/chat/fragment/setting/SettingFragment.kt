@@ -122,7 +122,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
     private fun updateView() {
         val addMode = Constant.ADD_MODE
 
-        binding.tvAppKeyValue.text = Constant.APP_KEY
+        binding.tvAppKeyValue.text = ""
 
         binding.tvPrefixValue.text = Constant.SEARCH_PREFIX
 

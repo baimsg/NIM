@@ -25,9 +25,9 @@ class ChatApp : Application() {
          * mmkv
          */
         MMKV.initialize(this)
-        initIM(this)
         initUmeng(this)
         Bugly.init(applicationContext, Constant.BUGLY_KEY, false)
+
     }
 
     override fun attachBaseContext(base: Context) {
@@ -40,29 +40,29 @@ class ChatApp : Application() {
         /**
          * IM
          */
-        fun initIM(context: Context) {
-            NIMClient.init(context, loginInfo(), options(context))
-        }
+//        fun initIM(context: Context) {
+//            NIMClient.init(context, loginInfo(), options(context))
+//        }
 
-        private fun loginInfo(): LoginInfo {
-            return LoginInfo(Constant.ACCOUNT, Constant.TOKEN)
-        }
-
-        private fun options(context: Context): SDKOptions {
-            val sDKOptions = SDKOptions()
-            sDKOptions.sdkStorageRootPath = "${context.cacheDir.canonicalPath}/nim"
-            sDKOptions.preloadAttach = true
-            sDKOptions.appKey = Constant.APP_KEY
-            sDKOptions.sessionReadAck = true
-            sDKOptions.animatedImageThumbnailEnabled = true
-            sDKOptions.asyncInitSDK = true
-            sDKOptions.reducedIM = false
-            sDKOptions.checkManifestConfig = false
-            sDKOptions.enableTeamMsgAck = true
-            sDKOptions.shouldConsiderRevokedMessageUnreadCount = true
-            sDKOptions.loginCustomTag = "登录自定义字段"
-            return sDKOptions
-        }
+//        private fun loginInfo(): LoginInfo {
+//            return LoginInfo(Constant.ACCOUNT, Constant.TOKEN)
+//        }
+//
+//        private fun options(context: Context): SDKOptions {
+//            val sDKOptions = SDKOptions()
+//            sDKOptions.sdkStorageRootPath = "${context.cacheDir.canonicalPath}/nim"
+//            sDKOptions.preloadAttach = true
+//            sDKOptions.appKey = Constant.APP_KEY
+//            sDKOptions.sessionReadAck = true
+//            sDKOptions.animatedImageThumbnailEnabled = true
+//            sDKOptions.asyncInitSDK = true
+//            sDKOptions.reducedIM = false
+//            sDKOptions.checkManifestConfig = false
+//            sDKOptions.enableTeamMsgAck = true
+//            sDKOptions.shouldConsiderRevokedMessageUnreadCount = true
+//            sDKOptions.loginCustomTag = "登录自定义字段"
+//            return sDKOptions
+//        }
 
         /**
          * 初始化Umeng

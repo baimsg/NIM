@@ -74,4 +74,7 @@ abstract class LoginRecordDao : BaseDao<NIMLoginRecord>() {
 
     @Query("SELECT DISTINCT appKey FROM nim_login_record")
     abstract fun appKeys(): List<String>
+
+    @Query("UPDATE nim_login_record SET used = 0")
+    abstract fun cancelUsed()
 }

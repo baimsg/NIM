@@ -24,7 +24,8 @@ data class NIMLoginRecord(
     val account: String = "",
     val token: String = "",
     val createTIme: Long = 0,
-    val loginTime: Long = 0
+    val loginTime: Long = 0,
+    val used: Boolean = false
 ) : BaseEntity, java.io.Serializable {
     override fun getIdentifier(): String = id
 }

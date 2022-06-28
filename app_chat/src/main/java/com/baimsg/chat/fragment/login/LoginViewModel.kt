@@ -19,6 +19,7 @@ import com.netease.nimlib.sdk.team.model.Team
 import com.netease.nimlib.sdk.uinfo.UserService
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -34,6 +35,33 @@ internal class LoginViewModel @Inject constructor(
     private val loginRecordDao: LoginRecordDao
 ) :
     ViewModel() {
+
+    private val _account by lazy {
+        MutableStateFlow("")
+    }
+
+    val account by lazy {
+        _account
+    }
+
+    private val _token by lazy {
+        MutableStateFlow("")
+    }
+
+    val token by lazy {
+        _token
+    }
+
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            val used = loginRecordDao.entries().filter { it.used }
+            if (used.isNotEmpty()) {
+                _account.value = used[0].account
+                _token.value = used[0].token
+            }
+        }
+
+    }
 
     /**
      * 登录状态
@@ -202,7 +230,7 @@ internal class LoginViewModel @Inject constructor(
      * 加载用户信息
      */
     fun loadUserInfo() {
-        NIMClient.getService(UserService::class.java).fetchUserInfo(listOf(Constant.ACCOUNT))
+        NIMClient.getService(UserService::class.java).fetchUserInfo(listOf(""))
             .setCallback(object : RequestCallback<List<NimUserInfo>> {
                 override fun onSuccess(users: List<NimUserInfo>?) {
                     viewModelScope.launch {

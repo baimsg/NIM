@@ -95,7 +95,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             loginViewModel.statusCode.collectLatest { status ->
                 binding.tvStatus.text = status.message()
                 Constant.apply {
-                    if (status.wontAutoLogin() || APP_KEY.isBlank() || ACCOUNT.isBlank() || TOKEN.isBlank()) openLogin
+//                    if (status.wontAutoLogin() || APP_KEY.isBlank() || ACCOUNT.isBlank() || TOKEN.isBlank()) openLogin
                 }
             }
         }

@@ -27,6 +27,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
 
     private val args by navArgs<LoginFragmentArgs>()
 
+    private val loginViewModel by activityViewModels<LoginViewModel>()
+
     //拦截返回事件
     private val tough by lazy {
         requireActivity().onBackPressedDispatcher.addCallback(this) {
@@ -34,18 +36,17 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
         }
     }
 
-    private var account: String = Constant.ACCOUNT
+    private var account: String = ""
 
-    private var token: String = Constant.TOKEN
+    private var token: String = ""
 
-    private val loginViewModel by activityViewModels<LoginViewModel>()
 
     override fun initView() {
 
-        binding.tvAppKey.text = Constant.APP_KEY.run { ifBlank { "点击设置appKey" } }
+//        binding.tvAppKey.text = Constant.APP_KEY.run { ifBlank { "点击设置appKey" } }
 
         binding.editAccount.apply {
-            setText(Constant.ACCOUNT)
+//            setText(Constant.ACCOUNT)
             showKeyboard(true)
             addTextChangedListener {
                 account = it.toString()
@@ -53,7 +54,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
         }
 
         binding.editToken.apply {
-            setText(Constant.TOKEN)
+//            setText(Constant.TOKEN)
             addTextChangedListener {
                 token = it.toString()
             }
@@ -64,14 +65,12 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
         }
 
         binding.btnLogin.setOnClickListener {
-            if (account.isNullOrBlank() || token.isNullOrBlank()) {
+            if (account.isBlank() || token.isBlank()) {
                 showShort("账号或密码为空")
                 return@setOnClickListener
             }
-            KvUtils.put(Constant.KEY_ACCOUNT, account ?: "")
-            KvUtils.put(Constant.KEY_TOKEN, token ?: "")
             val info =
-                LoginInfo(account, token, Constant.APP_KEY)
+                LoginInfo(account, token, "")
             val callback: RequestCallback<LoginInfo> = object : RequestCallback<LoginInfo> {
                 override fun onSuccess(param: LoginInfo) {
                     findNavController().navigateUp()
@@ -107,8 +106,4 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
         super.onPause()
     }
 
-    override fun onResume() {
-        requireActivity().setStatusBarDarkMode()
-        super.onResume()
-    }
 }

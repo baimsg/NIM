@@ -53,7 +53,7 @@ class SearchUserFragment : BaseFragment<FragmentSearchUserBinding>(R.layout.frag
                 .request { allGranted, grantedList, deniedList ->
                     if (allGranted) {
                         val path =
-                            requireContext().getExternalFilesDir("${Constant.APP_KEY}-${Constant.ACCOUNT}")
+                            requireContext().getExternalFilesDir("${""}-${""}")
                         if (path == null) {
                             showError("获取不到外置储存卡")
                             return@request

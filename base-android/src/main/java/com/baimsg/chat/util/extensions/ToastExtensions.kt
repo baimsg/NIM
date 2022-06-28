@@ -27,10 +27,15 @@ fun Context.showLong(msg: String) {
     Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
 }
 
-fun Fragment.showInfo(msg: String) {
-    Toasty.info(requireContext(), msg, Toast.LENGTH_SHORT, true).apply {
-        show()
-    }
+
+fun Activity.showInfo(msg: String) = applicationContext::showInfo::invoke
+
+fun Fragment.showInfo(msg: String) = requireContext()::showInfo
+
+fun Context.showInfo(msg: String) {
+    listOf("1","3","3").map { this::showInfo }
+    Toasty.info(this, msg, Toast.LENGTH_SHORT, true)
+        .apply { show() }
 }
 
 fun Fragment.showSuccess(msg: String) {

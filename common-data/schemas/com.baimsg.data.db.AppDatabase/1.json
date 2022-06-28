@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "04ae9eceae0e8ae9525a72c7a68b56cd",
+    "identityHash": "31932fc2e7cb625430fe67283a1030a2",
     "entities": [
       {
         "tableName": "nim_user_info",
@@ -86,7 +86,7 @@
       },
       {
         "tableName": "nim_login_record",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `appKey` TEXT NOT NULL, `account` TEXT NOT NULL, `token` TEXT NOT NULL, `createTIme` INTEGER NOT NULL, `loginTime` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `appKey` TEXT NOT NULL, `account` TEXT NOT NULL, `token` TEXT NOT NULL, `createTIme` INTEGER NOT NULL, `loginTime` INTEGER NOT NULL, `used` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -123,6 +123,12 @@
             "columnName": "loginTime",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "used",
+            "columnName": "used",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -138,7 +144,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '04ae9eceae0e8ae9525a72c7a68b56cd')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '31932fc2e7cb625430fe67283a1030a2')"
     ]
   }
 }

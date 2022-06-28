@@ -34,7 +34,6 @@ class AppKeyFragment : BaseFragment<FragmentAppKeyBinding>(R.layout.fragment_app
         }
 
         binding.tvFinish.setOnClickListener {
-            KvUtils.put(Constant.KEY_APP_KEY, appKey)
             showShort("设置成功")
             findNavController().navigateUp()
         }
