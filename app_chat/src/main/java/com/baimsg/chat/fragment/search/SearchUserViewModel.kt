@@ -1,6 +1,7 @@
 package com.baimsg.chat.fragment.search
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.baimsg.base.util.extensions.logE
 import com.baimsg.chat.Constant
 import com.baimsg.chat.type.BatchStatus
@@ -13,7 +14,9 @@ import com.netease.nimlib.sdk.friend.constant.VerifyType
 import com.netease.nimlib.sdk.friend.model.AddFriendData
 import com.netease.nimlib.sdk.uinfo.UserService
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 class SearchUserViewModel : ViewModel() {
 
@@ -65,31 +68,37 @@ class SearchUserViewModel : ViewModel() {
     private fun addFriend(nimUserInfo: NIMUserInfo) {
         addFriendViewState.apply {
             if (nimUserInfo.name.verified()) {
-                NIMClient.getService(FriendService::class.java).addFriend(
-                    AddFriendData(
-                        nimUserInfo.account,
-                        VerifyType.DIRECT_ADD,
-                        Constant.KEY_ADD_VERIFY
-                    )
-                ).setCallback(object : RequestCallback<Void> {
-                    override fun onSuccess(p0: Void?) {
-                        addFriendViewState.value =
-                            AddFriendViewState(index = value.index + 1, "添加成功", nimUserInfo)
-                        next()
-                    }
+                val friend = if (Constant.ADD_MODE) AddFriendData(
+                    nimUserInfo.account,
+                    VerifyType.DIRECT_ADD,
+                    null
+                ) else AddFriendData(
+                    nimUserInfo.account,
+                    VerifyType.VERIFY_REQUEST,
+                    Constant.KEY_ADD_VERIFY
+                )
+                NIMClient.getService(FriendService::class.java).addFriend(friend)
+                    .setCallback(object : RequestCallback<Void> {
+                        override fun onSuccess(p0: Void?) {
+                            addFriendViewState.value =
+                                AddFriendViewState(index = value.index + 1, "添加成功", nimUserInfo)
+                            next()
+                        }
 
-                    override fun onFailed(code: Int) {
-                        addFriendViewState.value =
-                            AddFriendViewState(index = value.index + 1, "添加失败：$code", nimUserInfo)
-                        next()
-                    }
+                        override fun onFailed(code: Int) {
+                            addFriendViewState.value =
+                                AddFriendViewState(
+                                    index = value.index + 1,
+                                    "添加失败：$code",
+                                    nimUserInfo
+                                )
+                        }
 
-                    override fun onException(e: Throwable?) {
-                        addFriendViewState.value =
-                            AddFriendViewState(index = value.index + 1, "添加失败：$e", nimUserInfo)
-                        next()
-                    }
-                })
+                        override fun onException(e: Throwable?) {
+                            addFriendViewState.value =
+                                AddFriendViewState(index = value.index + 1, "添加失败：$e", nimUserInfo)
+                        }
+                    })
             } else {
                 value =
                     AddFriendViewState(index = value.index + 1, "敏感词过滤", nimUserInfo)
@@ -99,9 +108,12 @@ class SearchUserViewModel : ViewModel() {
     }
 
     private fun next() {
-        val allUser = searchViewState.value.allUser
-        val index = addFriendViewState.value.index
-        if (index in allUser.indices) addFriend(allUser[index])
+        viewModelScope.launch {
+            delay(Constant.ADD_FRIEND_DELAY)
+            val allUser = searchViewState.value.allUser
+            val index = addFriendViewState.value.index
+            if (index in allUser.indices) addFriend(allUser[index])
+        }
     }
 
     /**

@@ -72,7 +72,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                     showInfo("unknown 该功能待开发")
                 }
                 vTeamChat.setOnClickListener {
-                    showInfo("unknown 该功能待开发")
+                    findNavController().navigate(R.id.action_homeFragment_to_teamFragment)
                 }
             }
 

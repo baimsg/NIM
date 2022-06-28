@@ -16,6 +16,10 @@ object Constant {
 
     const val KEY_SEARCH_COUNT = "key_search_count"
 
+    const val KEY_ADD_MODE = "key_add_mode"
+
+    const val KEY_ADD_FRIEND_DELAY = "key_add_friend_delay"
+
     const val KEY_SEARCH_PREFIX = "key_search_prefix"
 
     const val KEY_ADD_VERIFY = "key_key_add_verify"
@@ -40,6 +44,9 @@ object Constant {
     val SEARCH_COUNT: Long
         get() = KvUtils.getLong(KEY_SEARCH_COUNT, 100000)
 
+    val ADD_FRIEND_DELAY: Long
+        get() = KvUtils.getLong(KEY_ADD_FRIEND_DELAY, 1000)
+
     val SEARCH_PREFIX: String
         get() = KvUtils.getString(KEY_SEARCH_PREFIX, "659")
 
@@ -48,6 +55,9 @@ object Constant {
 
     val ADD_FILTER: String
         get() = KvUtils.getString(kEY_ADD_FILTER, "")
+
+    val ADD_MODE: Boolean
+        get() = KvUtils.getBoolean(KEY_ADD_MODE, true)
 
     val ADD_FILTERS: List<String>
         get() = if (ADD_FILTER.isNotBlank()) DEFAULT_JSON_FORMAT.decodeFromString(

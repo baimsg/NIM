@@ -110,73 +110,67 @@
                 app:layout_constraintTop_toTopOf="@id/tvAppKey" />
 
             <TextView
-                android:id="@+id/tvPrefix"
+                android:id="@+id/tvAddFriendDelay"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="12dp"
                 android:background="@drawable/bg_item_white"
                 android:gravity="start|center_vertical"
                 android:paddingHorizontal="16dp"
-                android:text="@string/dictionary_prefix"
+                android:text="@string/add_friend_delay"
                 android:textColor="@color/title_color"
                 android:textSize="16sp"
                 app:layout_constraintTop_toBottomOf="@id/tvAppKey" />
 
             <TextView
-                android:id="@+id/tvPrefixValue"
+                android:id="@+id/tvAddFriendDelayValue"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_marginEnd="8dp"
                 android:gravity="center"
                 android:textColor="@color/subtitle_color"
                 android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="@id/tvPrefix"
+                app:layout_constraintBottom_toBottomOf="@id/tvAddFriendDelay"
                 app:layout_constraintEnd_toStartOf="@id/ivAppKey"
-                app:layout_constraintTop_toTopOf="@id/tvPrefix"
-                tools:text="659" />
-
+                app:layout_constraintTop_toTopOf="@id/tvAddFriendDelay"
+                tools:text="500" />
 
             <View
-                android:id="@+id/vPrefix"
+                android:id="@+id/vAddFriendDelay"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginStart="16dp"
                 android:background="@color/line_color"
-                app:layout_constraintTop_toBottomOf="@id/tvPrefix" />
+                app:layout_constraintTop_toBottomOf="@id/tvAddFriendDelay" />
 
             <TextView
-                android:id="@+id/tvScope"
+                android:id="@+id/tvAddMode"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/bg_item_white"
                 android:gravity="start|center_vertical"
                 android:paddingHorizontal="16dp"
-                android:text="@string/dictionary_scope"
+                android:text="@string/add_direct"
                 android:textColor="@color/title_color"
                 android:textSize="16sp"
-                app:layout_constraintTop_toBottomOf="@id/vPrefix" />
+                app:layout_constraintTop_toBottomOf="@id/vAddFriendDelay" />
 
-            <TextView
-                android:id="@+id/tvScopeValue"
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/scAddMode"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_marginEnd="8dp"
-                android:gravity="center"
-                android:textColor="@color/subtitle_color"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="@id/tvScope"
-                app:layout_constraintEnd_toStartOf="@id/ivAppKey"
-                app:layout_constraintTop_toTopOf="@id/tvScope"
-                tools:text="100000" />
-
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toBottomOf="@id/tvAddMode"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tvAddMode" />
 
             <View
-                android:id="@+id/vScope"
+                android:id="@+id/vAddMode"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginStart="16dp"
                 android:background="@color/line_color"
-                app:layout_constraintTop_toBottomOf="@id/tvScope" />
+                app:layout_constraintTop_toBottomOf="@id/tvAddMode" />
 
             <TextView
                 android:id="@+id/tvVerify"
@@ -189,7 +183,7 @@
                 android:text="@string/dictionary_verify"
                 android:textColor="@color/title_color"
                 android:textSize="16sp"
-                app:layout_constraintTop_toBottomOf="@id/vScope" />
+                app:layout_constraintTop_toBottomOf="@id/vAddMode" />
 
             <TextView
                 android:id="@+id/tvVerifyValue"
@@ -238,6 +232,76 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/tvFilter" />
 
+
+            <TextView
+                android:id="@+id/tvPrefix"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_item_white"
+                android:gravity="start|center_vertical"
+                android:paddingHorizontal="16dp"
+                android:text="@string/dictionary_prefix"
+                android:textColor="@color/title_color"
+                android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@id/tvFilter" />
+
+            <TextView
+                android:id="@+id/tvPrefixValue"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginEnd="8dp"
+                android:gravity="center"
+                android:textColor="@color/subtitle_color"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/tvPrefix"
+                app:layout_constraintEnd_toStartOf="@id/ivAppKey"
+                app:layout_constraintTop_toTopOf="@id/tvPrefix"
+                tools:text="659" />
+
+            <View
+                android:id="@+id/vPrefix"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginStart="16dp"
+                android:background="@color/line_color"
+                app:layout_constraintTop_toBottomOf="@id/tvPrefix" />
+
+            <TextView
+                android:id="@+id/tvScope"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/bg_item_white"
+                android:gravity="start|center_vertical"
+                android:paddingHorizontal="16dp"
+                android:text="@string/dictionary_scope"
+                android:textColor="@color/title_color"
+                android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@id/vPrefix" />
+
+            <TextView
+                android:id="@+id/tvScopeValue"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginEnd="8dp"
+                android:gravity="center"
+                android:textColor="@color/subtitle_color"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/tvScope"
+                app:layout_constraintEnd_toStartOf="@id/ivAppKey"
+                app:layout_constraintTop_toTopOf="@id/tvScope"
+                tools:text="100000" />
+
+
+            <View
+                android:id="@+id/vScope"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginStart="16dp"
+                android:background="@color/line_color"
+                app:layout_constraintTop_toBottomOf="@id/tvScope" />
+
+
             <TextView
                 android:id="@+id/tvSwitchAccount"
                 android:layout_width="match_parent"
@@ -249,7 +313,7 @@
                 android:text="@string/switch_account"
                 android:textColor="@color/title_color"
                 android:textSize="16sp"
-                app:layout_constraintTop_toBottomOf="@id/tvFilter" />
+                app:layout_constraintTop_toBottomOf="@id/vScope" />
 
             <TextView
                 android:id="@+id/tvQuit"
