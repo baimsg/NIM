@@ -86,6 +86,13 @@
             app:popExitAnim="@anim/fragment_open_exit"
             app:popUpTo="@id/homeFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_loginFragment_to_localKeyFragment"
+            app:destination="@id/localKeyFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/fade_no_change"
+            app:popEnterAnim="@anim/fade_no_change"
+            app:popExitAnim="@anim/slide_out_left" />
     </fragment>
 
     <fragment
@@ -111,4 +118,27 @@
         android:name="com.baimsg.chat.fragment.team.TeamFragment"
         android:label="TeamFragment"
         tools:layout="@layout/fragment_team" />
+    <fragment
+        android:id="@+id/localKeyFragment"
+        android:name="com.baimsg.chat.fragment.login.local.LocalKeyFragment"
+        android:label="LocalKeyListFragment"
+        tools:layout="@layout/fragment_local_key">
+        <action
+            android:id="@+id/action_localKeyFragment_to_localAccountFragment"
+            app:destination="@id/localAccountFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/fade_no_change"
+            app:popEnterAnim="@anim/fade_no_change"
+            app:popExitAnim="@anim/slide_out_left" />
+    </fragment>
+    <fragment
+        android:id="@+id/localAccountFragment"
+        android:name="com.baimsg.chat.fragment.login.local.LocalAccountFragment"
+        android:label="LocalAccountFragment"
+        tools:layout="@layout/fragment_local_account">
+        <argument
+            android:name="appKey"
+            android:defaultValue="null"
+            app:argType="string" />
+    </fragment>
 </navigation>

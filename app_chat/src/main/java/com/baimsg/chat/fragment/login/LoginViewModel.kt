@@ -1,14 +1,9 @@
 package com.baimsg.chat.fragment.login
 
-import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.fragment.findNavController
 import com.baimsg.chat.fragment.home.FriendViewState
 import com.baimsg.chat.type.ExecutionStatus
-import com.baimsg.chat.util.extensions.showError
-import com.baimsg.chat.util.extensions.showSuccess
-import com.baimsg.chat.util.extensions.showWarning
 import com.baimsg.data.db.daos.LoginRecordDao
 import com.baimsg.data.model.entities.*
 import com.netease.nimlib.sdk.NIMClient
@@ -62,6 +57,16 @@ internal class LoginViewModel @Inject constructor(
 
     suspend fun getLoginInfo() =
         withContext(Dispatchers.IO) { loginRecordDao.used().firstOrNull() ?: NIMLoginRecord() }
+
+    suspend fun appKeys() = withContext(Dispatchers.IO) {
+        loginRecordDao.appKeys()
+    }
+
+    suspend fun accounts(appKey: String) =
+        withContext(Dispatchers.IO) {
+        loginRecordDao.entriesByAppKey(appKey)
+    }
+
 
     /**
      * 登录状态

@@ -80,4 +80,8 @@ abstract class LoginRecordDao : BaseDao<NIMLoginRecord>() {
 
     @Query("SELECT * FROM nim_login_record WHERE used = 1")
     abstract fun used(): List<NIMLoginRecord>
+
+    @Transaction
+    @Query("SELECT * FROM nim_login_record WHERE appKey = :appKey")
+    abstract fun entriesByAppKey(appKey: String): List<NIMLoginRecord>
 }

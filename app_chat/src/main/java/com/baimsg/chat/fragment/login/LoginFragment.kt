@@ -29,6 +29,22 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
 
     override fun initView() {
 
+        binding.ivBack.apply {
+            show(!args.hard)
+            setOnClickListener {
+                findNavController().navigateUp()
+            }
+        }
+
+        binding.tvLocalAccount.apply {
+            lifecycleScope.launch {
+                show(loginViewModel.appKeys().isNotEmpty())
+            }
+            setOnClickListener {
+                findNavController().navigate(R.id.action_loginFragment_to_localKeyFragment)
+            }
+        }
+
         binding.editAppKey.apply {
             lifecycleScope.launch(Dispatchers.Main) {
                 val appKey = loginViewModel.getLoginInfo().appKey
@@ -64,7 +80,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
             loginViewModel.login()
         }
 
-        binding.ivBack.show(!args.hard)
 
         if (args.hard) {
             requireActivity().onBackPressedDispatcher.addCallback(this) {

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_item_white">
+
+    <TextView
+        android:id="@+id/tvAccount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="4dp"
+        android:text="@string/account"
+        android:textColor="@color/title_color"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvAccountValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="4dp"
+        android:textColor="@color/subtitle_color"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@id/tvAccount"
+        app:layout_constraintStart_toEndOf="@id/tvAccount"
+        app:layout_constraintTop_toTopOf="@id/tvAccount"
+        tools:text="0897654367890879" />
+
+    <TextView
+        android:id="@+id/tvToken"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="4dp"
+        android:text="@string/token"
+        android:textColor="@color/title_color"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvAccount" />
+
+    <TextView
+        android:id="@+id/tvTokenValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="4dp"
+        android:textColor="@color/subtitle_color"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@id/tvToken"
+        app:layout_constraintStart_toStartOf="@id/tvAccountValue"
+        app:layout_constraintTop_toTopOf="@id/tvToken"
+        tools:text="0897654367890879" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
