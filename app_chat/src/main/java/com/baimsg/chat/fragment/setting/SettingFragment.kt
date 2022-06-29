@@ -1,6 +1,7 @@
 package com.baimsg.chat.fragment.setting
 
 import android.text.InputType
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
@@ -9,18 +10,17 @@ import com.baimsg.chat.Constant
 import com.baimsg.chat.R
 import com.baimsg.chat.base.BaseFragment
 import com.baimsg.chat.databinding.FragmentSettingBinding
-import com.baimsg.chat.util.extensions.showError
-import com.baimsg.chat.util.extensions.showInfo
+import com.baimsg.chat.fragment.login.LoginViewModel
 import com.baimsg.chat.util.extensions.showSuccess
+import com.lxj.xpopup.XPopup
+import com.lxj.xpopup.interfaces.OnSelectListener
 import com.netease.nimlib.sdk.NIMClient
-import com.netease.nimlib.sdk.RequestCallback
 import com.netease.nimlib.sdk.auth.AuthService
-import com.netease.nimlib.sdk.misc.DirCacheFileType
-import com.netease.nimlib.sdk.misc.MiscService
 
 
 class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_setting) {
 
+    private val loginViewModel by activityViewModels<LoginViewModel>()
 
     override fun initView() {
 
@@ -28,10 +28,6 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
 
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()
-        }
-
-        binding.tvAppKey.setOnClickListener {
-            findNavController().navigate(R.id.action_settingFragment_to_appKeyFragment)
         }
 
         binding.scAddMode.setOnCheckedChangeListener { _, isChecked ->
@@ -94,35 +90,28 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
         }
 
         binding.tvQuit.setOnClickListener {
-            val fileTypes = listOf(
-                DirCacheFileType.THUMB,
-                DirCacheFileType.IMAGE,
-                DirCacheFileType.AUDIO
-            )
-            NIMClient.getService(AuthService::class.java).logout()
-            NIMClient.getService(MiscService::class.java).clearDirCache(fileTypes, 0, 0)
-                .setCallback(object : RequestCallback<Void> {
-                    override fun onSuccess(p0: Void?) {
-                        showSuccess("已退出本账号登录")
-                        requireActivity().finish()
+            XPopup.Builder(requireContext())
+                .asBottomList(
+                    null,
+                    arrayOf(getString(R.string.logout), getString(R.string.exit_app))
+                ) { position, _ ->
+                    when (position) {
+                        0 -> {
+                            loginViewModel.logout()
+                            showSuccess("已退出本账号登录")
+                            findNavController().navigateUp()
+                        }
+                        else -> {
+                            loginViewModel.exit()
+                        }
                     }
-
-                    override fun onFailed(p0: Int) {
-                        showError("删除缓存失败")
-                    }
-
-                    override fun onException(p0: Throwable?) {
-                        showError("删除缓存失败")
-                    }
-                })
+                }.show()
         }
     }
 
 
     private fun updateView() {
         val addMode = Constant.ADD_MODE
-
-        binding.tvAppKeyValue.text = ""
 
         binding.tvPrefixValue.text = Constant.SEARCH_PREFIX
 

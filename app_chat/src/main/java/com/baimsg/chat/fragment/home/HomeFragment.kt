@@ -4,9 +4,11 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
+import com.baimsg.base.util.extensions.logE
 import com.baimsg.chat.Constant
 import com.baimsg.chat.R
 import com.baimsg.chat.adapter.FriendAdapter
@@ -21,15 +23,17 @@ import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
 import com.baimsg.chat.util.extensions.showInfo
 import com.chad.library.adapter.base.animation.AlphaInAnimation
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private val loginViewModel by activityViewModels<LoginViewModel>()
-    
+
     private val openLogin by lazy {
-        findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToLoginFragment(tough = true))
+        findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToLoginFragment(hard = true))
     }
 
     private val friendAdapter by lazy {
@@ -94,8 +98,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         repeatOnLifecycleStarted {
             loginViewModel.statusCode.collectLatest { status ->
                 binding.tvStatus.text = status.message()
-                Constant.apply {
-//                    if (status.wontAutoLogin() || APP_KEY.isBlank() || ACCOUNT.isBlank() || TOKEN.isBlank()) openLogin
+                lifecycleScope.launch(Dispatchers.Main) {
+                    if (status.wontAutoLogin() || loginViewModel.getLoginInfo()
+                            .mustEmpty() || loginViewModel.getLoginInfo().appKeyEmpty()
+                    ) openLogin
                 }
             }
         }

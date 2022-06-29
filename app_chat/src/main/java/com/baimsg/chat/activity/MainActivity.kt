@@ -1,31 +1,20 @@
 package com.baimsg.chat.activity
 
-import android.content.res.Configuration
-import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.baimsg.base.util.extensions.logE
 import com.baimsg.chat.R
 import com.baimsg.chat.base.BaseActivity
 import com.baimsg.chat.databinding.ActivityMainBinding
 import com.baimsg.chat.fragment.login.LoginAction
 import com.baimsg.chat.fragment.login.LoginViewModel
-import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
-import com.baimsg.chat.util.extensions.setStatusBarDarkMode
-import com.baimsg.chat.util.extensions.setStatusBarLightMode
-import com.baimsg.chat.util.extensions.showShort
+import com.baimsg.chat.util.extensions.*
 import com.netease.nimlib.sdk.NIMClient
-import com.netease.nimlib.sdk.Observer
-import com.netease.nimlib.sdk.SDKOptions
 import com.netease.nimlib.sdk.auth.AuthServiceObserver
-import com.netease.nimlib.sdk.auth.LoginInfo
 import com.netease.nimlib.sdk.lifecycle.SdkLifecycleObserver
-import com.netease.nimlib.sdk.util.NIMUtil
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 
 /**
  * Create by Baimsg on 2022/6/10
@@ -36,20 +25,33 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private val loginViewModel by viewModels<LoginViewModel>()
 
+    private val authServiceObserver by lazy {
+        NIMClient.getService(AuthServiceObserver::class.java)
+    }
+
+    private val sdkLifecycleObserver by lazy {
+        NIMClient.getService(SdkLifecycleObserver::class.java)
+    }
+
     override fun initView() {
         /**
          * 初始化云信
          */
         NIMClient.initSDK()
 
-        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
-            Configuration.UI_MODE_NIGHT_NO -> {
-                setStatusBarLightMode()
+        /**
+         * 监听初始化状态
+         */
+        sdkLifecycleObserver.observeMainProcessInitCompleteResult({
+            if (!it) showError("IM Failed to load")
+        }, true)
+
+        //监听登录状态
+        authServiceObserver.observeOnlineStatus({ status ->
+            repeatOnLifecycleStarted {
+                loginViewModel.submit(LoginAction.UpdateStatusCode(status))
             }
-            Configuration.UI_MODE_NIGHT_YES -> {
-                setStatusBarDarkMode()
-            }
-        }
+        }, true)
 
         //绑定bottomNavigation
         val navHostFragment =
@@ -64,20 +66,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 else -> binding.bottomNav.visibility = View.GONE
             }
         }
-        //监听注册状态
-        NIMClient.getService(SdkLifecycleObserver::class.java)
-            .observeMainProcessInitCompleteResult({
-                if (!it) showShort("SDK初始化失败!")
-            }, true)
-
-        //监听登录状态
-        NIMClient.getService(AuthServiceObserver::class.java).observeOnlineStatus({ status ->
-            repeatOnLifecycleStarted {
-                loginViewModel.submit(LoginAction.UpdateStatusCode(status))
-            }
-        }, true)
-
     }
+
 
     override fun onBackPressed() {
         if (!onBackPressedDispatcher.hasEnabledCallbacks()) {

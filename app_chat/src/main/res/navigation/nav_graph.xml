@@ -53,13 +53,6 @@
         android:label="SettingFragment"
         tools:layout="@layout/fragment_setting">
         <action
-            android:id="@+id/action_settingFragment_to_appKeyFragment"
-            app:destination="@id/appKeyFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/fade_no_change"
-            app:popEnterAnim="@anim/fade_no_change"
-            app:popExitAnim="@anim/slide_out_left" />
-        <action
             android:id="@+id/action_settingFragment_to_loginFragment"
             app:destination="@id/loginFragment"
             app:enterAnim="@anim/slide_in_bottom"
@@ -81,24 +74,19 @@
         android:label="LoginFragment"
         tools:layout="@layout/fragment_login">
         <argument
-            android:name="tough"
+            android:name="hard"
             android:defaultValue="false"
             app:argType="boolean" />
         <action
-            android:id="@+id/action_loginFragment_to_appKeyFragment"
-            app:destination="@id/appKeyFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/fade_no_change"
-            app:popEnterAnim="@anim/fade_no_change"
-            app:popExitAnim="@anim/slide_out_left" />
+            android:id="@+id/action_loginFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
+            app:popExitAnim="@anim/fragment_open_exit"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true" />
     </fragment>
-
-    <fragment
-        android:id="@+id/appKeyFragment"
-        android:name="com.baimsg.chat.fragment.setting.appkey.AppKeyFragment"
-        android:label="AppKeyFragment"
-        tools:layout="@layout/fragment_app_key" />
-
 
     <fragment
         android:id="@+id/filterFragment"

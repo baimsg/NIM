@@ -20,7 +20,7 @@ import kotlinx.serialization.Serializable
 data class NIMLoginRecord(
     @PrimaryKey
     val id: String = "",
-    val appKey: String = "96e60d1d45c959069333ad8308b5799b",
+    val appKey: String = "",
     val account: String = "",
     val token: String = "",
     val createTIme: Long = 0,
@@ -28,4 +28,8 @@ data class NIMLoginRecord(
     val used: Boolean = false
 ) : BaseEntity, java.io.Serializable {
     override fun getIdentifier(): String = id
+
+    fun appKeyEmpty(): Boolean = appKey.isEmpty()
+
+    fun mustEmpty(): Boolean = account.isEmpty() || token.isEmpty()
 }

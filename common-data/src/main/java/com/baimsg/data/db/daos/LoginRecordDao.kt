@@ -77,4 +77,7 @@ abstract class LoginRecordDao : BaseDao<NIMLoginRecord>() {
 
     @Query("UPDATE nim_login_record SET used = 0")
     abstract fun cancelUsed()
+
+    @Query("SELECT * FROM nim_login_record WHERE used = 1")
+    abstract fun used(): List<NIMLoginRecord>
 }

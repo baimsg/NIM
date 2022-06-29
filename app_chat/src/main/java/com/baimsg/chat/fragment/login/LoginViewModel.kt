@@ -1,18 +1,21 @@
 package com.baimsg.chat.fragment.login
 
+import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.baimsg.chat.Constant
+import androidx.navigation.fragment.findNavController
 import com.baimsg.chat.fragment.home.FriendViewState
 import com.baimsg.chat.type.ExecutionStatus
+import com.baimsg.chat.util.extensions.showError
+import com.baimsg.chat.util.extensions.showSuccess
+import com.baimsg.chat.util.extensions.showWarning
 import com.baimsg.data.db.daos.LoginRecordDao
-import com.baimsg.data.model.entities.NIMTeam
-import com.baimsg.data.model.entities.NIMUserInfo
-import com.baimsg.data.model.entities.asTeam
-import com.baimsg.data.model.entities.asUser
+import com.baimsg.data.model.entities.*
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.RequestCallback
 import com.netease.nimlib.sdk.StatusCode
+import com.netease.nimlib.sdk.auth.AuthService
+import com.netease.nimlib.sdk.auth.LoginInfo
 import com.netease.nimlib.sdk.friend.FriendService
 import com.netease.nimlib.sdk.team.TeamService
 import com.netease.nimlib.sdk.team.model.Team
@@ -22,8 +25,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 /**
@@ -33,35 +38,30 @@ import javax.inject.Inject
 @HiltViewModel
 internal class LoginViewModel @Inject constructor(
     private val loginRecordDao: LoginRecordDao
-) :
-    ViewModel() {
+) : ViewModel() {
 
-    private val _account by lazy {
-        MutableStateFlow("")
+    private val authService by lazy {
+        NIMClient.getService(AuthService::class.java)
     }
 
-    val account by lazy {
-        _account
+    private val _loginInfo by lazy {
+        MutableStateFlow(NIMLoginRecord())
     }
 
-    private val _token by lazy {
-        MutableStateFlow("")
+    private val _viewState by lazy {
+        MutableStateFlow(LoginViewState.EMPTY)
     }
 
-    val token by lazy {
-        _token
-    }
+    val observeViewState: StateFlow<LoginViewState> = _viewState
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
-            val used = loginRecordDao.entries().filter { it.used }
-            if (used.isNotEmpty()) {
-                _account.value = used[0].account
-                _token.value = used[0].token
-            }
+        viewModelScope.launch {
+            _loginInfo.value = getLoginInfo()
         }
-
     }
+
+    suspend fun getLoginInfo() =
+        withContext(Dispatchers.IO) { loginRecordDao.used().firstOrNull() ?: NIMLoginRecord() }
 
     /**
      * 登录状态
@@ -135,6 +135,96 @@ internal class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             pending.emit(action)
         }
+    }
+
+    /**
+     * 更新 appKey
+     */
+    fun upDateAppKey(appKey: String) {
+        _loginInfo.apply {
+            value = value.copy(appKey = appKey)
+        }
+    }
+
+    /**
+     * 更新 account
+     */
+    fun updateAccount(account: String) {
+        _loginInfo.apply {
+            value = value.copy(account = account)
+        }
+    }
+
+    /**
+     * 更新 token
+     */
+    fun updateToken(token: String) {
+        _loginInfo.apply {
+            value = value.copy(token = token)
+        }
+    }
+
+    /**
+     * 登录账号
+     */
+    fun login(loginInfo: NIMLoginRecord = _loginInfo.value) {
+        _viewState.value = LoginViewState.EMPTY
+        when {
+            loginInfo.appKeyEmpty() -> {
+                _viewState.apply {
+                    value = value.copy(executionStatus = ExecutionStatus.FAIL, message = "appKey为空")
+                }
+            }
+            loginInfo.mustEmpty() -> {
+                _viewState.apply {
+                    value = value.copy(executionStatus = ExecutionStatus.FAIL, message = "账号或密码为空")
+                }
+            }
+            else -> {
+                authService.login(LoginInfo(loginInfo.account, loginInfo.token, loginInfo.appKey))
+                    .setCallback(object : RequestCallback<LoginInfo> {
+                        override fun onSuccess(param: LoginInfo) {
+                            viewModelScope.launch(Dispatchers.IO) {
+                                val id = "${loginInfo.appKey}-${loginInfo.account}"
+                                loginRecordDao.cancelUsed()
+                                loginRecordDao.updateOrInsert(loginInfo.run {
+                                    val t = System.currentTimeMillis()
+                                    if (loginRecordDao.countById(id) == 0) copy(
+                                        id = "$appKey-$account",
+                                        createTIme = t,
+                                        loginTime = t,
+                                        used = true
+                                    ) else copy(loginTime = t, used = true)
+                                })
+                            }
+                            _viewState.apply {
+                                value = value.copy(executionStatus = ExecutionStatus.SUCCESS)
+                                value = LoginViewState.EMPTY
+                            }
+                        }
+
+                        override fun onFailed(code: Int) {
+                        }
+
+                        override fun onException(exception: Throwable) {
+                        }
+                    })
+            }
+        }
+    }
+
+    /**
+     * 退出登录
+     */
+    fun logout() {
+        authService.logout()
+    }
+
+    /**
+     * 退出软件
+     */
+    fun exit() {
+        authService.exit()
     }
 
     /**

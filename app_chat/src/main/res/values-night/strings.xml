@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">NIM助手</string>
     <string name="back">返回</string>
@@ -16,6 +15,8 @@
     <string name="app_key_hint">请输入appKey</string>
     <string name="digits_key">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
     <string name="quit">退出</string>
+    <string name="quit_title">请选择退出方式</string>
+    <string name="exit_app">退出软件</string>
     <string name="logout">退出登录</string>
     <string name="friend_requests">好友申请</string>
     <string name="team_chat">群聊</string>
@@ -36,4 +37,9 @@
     <string name="add_friend">一键加好友</string>
     <string name="avatar">头像</string>
     <string name="setting_login">登录设置</string>
+    <string name="add_friend_delay">加好友延时</string>
+    <string name="add_direct">直接添加</string>
+    <string name="account_hint">请输入account</string>
+    <string name="token_hint">请输入token</string>
+    <string name="local_account">本地账号</string>
 </resources>

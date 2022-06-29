@@ -72,6 +72,7 @@ dependencies {
     api(Dep.Libs.glide)
     api(Dep.Libs.baseAdapter)
     api(Dep.Libs.toasty)
+    api(Dep.Libs.xPopup)
     api(Dep.Libs.permissionX)
     api(Dep.Libs.Dialog.core)
     api(Dep.Libs.Dialog.input)

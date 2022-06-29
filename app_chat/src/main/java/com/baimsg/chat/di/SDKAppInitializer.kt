@@ -58,12 +58,13 @@ class SDKAppInitializer @Inject constructor(
             val loginRecord = loginRecord()
             val loginInfo = LoginInfo(loginRecord.account, loginRecord.token)
             val sdkOptions = SDKOptions().apply {
-                sdkStorageRootPath = "${context.cacheDir.canonicalPath}/nim"
+                sdkStorageRootPath = context.externalCacheDir?.canonicalPath
+                    ?: context.getExternalFilesDir("nim")?.canonicalPath
                 preloadAttach = true
                 appKey = loginRecord.appKey
                 sessionReadAck = true
                 animatedImageThumbnailEnabled = true
-                asyncInitSDK = false
+                asyncInitSDK = true
                 reducedIM = false
                 checkManifestConfig = false
                 enableTeamMsgAck = true
@@ -73,6 +74,7 @@ class SDKAppInitializer @Inject constructor(
             NIMClient.config(context, loginInfo, sdkOptions)
         }
     }
+
 
     private suspend fun loginRecord(): NIMLoginRecord {
         return withContext(Dispatchers.IO) {

@@ -26,12 +26,12 @@ object ViewHelper {
 
 }
 
-fun View.show() {
-    visibility = View.VISIBLE
+fun View.show(isShow: Boolean = true) {
+    visibility = if (isShow) View.VISIBLE else View.GONE
 }
 
-fun View.hide() {
-    visibility = View.GONE
+fun View.hide(disappear: Boolean = true) {
+    visibility = if (disappear) View.GONE else View.INVISIBLE
 }
 
 /**
