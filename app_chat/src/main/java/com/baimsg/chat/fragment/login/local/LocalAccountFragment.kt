@@ -11,6 +11,11 @@ import com.baimsg.chat.adapter.LocalAccountAdapter
 import com.baimsg.chat.base.BaseFragment
 import com.baimsg.chat.databinding.FragmentLocalAccountBinding
 import com.baimsg.chat.fragment.login.LoginViewModel
+import com.baimsg.chat.type.ExecutionStatus
+import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
+import com.baimsg.chat.util.extensions.showError
+import com.baimsg.data.model.entities.NIMLoginRecord
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 /**
@@ -48,15 +53,23 @@ class LocalAccountFragment :
         }
 
         localAccountAdapter.setOnItemClickListener { adapter, _, position ->
-            findNavController().navigate(
-                LocalKeyFragmentDirections.actionLocalKeyFragmentToLocalAccountFragment(
-                    appKey = adapter.data[position] as String
-                )
-            )
+            loginViewModel.login(loginInfo = adapter.data[position] as NIMLoginRecord)
         }
 
         localAccountAdapter.setOnItemLongClickListener { adapter, view, position ->
             true
+        }
+    }
+
+    override fun initLiveData() {
+        repeatOnLifecycleStarted {
+            loginViewModel.observeViewState.collectLatest {
+                when (it.executionStatus) {
+                    ExecutionStatus.SUCCESS -> findNavController().navigate(R.id.action_localAccountFragment_to_homeFragment)
+                    ExecutionStatus.FAIL -> showError(it.message)
+                    else -> {}
+                }
+            }
         }
     }
 }

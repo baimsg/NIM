@@ -4,11 +4,9 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import com.baimsg.base.util.extensions.logE
 import com.baimsg.chat.R
 import com.baimsg.chat.base.BaseActivity
 import com.baimsg.chat.databinding.ActivityMainBinding
-import com.baimsg.chat.fragment.login.LoginAction
 import com.baimsg.chat.fragment.login.LoginViewModel
 import com.baimsg.chat.util.extensions.*
 import com.netease.nimlib.sdk.NIMClient
@@ -49,7 +47,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         //监听登录状态
         authServiceObserver.observeOnlineStatus({ status ->
             repeatOnLifecycleStarted {
-                loginViewModel.submit(LoginAction.UpdateStatusCode(status))
+                loginViewModel.updateStatusCode(status)
             }
         }, true)
 

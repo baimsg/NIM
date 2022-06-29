@@ -49,9 +49,31 @@ internal class LoginViewModel @Inject constructor(
 
     val observeViewState: StateFlow<LoginViewState> = _viewState
 
+    private val _statusCode by lazy {
+        MutableStateFlow(StatusCode.INVALID)
+    }
+
+    val observerStatusCode: StateFlow<StatusCode> = _statusCode
+
+    private val _userInfo by lazy {
+        MutableStateFlow(NIMUserInfo())
+    }
+
+    val observeUserInfo: StateFlow<NIMUserInfo> = _userInfo
+
     init {
+        //初始化用户信息
         viewModelScope.launch {
             _loginInfo.value = getLoginInfo()
+        }
+
+        //加载用户信息
+        viewModelScope.launch {
+            observerStatusCode.collectLatest { statusCode ->
+                if (statusCode == StatusCode.LOGINED) {
+                    loadUserInfo()
+                }
+            }
         }
     }
 
@@ -64,23 +86,9 @@ internal class LoginViewModel @Inject constructor(
 
     suspend fun accounts(appKey: String) =
         withContext(Dispatchers.IO) {
-        loginRecordDao.entriesByAppKey(appKey)
-    }
+            loginRecordDao.entriesByAppKey(appKey)
+        }
 
-
-    /**
-     * 登录状态
-     */
-    val statusCode by lazy {
-        MutableStateFlow(StatusCode.INVALID)
-    }
-
-    /**
-     * 用户信息
-     */
-    val userInfo by lazy {
-        MutableStateFlow(NIMUserInfo())
-    }
 
     /**
      * 好友用户信息
@@ -106,40 +114,6 @@ internal class LoginViewModel @Inject constructor(
      */
     val teams by lazy {
         MutableStateFlow(emptyList<NIMTeam>())
-    }
-
-    private val pending by lazy {
-        MutableSharedFlow<LoginAction>()
-    }
-
-    init {
-        viewModelScope.launch {
-            statusCode.collectLatest { statusCode ->
-                if (statusCode == StatusCode.LOGINED && !userInfo.value.loaded) {
-                    loadUserInfo()
-                    loadFriends()
-                }
-            }
-        }
-
-        viewModelScope.launch {
-            pending.collectLatest { action ->
-                when (action) {
-                    is LoginAction.UpdateStatusCode -> {
-                        statusCode.value = action.statusCode
-                    }
-                    is LoginAction.UpdateUserInfo -> {
-                        userInfo.value = action.nimUserInfo
-                    }
-                }
-            }
-        }
-    }
-
-    fun submit(action: LoginAction) {
-        viewModelScope.launch {
-            pending.emit(action)
-        }
     }
 
     /**
@@ -230,6 +204,14 @@ internal class LoginViewModel @Inject constructor(
      */
     fun exit() {
         authService.exit()
+    }
+
+    /**
+     * 更新登录状态
+     * @param statusCode 状态
+     */
+    fun updateStatusCode(statusCode: StatusCode) {
+        _statusCode.value = statusCode
     }
 
     /**
@@ -325,21 +307,16 @@ internal class LoginViewModel @Inject constructor(
      * 加载用户信息
      */
     fun loadUserInfo() {
-        NIMClient.getService(UserService::class.java).fetchUserInfo(listOf(""))
+        NIMClient.getService(UserService::class.java)
+            .fetchUserInfo(listOf(_loginInfo.value.account))
             .setCallback(object : RequestCallback<List<NimUserInfo>> {
                 override fun onSuccess(users: List<NimUserInfo>?) {
-                    viewModelScope.launch {
-                        userInfo.emit(users?.firstOrNull().asUser())
-                    }
+                    _userInfo.value = users?.firstOrNull().asUser()
                 }
 
-                override fun onFailed(code: Int) {
+                override fun onFailed(code: Int) {}
 
-                }
-
-                override fun onException(e: Throwable?) {
-
-                }
+                override fun onException(e: Throwable?) {}
             })
     }
 

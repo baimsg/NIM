@@ -93,7 +93,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
          * 监听登录状态
          */
         repeatOnLifecycleStarted {
-            loginViewModel.statusCode.collectLatest { status ->
+            loginViewModel.observerStatusCode.collectLatest { status ->
                 binding.tvStatus.text = status.message()
             }
         }

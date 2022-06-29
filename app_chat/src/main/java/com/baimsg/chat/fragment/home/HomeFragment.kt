@@ -96,7 +96,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         }
 
         repeatOnLifecycleStarted {
-            loginViewModel.statusCode.collectLatest { status ->
+            loginViewModel.observerStatusCode.collectLatest { status ->
                 binding.tvStatus.text = status.message()
                 lifecycleScope.launch(Dispatchers.Main) {
                     if (status.wontAutoLogin() || loginViewModel.getLoginInfo()

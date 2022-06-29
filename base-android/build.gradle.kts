@@ -92,4 +92,5 @@ dependencies {
     api(Dep.Bugly.upgrade)
     api(Dep.Bugly.native)
 
+    coreLibraryDesugaring(Dep.Libs.desugar)
 }

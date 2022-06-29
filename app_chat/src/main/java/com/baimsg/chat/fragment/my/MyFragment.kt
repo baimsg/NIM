@@ -38,7 +38,7 @@ class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
 
     override fun initLiveData() {
         repeatOnLifecycleStarted {
-            loginViewModel.userInfo.collectLatest {
+            loginViewModel.observeUserInfo.collectLatest {
                 it.apply {
                     if (loaded) {
                         binding.tvName.text = name
