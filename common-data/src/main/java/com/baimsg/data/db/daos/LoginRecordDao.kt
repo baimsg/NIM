@@ -82,6 +82,6 @@ abstract class LoginRecordDao : BaseDao<NIMLoginRecord>() {
     abstract fun used(): List<NIMLoginRecord>
 
     @Transaction
-    @Query("SELECT * FROM nim_login_record WHERE appKey = :appKey")
+    @Query("SELECT * FROM nim_login_record WHERE appKey = :appKey ORDER BY loginTime DESC")
     abstract fun entriesByAppKey(appKey: String): List<NIMLoginRecord>
 }

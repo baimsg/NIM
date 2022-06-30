@@ -67,5 +67,7 @@ dependencies {
     api(Dep.AndroidX.dataStore)
 
     api(Dep.Libs.mmkv)
+    api(Dep.Libs.PinYin.library)
+    api(Dep.Libs.PinYin.android)
     coreLibraryDesugaring(Dep.Libs.desugar)
 }

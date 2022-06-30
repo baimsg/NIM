@@ -161,6 +161,12 @@ object Dep {
         const val xPopup = "com.github.li-xiaojun:XPopup:2.8.5"
         const val tapTargetView = "com.getkeepsafe.taptargetview:taptargetview:1.13.3"
 
+        object PinYin {
+            private const val ver = "2.0.3"
+            const val library = "com.github.promeg:tinypinyin:$ver"
+            const val android = "com.github.promeg:tinypinyin-lexicons-android-cncity:$ver"
+        }
+
         object Dialog {
             const val dialogX = "com.github.kongzue.DialogX:DialogX:0.0.45.beta12"
             private const val ver = "3.3.0"

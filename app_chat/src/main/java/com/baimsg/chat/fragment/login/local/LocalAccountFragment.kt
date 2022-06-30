@@ -53,7 +53,7 @@ class LocalAccountFragment :
         }
 
         localAccountAdapter.setOnItemClickListener { adapter, _, position ->
-            loginViewModel.login(loginInfo = adapter.data[position] as NIMLoginRecord)
+            loginViewModel.updateLoginInfo(loginInfo = adapter.data[position] as NIMLoginRecord)
         }
 
         localAccountAdapter.setOnItemLongClickListener { adapter, view, position ->

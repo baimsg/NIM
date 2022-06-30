@@ -19,7 +19,7 @@ class AddFriendAdapter : BaseBindingAdapter<ItemAddFriendBinding, NIMUserInfo>()
             Glide.with(ivAvatar).load(item.avatar).apply(
                 RequestOptions()
                     .transform(
-                        CenterCrop(), RoundedCorners(context.dp2px(88.0f).toInt())
+                        CenterCrop(), RoundedCorners(context.dp2px(12.0f).toInt())
                     )
             ).into(ivAvatar)
             tvName.text = item.name

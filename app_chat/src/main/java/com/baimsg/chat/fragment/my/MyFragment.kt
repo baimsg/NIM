@@ -51,7 +51,7 @@ class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
                             RequestOptions()
                                 .transform(
                                     CenterCrop(),
-                                    RoundedCorners(requireContext().dp2px(88.0f).toInt())
+                                    RoundedCorners(requireContext().dp2px(12.0f).toInt())
                                 )
                         ).into(binding.ivAvatar)
                     }

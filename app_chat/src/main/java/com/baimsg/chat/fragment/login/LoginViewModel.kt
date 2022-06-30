@@ -18,7 +18,6 @@ import com.netease.nimlib.sdk.uinfo.UserService
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -118,6 +117,7 @@ internal class LoginViewModel @Inject constructor(
 
     /**
      * 更新 appKey
+     * @param appKey
      */
     fun upDateAppKey(appKey: String) {
         _loginInfo.apply {
@@ -127,6 +127,7 @@ internal class LoginViewModel @Inject constructor(
 
     /**
      * 更新 account
+     * @param account
      */
     fun updateAccount(account: String) {
         _loginInfo.apply {
@@ -136,6 +137,7 @@ internal class LoginViewModel @Inject constructor(
 
     /**
      * 更新 token
+     * @param token
      */
     fun updateToken(token: String) {
         _loginInfo.apply {
@@ -144,10 +146,20 @@ internal class LoginViewModel @Inject constructor(
     }
 
     /**
+     * 更新登录账号并登录
+     * @param loginInfo
+     */
+    fun updateLoginInfo(loginInfo: NIMLoginRecord) {
+        _loginInfo.value = loginInfo
+        login()
+    }
+
+    /**
      * 登录账号
      */
-    fun login(loginInfo: NIMLoginRecord = _loginInfo.value) {
+    fun login() {
         _viewState.value = LoginViewState.EMPTY
+        val loginInfo = _loginInfo.value
         when {
             loginInfo.appKeyEmpty() -> {
                 _viewState.apply {

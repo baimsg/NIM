@@ -18,7 +18,7 @@
     <string name="quit_title">请选择退出方式</string>
     <string name="exit_app">退出软件</string>
     <string name="logout">退出登录</string>
-    <string name="friend_requests">好友申请</string>
+    <string name="new_friend">新的朋友</string>
     <string name="team_chat">群聊</string>
     <string name="add">添加</string>
     <string name="search">搜索</string>

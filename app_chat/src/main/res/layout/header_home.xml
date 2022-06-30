@@ -7,70 +7,73 @@
     <View
         android:id="@+id/vNewFriend"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="0dp"
         android:background="@drawable/bg_item_white"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@id/ivNewFriend"
+        app:layout_constraintTop_toTopOf="@id/ivNewFriend" />
 
     <ImageView
         android:id="@+id/ivNewFriend"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:contentDescription="@string/friend_requests"
-        android:src="@drawable/ic_new_friend"
-        app:layout_constraintBottom_toBottomOf="@id/vNewFriend"
-        app:layout_constraintStart_toStartOf="@id/vNewFriend"
-        app:layout_constraintTop_toTopOf="@id/vNewFriend" />
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:contentDescription="@string/new_friend"
+        android:paddingVertical="2dp"
+        android:src="@drawable/icon_notice"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvNewFriend"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="12dp"
         android:gravity="center_vertical"
-        android:text="@string/friend_requests"
+        android:text="@string/new_friend"
         android:textColor="@color/title_color"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@id/vNewFriend"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/ivNewFriend"
         app:layout_constraintStart_toEndOf="@id/ivNewFriend"
-        app:layout_constraintTop_toTopOf="@id/vNewFriend" />
+        app:layout_constraintTop_toTopOf="@id/ivNewFriend" />
 
     <View
-        android:id="@+id/vLine"
-        android:layout_width="match_parent"
+        android:id="@+id/vLineNewFriend"
+        android:layout_width="0dp"
         android:layout_height="0.5dp"
         android:background="@color/line_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tvNewFriend"
         app:layout_constraintTop_toBottomOf="@id/vNewFriend" />
 
     <View
         android:id="@+id/vTeamChat"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="0dp"
         android:background="@drawable/bg_item_white"
-        app:layout_constraintTop_toBottomOf="@id/vLine" />
+        app:layout_constraintBottom_toBottomOf="@id/ivTeamChat"
+        app:layout_constraintTop_toTopOf="@id/ivTeamChat" />
 
     <ImageView
         android:id="@+id/ivTeamChat"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:contentDescription="@string/team_chat"
-        android:src="@drawable/ic_team_chat"
-        app:layout_constraintBottom_toBottomOf="@id/vTeamChat"
+        android:paddingVertical="2dp"
+        android:src="@drawable/icon_team_chat"
         app:layout_constraintStart_toStartOf="@id/ivNewFriend"
-        app:layout_constraintTop_toTopOf="@id/vTeamChat" />
+        app:layout_constraintTop_toBottomOf="@id/vLineNewFriend" />
 
 
     <TextView
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:gravity="center_vertical"
         android:text="@string/team_chat"
         android:textColor="@color/title_color"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@id/vTeamChat"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/ivTeamChat"
         app:layout_constraintStart_toStartOf="@id/tvNewFriend"
-        app:layout_constraintTop_toTopOf="@id/vTeamChat" />
+        app:layout_constraintTop_toTopOf="@id/ivTeamChat" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
