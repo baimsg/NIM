@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.baimsg.chat.Constant
 import com.baimsg.chat.R
-import com.baimsg.chat.adapter.AddFriendAdapter
+import com.baimsg.chat.adapter.AccountMediumAdapter
 import com.baimsg.chat.base.BaseFragment
 import com.baimsg.chat.databinding.FragmentSearchUserBinding
 import com.baimsg.chat.type.BatchStatus
@@ -23,11 +23,11 @@ import java.io.File
 class SearchUserFragment : BaseFragment<FragmentSearchUserBinding>(R.layout.fragment_search_user) {
 
     private val searchUserViewModel by lazy {
-        ViewModelProvider(requireActivity())[SearchUserViewModel::class.java]
+        ViewModelProvider(this)[SearchUserViewModel::class.java]
     }
 
-    private val friendAdapter by lazy {
-        AddFriendAdapter()
+    private val accountMediumAdapter by lazy {
+        AccountMediumAdapter()
     }
 
     override fun initView() {
@@ -98,17 +98,17 @@ class SearchUserFragment : BaseFragment<FragmentSearchUserBinding>(R.layout.frag
         binding.srContent.apply {
             setColorSchemeResources(R.color.color_primary)
             setOnRefreshListener {
-                friendAdapter.setList(searchUserViewModel.searchViewState.value.allUser.filter { it.loaded })
+                accountMediumAdapter.setList(searchUserViewModel.searchViewState.value.allUser.filter { it.loaded })
                 isRefreshing = false
             }
         }
 
         binding.ryContent.apply {
-            friendAdapter.animationEnable = true
-            friendAdapter.adapterAnimation = AlphaInAnimation()
+            accountMediumAdapter.animationEnable = true
+            accountMediumAdapter.adapterAnimation = AlphaInAnimation()
 
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-            adapter = friendAdapter
+            adapter = accountMediumAdapter
         }
 
         binding.editAccount.apply {
@@ -147,14 +147,14 @@ class SearchUserFragment : BaseFragment<FragmentSearchUserBinding>(R.layout.frag
                             binding.fabAdd.hide()
                             binding.proLoading.show()
                             binding.editAccount.isEnabled = false
-                            if (update) friendAdapter.addData(users)
+                            if (update) accountMediumAdapter.addData(users)
                             binding.editAccount.setText("${value.account}")
                         }
                         BatchStatus.STOP -> {
                             binding.fabAdd.hide()
                             binding.ivSave.hide()
                             binding.ivClean.hide()
-                            friendAdapter.setList(null)
+                            accountMediumAdapter.setList(null)
                             binding.editAccount.isEnabled = true
                         }
                         else -> {

@@ -8,9 +8,11 @@
 
     <View
         android:id="@+id/vTop"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0.5dp"
         android:background="@color/line_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tvName"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
@@ -21,6 +23,7 @@
         android:layout_marginStart="16dp"
         android:background="@drawable/bg_avatar_round"
         android:contentDescription="@string/avatar"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/vTop" />
 
@@ -48,22 +51,5 @@
         app:layout_constraintStart_toStartOf="@id/tvName"
         app:layout_constraintTop_toBottomOf="@id/tvName"
         tools:text="账号:2345678" />
-
-    <TextView
-        android:id="@+id/tvTip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:maxLines="1"
-        android:textColor="@color/color_primary"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@id/tvAccount"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:text="添加失败" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="8dp"
-        app:layout_constraintTop_toBottomOf="@id/ivAvatar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

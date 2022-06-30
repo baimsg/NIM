@@ -2,7 +2,7 @@ package com.baimsg.chat.adapter
 
 import com.baimsg.chat.adapter.base.BaseBindingAdapter
 import com.baimsg.chat.adapter.base.VBViewHolder
-import com.baimsg.chat.databinding.ItemFriendBinding
+import com.baimsg.chat.databinding.ItemAccountSmallBinding
 import com.baimsg.chat.util.extensions.dp2px
 import com.baimsg.data.model.entities.NIMUserInfo
 import com.bumptech.glide.Glide
@@ -14,8 +14,8 @@ import com.chad.library.adapter.base.module.LoadMoreModule
 /**
  * 好友列表适配器
  */
-class FriendAdapter : BaseBindingAdapter<ItemFriendBinding, NIMUserInfo>(), LoadMoreModule {
-    override fun convert(holder: VBViewHolder<ItemFriendBinding>, item: NIMUserInfo) {
+class AccountSmallAdapter : BaseBindingAdapter<ItemAccountSmallBinding, NIMUserInfo>(), LoadMoreModule {
+    override fun convert(holder: VBViewHolder<ItemAccountSmallBinding>, item: NIMUserInfo) {
         holder.vb.apply {
             Glide.with(ivAvatar).load(item.avatar).apply(
                 RequestOptions()

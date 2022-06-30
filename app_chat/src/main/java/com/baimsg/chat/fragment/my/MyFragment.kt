@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
+import com.netease.nimlib.sdk.StatusCode
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
@@ -22,6 +23,7 @@ import kotlinx.coroutines.flow.collectLatest
  **/
 @AndroidEntryPoint
 class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
+
     private val loginViewModel by activityViewModels<LoginViewModel>()
 
     override fun initView() {
@@ -37,6 +39,12 @@ class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
     }
 
     override fun initLiveData() {
+        repeatOnLifecycleStarted {
+            loginViewModel.observerStatusCode.collectLatest {
+                if (it == StatusCode.LOGINED) loginViewModel.loadUserInfo()
+            }
+        }
+
         repeatOnLifecycleStarted {
             loginViewModel.observeUserInfo.collectLatest {
                 it.apply {

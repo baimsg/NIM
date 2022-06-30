@@ -55,14 +55,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             loginViewModel.observerStatusCode.collectLatest { status ->
                 binding.tvStatus.text = status.message()
                 lifecycleScope.launch(Dispatchers.Main) {
-                    if (status.wontAutoLogin() || loginViewModel.getLoginInfo()
-                            .mustEmpty() || loginViewModel.getLoginInfo().appKeyEmpty()
-                    ) openLogin
+                    val loginInfo = loginViewModel.getLoginInfo()
+                    if (status.wontAutoLogin() || loginInfo.mustEmpty() || loginInfo.appKeyEmpty()) openLogin
                 }
             }
         }
 
     }
-
 
 }

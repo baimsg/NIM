@@ -118,6 +118,7 @@
         android:layout_height="38dp"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="12dp"
+        android:autofillHints="name"
         android:background="@drawable/bg_edit_search"
         android:elevation="1dp"
         android:hint="@string/account"
@@ -156,11 +157,13 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="35dp"
-        android:contentDescription="@string/add_friend"
+        android:contentDescription="@string/add"
         android:elevation="10dp"
-        android:src="@drawable/ic_round_add"
+        android:src="@drawable/ic_add"
         android:visibility="gone"
         app:backgroundTint="@color/color_primary"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="visible" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

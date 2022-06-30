@@ -1,4 +1,4 @@
-package com.baimsg.chat.fragment.home
+package com.baimsg.chat.fragment.friend
 
 import com.baimsg.chat.type.ExecutionStatus
 import com.baimsg.data.model.entities.NIMUserInfo

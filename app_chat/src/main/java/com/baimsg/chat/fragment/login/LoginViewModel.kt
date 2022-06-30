@@ -2,25 +2,22 @@ package com.baimsg.chat.fragment.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.baimsg.chat.fragment.home.FriendViewState
 import com.baimsg.chat.type.ExecutionStatus
 import com.baimsg.data.db.daos.LoginRecordDao
-import com.baimsg.data.model.entities.*
+import com.baimsg.data.model.entities.NIMLoginRecord
+import com.baimsg.data.model.entities.NIMUserInfo
+import com.baimsg.data.model.entities.asUser
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.RequestCallback
 import com.netease.nimlib.sdk.StatusCode
 import com.netease.nimlib.sdk.auth.AuthService
 import com.netease.nimlib.sdk.auth.LoginInfo
-import com.netease.nimlib.sdk.friend.FriendService
-import com.netease.nimlib.sdk.team.TeamService
-import com.netease.nimlib.sdk.team.model.Team
 import com.netease.nimlib.sdk.uinfo.UserService
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -36,6 +33,10 @@ internal class LoginViewModel @Inject constructor(
 
     private val authService by lazy {
         NIMClient.getService(AuthService::class.java)
+    }
+
+    private val userService by lazy {
+        NIMClient.getService(UserService::class.java)
     }
 
     private val _loginInfo by lazy {
@@ -66,14 +67,6 @@ internal class LoginViewModel @Inject constructor(
             _loginInfo.value = getLoginInfo()
         }
 
-        //加载用户信息
-        viewModelScope.launch {
-            observerStatusCode.collectLatest { statusCode ->
-                if (statusCode == StatusCode.LOGINED) {
-                    loadUserInfo()
-                }
-            }
-        }
     }
 
     suspend fun getLoginInfo() =
@@ -88,32 +81,6 @@ internal class LoginViewModel @Inject constructor(
             loginRecordDao.entriesByAppKey(appKey)
         }
 
-
-    /**
-     * 好友用户信息
-     */
-    val friendViewState by lazy {
-        MutableStateFlow(FriendViewState.EMPTY)
-    }
-
-    /**
-     * 当前页码
-     */
-    var friendPage = 0
-
-    /**
-     * 好友列表
-     */
-    val friends by lazy {
-        MutableStateFlow(emptyList<String?>())
-    }
-
-    /**
-     * 群列表
-     */
-    val teams by lazy {
-        MutableStateFlow(emptyList<NIMTeam>())
-    }
 
     /**
      * 更新 appKey
@@ -227,100 +194,10 @@ internal class LoginViewModel @Inject constructor(
     }
 
     /**
-     * 加载好友列表
-     */
-    fun loadFriends() {
-        /**
-         * 重制页码
-         */
-        friendPage = 0
-        val list = NIMClient.getService(FriendService::class.java)?.friendAccounts
-        if (list == null) {
-            friendViewState.value =
-                FriendViewState.EMPTY.copy(executionStatus = ExecutionStatus.FAIL)
-        } else {
-            friends.value = list
-            getUserInfo()
-        }
-    }
-
-    fun nextPageUserInfo() {
-        friendPage++
-        getUserInfo()
-    }
-
-    /**
-     * 获取好友列表信息
-     * @param limit 返回数量
-     */
-    private fun getUserInfo(limit: Int = 20) {
-        friendViewState.value = FriendViewState.EMPTY
-        val start = friendPage * limit
-        val end = start + limit
-        val accounts = mutableListOf<String?>()
-        (start until end).forEachIndexed { _, i ->
-            if (i in friends.value.indices) accounts.add(friends.value[i])
-        }
-        if (accounts.isEmpty()) {
-            friendViewState.value =
-                FriendViewState.EMPTY.copy(executionStatus = ExecutionStatus.EMPTY)
-            return
-        }
-        NIMClient.getService(UserService::class.java).fetchUserInfo(accounts)
-            .setCallback(object : RequestCallback<List<NimUserInfo>> {
-                override fun onSuccess(mUsers: List<NimUserInfo>?) {
-                    val users = mUsers?.map { it.asUser() } ?: emptyList()
-                    friendViewState.value = FriendViewState(
-                        executionStatus = ExecutionStatus.SUCCESS,
-                        users = users
-                    )
-                }
-
-                override fun onFailed(code: Int) {
-                    friendViewState.value =
-                        FriendViewState.EMPTY.copy(executionStatus = ExecutionStatus.FAIL)
-                }
-
-                override fun onException(e: Throwable?) {
-                    friendViewState.value =
-                        FriendViewState.EMPTY.copy(executionStatus = ExecutionStatus.FAIL)
-                }
-            })
-    }
-
-
-    /**
-     * 加载群列表
-     */
-    fun loadGroupList() {
-        NIMClient.getService(TeamService::class.java).queryTeamList()
-            .setCallback(object : RequestCallback<List<Team>> {
-                override fun onSuccess(mTeams: List<Team>?) {
-                    viewModelScope.launch {
-                        mTeams?.run {
-                            teams.emit(this.map { it.asTeam() })
-                        }
-                    }
-                }
-
-                override fun onFailed(code: Int) {
-                    viewModelScope.launch {
-
-                    }
-                }
-
-                override fun onException(e: Throwable?) {
-
-                }
-            })
-    }
-
-    /**
      * 加载用户信息
      */
     fun loadUserInfo() {
-        NIMClient.getService(UserService::class.java)
-            .fetchUserInfo(listOf(_loginInfo.value.account))
+        userService.fetchUserInfo(listOf(_loginInfo.value.account))
             .setCallback(object : RequestCallback<List<NimUserInfo>> {
                 override fun onSuccess(users: List<NimUserInfo>?) {
                     _userInfo.value = users?.firstOrNull().asUser()
@@ -331,6 +208,5 @@ internal class LoginViewModel @Inject constructor(
                 override fun onException(e: Throwable?) {}
             })
     }
-
 
 }

@@ -21,7 +21,7 @@
     <color name="subtitle_color">#666666</color>
 
     <color name="icon_tint">#FFFFFF</color>
-    <color name="icon_tint_pressed">#33F6F6F6</color>
+    <color name="icon_tint_pressed">#33FFFFFF</color>
 
     <color name="line_color">#000000</color>
 
