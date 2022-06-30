@@ -166,7 +166,7 @@ class SearchUserFragment : BaseFragment<FragmentSearchUserBinding>(R.layout.frag
                                 binding.ivClean.show()
                                 binding.fabAdd.show()
                             }
-                            binding.ivStart.setImageResource(R.drawable.ic_start)
+                            binding.ivStart.setImageResource(R.drawable.ic_play)
                         }
                     }
                 }

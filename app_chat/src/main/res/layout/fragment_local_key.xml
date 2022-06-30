@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/edit"
         android:padding="16dp"
-        android:src="@drawable/ic_edit"
+        android:src="@drawable/ic_round_filter"
         android:tint="@color/icon_click"
         app:layout_constraintBottom_toBottomOf="@id/ivBack"
         app:layout_constraintEnd_toEndOf="parent"
