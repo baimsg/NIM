@@ -6,6 +6,13 @@
     android:layout_height="wrap_content"
     android:background="@drawable/bg_item_white">
 
+    <View
+        android:id="@+id/vTop"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/line_color"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/tvAccount"
         android:layout_width="wrap_content"
@@ -16,7 +23,7 @@
         android:textColor="@color/title_color"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/vTop" />
 
     <TextView
         android:id="@+id/tvAccountValue"

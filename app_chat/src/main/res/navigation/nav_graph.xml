@@ -21,15 +21,15 @@
             android:id="@+id/action_homeFragment_to_searchUserFragment"
             app:destination="@id/searchUserFragment"
             app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/fade_no_change"
-            app:popEnterAnim="@anim/fade_no_change"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
             app:popExitAnim="@anim/slide_out_left" />
         <action
             android:id="@+id/action_homeFragment_to_teamFragment"
             app:destination="@id/teamFragment"
             app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/fade_no_change"
-            app:popEnterAnim="@anim/fade_no_change"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
             app:popExitAnim="@anim/slide_out_left" />
     </fragment>
 
@@ -42,8 +42,8 @@
             android:id="@+id/action_myFragment_to_settingFragment"
             app:destination="@id/settingFragment"
             app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/fade_no_change"
-            app:popEnterAnim="@anim/fade_no_change"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
             app:popExitAnim="@anim/slide_out_left" />
     </fragment>
 
@@ -56,15 +56,15 @@
             android:id="@+id/action_settingFragment_to_loginFragment"
             app:destination="@id/loginFragment"
             app:enterAnim="@anim/slide_in_bottom"
-            app:exitAnim="@anim/fade_no_change"
-            app:popEnterAnim="@anim/fade_no_change"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
             app:popExitAnim="@anim/slide_out_bottom" />
         <action
             android:id="@+id/action_settingFragment_to_filterFragment"
             app:destination="@id/filterFragment"
             app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/fade_no_change"
-            app:popEnterAnim="@anim/fade_no_change"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
             app:popExitAnim="@anim/slide_out_left" />
     </fragment>
 
@@ -80,18 +80,18 @@
         <action
             android:id="@+id/action_loginFragment_to_homeFragment"
             app:destination="@id/homeFragment"
-            app:enterAnim="@anim/slide_out_bottom"
-            app:exitAnim="@anim/fade_no_change"
-            app:popEnterAnim="@anim/fade_no_change"
-            app:popExitAnim="@anim/fade_no_change"
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
+            app:popExitAnim="@anim/slide_out_bottom"
             app:popUpTo="@id/homeFragment"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_loginFragment_to_localKeyFragment"
             app:destination="@id/localKeyFragment"
             app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/fade_no_change"
-            app:popEnterAnim="@anim/fade_no_change"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
             app:popExitAnim="@anim/slide_out_left" />
     </fragment>
 
@@ -109,8 +109,8 @@
             android:id="@+id/action_searchUserFragment_to_settingFragment"
             app:destination="@id/settingFragment"
             app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/fade_no_change"
-            app:popEnterAnim="@anim/fade_no_change"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
             app:popExitAnim="@anim/slide_out_left" />
     </fragment>
     <fragment
@@ -127,8 +127,8 @@
             android:id="@+id/action_localKeyFragment_to_localAccountFragment"
             app:destination="@id/localAccountFragment"
             app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/fade_no_change"
-            app:popEnterAnim="@anim/fade_no_change"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
             app:popExitAnim="@anim/slide_out_left" />
     </fragment>
     <fragment
@@ -143,10 +143,10 @@
         <action
             android:id="@+id/action_localAccountFragment_to_homeFragment"
             app:destination="@id/homeFragment"
-            app:enterAnim="@anim/slide_out_bottom"
-            app:exitAnim="@anim/fade_no_change"
-            app:popEnterAnim="@anim/fade_no_change"
-            app:popExitAnim="@anim/fade_no_change"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
+            app:popExitAnim="@anim/slide_out_left"
             app:popUpTo="@id/homeFragment"
             app:popUpToInclusive="true" />
     </fragment>

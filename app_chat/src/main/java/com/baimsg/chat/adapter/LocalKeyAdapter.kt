@@ -9,7 +9,7 @@ import com.baimsg.chat.databinding.ItemLocalKeyBinding
  * Create by Baimsg on 2022/6/29
  *
  **/
-class AppKeyAdapter : BaseBindingAdapter<ItemLocalKeyBinding, String>() {
+class LocalKeyAdapter : BaseBindingAdapter<ItemLocalKeyBinding, String>() {
 
     override fun convert(holder: VBViewHolder<ItemLocalKeyBinding>, item: String) {
         holder.vb.apply {
