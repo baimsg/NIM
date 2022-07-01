@@ -6,12 +6,18 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.list.listItems
 import com.baimsg.chat.R
 import com.baimsg.chat.adapter.AccountMediumAdapter
 import com.baimsg.chat.base.BaseFragment
 import com.baimsg.chat.databinding.FragmentLocalBinding
 import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
 import com.chad.library.adapter.base.animation.AlphaInAnimation
+import com.lxj.xpopup.XPopup
+import com.lxj.xpopup.animator.EmptyAnimator
+import com.lxj.xpopup.animator.ScaleAlphaAnimator
+import com.lxj.xpopup.interfaces.OnSelectListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -40,6 +46,13 @@ class LocalFragment : BaseFragment<FragmentLocalBinding>(R.layout.fragment_local
 
         binding.ivFilter.setOnClickListener {
             findNavController().navigate(R.id.action_localFragment_to_filterFragment)
+        }
+
+        binding.ivMore.setOnClickListener {
+            MaterialDialog(requireContext()).show {
+                listItems(items = listOf("导入数据", "导入数据", "清空数据")) { dialog, index, text ->
+                }
+            }
         }
 
         binding.srContent.apply {

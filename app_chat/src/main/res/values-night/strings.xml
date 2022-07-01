@@ -46,4 +46,5 @@
     <string name="token_hint">请输入token</string>
     <string name="local_account">本地账号</string>
     <string name="refresh">刷新</string>
+    <string name="import_or_export">导入或导出</string>
 </resources>

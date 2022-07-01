@@ -106,6 +106,7 @@ class ScanningAccountFragment :
                             binding.ivBack.hide()
                             binding.ivSave.hide()
                             binding.ivClean.hide()
+                            binding.ivSetting.hide()
                             binding.proLoading.show()
                             binding.editAccount.isEnabled = false
                             if (update) accountMediumAdapter.addData(users)
@@ -122,6 +123,7 @@ class ScanningAccountFragment :
                         else -> {
                             binding.proLoading.hide(true)
                             binding.ivBack.show()
+                            binding.ivSetting.show()
                             if (allUser.isNotEmpty()) {
                                 binding.ivSave.show()
                                 binding.ivClean.show()

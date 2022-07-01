@@ -81,12 +81,10 @@
         android:padding="16dp"
         android:src="@drawable/ic_setting"
         android:tint="@color/icon_click"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/ivStart"
         app:layout_constraintEnd_toStartOf="@id/ivClean"
         app:layout_constraintTop_toTopOf="@id/ivStart"
-        tools:ignore="UseAppTint"
-        tools:visibility="visible" />
+        tools:ignore="UseAppTint" />
 
     <ImageView
         android:id="@+id/ivSave"

@@ -13,9 +13,6 @@ import com.baimsg.chat.databinding.FragmentSettingBinding
 import com.baimsg.chat.fragment.login.LoginViewModel
 import com.baimsg.chat.util.extensions.showSuccess
 import com.lxj.xpopup.XPopup
-import com.lxj.xpopup.interfaces.OnSelectListener
-import com.netease.nimlib.sdk.NIMClient
-import com.netease.nimlib.sdk.auth.AuthService
 
 
 class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_setting) {
