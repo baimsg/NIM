@@ -61,7 +61,9 @@ class LocalFragment : BaseFragment<FragmentLocalBinding>(R.layout.fragment_local
                             showWarning("导出功能待完善")
                         }
                         2 -> {
-                            showWarning("清空功能待完善")
+                            accountMediumAdapter.setList(null)
+                            localViewModel.deleteAll(args.appKey)
+                            showWarning("已将数据库清空")
                         }
                     }
                 }

@@ -4,8 +4,8 @@ import com.netease.nimlib.sdk.team.constant.*
 import com.netease.nimlib.sdk.team.model.Team
 
 data class NIMTeam(
-    val id: String? = null,
-    val name: String? = null,
+    val id: String = "",
+    val name: String = "",
     val icon: String? = null,
     val type: TeamTypeEnum = TeamTypeEnum.Normal,
     val announcement: String? = null,//通知

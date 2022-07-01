@@ -17,6 +17,10 @@ abstract class UserInfoDao : BaseDao<NIMUserInfo>() {
     @Query("DELETE FROM nim_user_info WHERE id=:id")
     abstract override suspend fun deleteById(id: String)
 
+    @Transaction
+    @Query("DELETE FROM nim_user_info WHERE appKey=:appKey")
+    abstract suspend fun deleteByAppKey(appKey: String)
+
     @Query("DELETE FROM nim_user_info")
     abstract override suspend fun deleteAll()
 

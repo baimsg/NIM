@@ -13,6 +13,10 @@ abstract class TaskAccountDao : BaseDao<NIMTaskAccount>() {
     @Query("DELETE FROM nim_task_account WHERE id=:id")
     abstract override suspend fun deleteById(id: String)
 
+    @Transaction
+    @Query("DELETE FROM nim_task_account WHERE appKey=:appKey")
+    abstract suspend fun deleteByAppKey(appKey: String)
+
     @Query("DELETE FROM nim_task_account")
     abstract override suspend fun deleteAll()
 

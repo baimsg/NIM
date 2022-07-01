@@ -68,4 +68,13 @@ class LocalViewModel @Inject constructor(
             userInfoDao.deleteById(id)
         }
     }
+
+    /**
+     *
+     */
+    fun deleteAll(appKey: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            userInfoDao.deleteByAppKey(appKey)
+        }
+    }
 }

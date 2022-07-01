@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.afollestad.materialdialogs.MaterialDialog
 import com.baimsg.chat.R
 import com.baimsg.chat.adapter.TeamItemAdapter
 import com.baimsg.chat.base.BaseFragment
@@ -18,6 +19,7 @@ import com.baimsg.chat.util.extensions.showError
 import com.baimsg.data.model.Fail
 import com.baimsg.data.model.Loading
 import com.baimsg.data.model.Success
+import com.baimsg.data.model.entities.NIMTeam
 import kotlinx.coroutines.flow.collectLatest
 
 class TeamFragment : BaseFragment<FragmentTeamBinding>(R.layout.fragment_team) {
@@ -57,10 +59,14 @@ class TeamFragment : BaseFragment<FragmentTeamBinding>(R.layout.fragment_team) {
             }
         }
 
-        teamItemAdapter.setOnItemClickListener { adapter, view, posion ->
-
+        teamItemAdapter.setOnItemClickListener { adapter, _, position ->
+            val data = adapter.data[position] as NIMTeam
+            MaterialDialog(requireContext()).show {
+                title(text = data.name)
+                message(text = "[群容量] ${data.memberLimit}\n[群成员] ${data.memberCount} \n[ID] ${data.id}")
+                positiveButton(R.string.sure)
+            }
         }
-
 
     }
 
