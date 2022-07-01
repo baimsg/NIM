@@ -26,15 +26,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     override fun initView() {
         binding.ivAdd.setOnClickListener {
-
+            showInfo("unknown 该功能待开发")
         }
 
         binding.vNewFriend.setOnClickListener {
             showInfo("unknown 该功能待开发")
         }
 
-
         binding.vFriendList.setOnClickListener {
+            showInfo("unknown 该功能待开发")
         }
 
         binding.vTeamChat.setOnClickListener {

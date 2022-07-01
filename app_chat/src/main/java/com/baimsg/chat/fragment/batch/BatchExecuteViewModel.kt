@@ -2,6 +2,7 @@ package com.baimsg.chat.fragment.batch
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.baimsg.chat.type.UpdateStatus
 import com.baimsg.data.db.daos.TaskAccountDao
 import com.baimsg.data.model.entities.NIMTaskAccount
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,18 +17,34 @@ class BatchExecuteViewModel @Inject constructor(
     private val taskAccountDao: TaskAccountDao
 ) : ViewModel() {
 
-    private val _taskAccount by lazy {
-        MutableStateFlow(emptyList<NIMTaskAccount>())
+    private val _viewState by lazy {
+        MutableStateFlow(BatchExecuteViewState.EMPTY)
     }
 
-    val observeTaskAccount: StateFlow<List<NIMTaskAccount>> = _taskAccount
+    val observeViewState: StateFlow<BatchExecuteViewState> = _viewState
 
-    val taskAccount: List<NIMTaskAccount>
-        get() = _taskAccount.value
+    private val allTaskAccounts: List<NIMTaskAccount>
+        get() = _viewState.value.allTaskAccounts
 
     fun loadAllAccount(appKey: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            _taskAccount.value = taskAccountDao.entriesByAppKey(appKey = appKey)
+            _viewState.apply {
+                value = value.copy(
+                    allTaskAccounts = taskAccountDao.entriesByAppKey(appKey),
+                    updateStatus = UpdateStatus.REFRESH
+                )
+            }
+        }
+    }
+
+    fun deleteById(nimTaskAccount: NIMTaskAccount) {
+        viewModelScope.launch(Dispatchers.IO) {
+            taskAccountDao.deleteById(nimTaskAccount.id)
+            _viewState.apply {
+                value = value.copy(allTaskAccounts = allTaskAccounts.toMutableList().apply {
+                    remove(nimTaskAccount)
+                }, updateStatus = UpdateStatus.DEFAULT)
+            }
         }
     }
 

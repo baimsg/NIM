@@ -82,6 +82,19 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
             }
         }
 
+        binding.tvTeamLimit.setOnClickListener {
+            MaterialDialog(requireContext()).show {
+                input(
+                    hint = "请输入每个群上限人数",
+                    inputType = InputType.TYPE_CLASS_NUMBER,
+                    maxLength = 8
+                ) { _, charSequence ->
+                    KvUtils.put(Constant.KEY_TEAM_LIMIT, charSequence.toString().toLong())
+                    updateView()
+                }
+            }
+        }
+
         binding.tvFilter.setOnClickListener {
             findNavController().navigate(R.id.action_settingFragment_to_filterFragment)
         }
@@ -125,6 +138,8 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
         binding.tvVerifyValue.text = Constant.ADD_VERIFY
 
         binding.tvScopeValue.text = "${Constant.SEARCH_COUNT}次"
+
+        binding.tvTeamLimitValue.text = "${Constant.TEAM_LIMIT}人"
 
         binding.tvAddFriendDelayValue.text = "${Constant.ADD_FRIEND_DELAY}毫秒"
 

@@ -37,7 +37,7 @@
     <string name="add_data">添加数据</string>
     <string name="save">保存</string>
     <string name="start">开始</string>
-    <string name="add_friend">一键加好友</string>
+    <string name="fast_add_friend">一键加好友</string>
     <string name="avatar">头像</string>
     <string name="setting_login">登录设置</string>
     <string name="add_friend_delay">加好友延时</string>
@@ -49,4 +49,7 @@
     <string name="database">数据库</string>
     <string name="import_or_export">导入或导出</string>
     <string name="cancel">取消</string>
+    <string name="sure">确定</string>
+    <string name="friend">好友</string>
+    <string name="team_chat_limit">群聊上限</string>
 </resources>

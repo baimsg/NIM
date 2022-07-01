@@ -5,11 +5,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.afollestad.materialdialogs.MaterialDialog
 import com.baimsg.chat.R
 import com.baimsg.chat.adapter.TaskAccountAdapter
 import com.baimsg.chat.base.BaseFragment
 import com.baimsg.chat.databinding.FragmentBatchExecuteBinding
+import com.baimsg.chat.type.UpdateStatus
 import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
+import com.baimsg.data.model.entities.NIMTaskAccount
 import com.chad.library.adapter.base.animation.AlphaInAnimation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -54,16 +57,31 @@ class BatchExecuteFragment :
         }
 
         taskAccountAdapter.setOnItemClickListener { adapter, _, position ->
+            val data = adapter.data[position] as NIMTaskAccount
+            MaterialDialog(requireContext()).show {
+                title(text = "移除任务")
+                message(text = "你确定将\n[昵称] ${data.name}\n[id] ${data.account}\n从批量操作中移除？")
+                negativeButton(R.string.cancel)
+                positiveButton(R.string.sure) {
+                    taskAccountAdapter.removeAt(position)
+                    batchExecuteViewModel.deleteById(data)
+                }
+            }
         }
-
 
     }
 
     override fun initLiveData() {
         repeatOnLifecycleStarted {
-            batchExecuteViewModel.observeTaskAccount.collectLatest {
-                taskAccountAdapter.setList(it)
-                binding.tvCount.text = "(${it.size})"
+            batchExecuteViewModel.observeViewState.collectLatest {
+                binding.tvCount.text = "(${it.allTaskAccounts.size})"
+                when (it.updateStatus) {
+                    UpdateStatus.REFRESH -> {
+                        taskAccountAdapter.setList(it.allTaskAccounts)
+                    }
+                    else -> {
+                    }
+                }
             }
         }
     }

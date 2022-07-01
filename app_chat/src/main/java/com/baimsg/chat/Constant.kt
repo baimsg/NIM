@@ -13,6 +13,8 @@ object Constant {
 
     const val KEY_SEARCH_COUNT = "key_search_count"
 
+    const val KEY_TEAM_LIMIT = "key_team_limit"
+
     const val KEY_ADD_MODE = "key_add_mode"
 
     const val KEY_ADD_FRIEND_DELAY = "key_add_friend_delay"
@@ -30,6 +32,9 @@ object Constant {
 
     val SEARCH_COUNT: Long
         get() = KvUtils.getLong(KEY_SEARCH_COUNT, 100000)
+
+    val TEAM_LIMIT: Long
+        get() = KvUtils.getLong(KEY_TEAM_LIMIT, 200)
 
     val ADD_FRIEND_DELAY: Long
         get() = KvUtils.getLong(KEY_ADD_FRIEND_DELAY, 1000)
