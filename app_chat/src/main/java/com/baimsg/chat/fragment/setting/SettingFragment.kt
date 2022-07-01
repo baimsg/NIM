@@ -37,7 +37,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
 
         binding.tvPrefix.setOnClickListener {
             MaterialDialog(requireContext()).show {
-                input(hint = "请输入字典通用前缀") { _, charSequence ->
+                input(hint = "请输入字典通用前缀", allowEmpty = true) { _, charSequence ->
                     KvUtils.put(Constant.KEY_SEARCH_PREFIX, charSequence.toString())
                     updateView()
                 }

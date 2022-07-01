@@ -10,8 +10,10 @@ import com.baimsg.chat.R
 import com.baimsg.chat.adapter.AccountMediumAdapter
 import com.baimsg.chat.base.BaseFragment
 import com.baimsg.chat.databinding.FragmentLocalBinding
+import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
 import com.chad.library.adapter.base.animation.AlphaInAnimation
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 /**
@@ -30,20 +32,21 @@ class LocalFragment : BaseFragment<FragmentLocalBinding>(R.layout.fragment_local
     }
 
     override fun initView() {
-        lifecycleScope.launch {
-            accountMediumAdapter.setList(localViewModel.loadAllAccount(appKey = args.appKey))
-        }
+        localViewModel.loadAllAccount(appKey = args.appKey)
+
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()
+        }
+
+        binding.ivFilter.setOnClickListener {
+            findNavController().navigate(R.id.action_localFragment_to_filterFragment)
         }
 
         binding.srContent.apply {
             setColorSchemeResources(R.color.color_primary)
             setOnRefreshListener {
-                lifecycleScope.launch {
-                    accountMediumAdapter.setList(localViewModel.loadAllAccount(appKey = args.appKey))
-                    isRefreshing = false
-                }
+                localViewModel.loadAllAccount(appKey = args.appKey)
+                isRefreshing = false
             }
         }
 
@@ -53,6 +56,15 @@ class LocalFragment : BaseFragment<FragmentLocalBinding>(R.layout.fragment_local
 
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             adapter = accountMediumAdapter
+        }
+    }
+
+    override fun initLiveData() {
+        repeatOnLifecycleStarted {
+            localViewModel.observeAllAccount.collectLatest {
+                accountMediumAdapter.setList(it)
+                binding.tvCount.text = "(${it.size})"
+            }
         }
     }
 }

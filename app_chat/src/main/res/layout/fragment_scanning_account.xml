@@ -74,6 +74,21 @@
         tools:visibility="visible" />
 
     <ImageView
+        android:id="@+id/ivSetting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/setting"
+        android:padding="16dp"
+        android:src="@drawable/ic_setting"
+        android:tint="@color/icon_click"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/ivStart"
+        app:layout_constraintEnd_toStartOf="@id/ivClean"
+        app:layout_constraintTop_toTopOf="@id/ivStart"
+        tools:ignore="UseAppTint"
+        tools:visibility="visible" />
+
+    <ImageView
         android:id="@+id/ivSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

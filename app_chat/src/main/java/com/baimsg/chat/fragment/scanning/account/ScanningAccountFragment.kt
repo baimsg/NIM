@@ -51,6 +51,9 @@ class ScanningAccountFragment :
             findNavController().navigateUp()
         }
 
+        binding.ivSetting.setOnClickListener {
+            findNavController().navigate(R.id.action_scanningAccountFragment_to_settingFragment)
+        }
 
         binding.ivClean.setOnClickListener {
             scanningAccountViewModel.stopSearchAccount()
