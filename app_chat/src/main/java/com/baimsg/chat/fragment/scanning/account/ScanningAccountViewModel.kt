@@ -1,4 +1,4 @@
-package com.baimsg.chat.fragment.scanning
+package com.baimsg.chat.fragment.scanning.account
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 /**
@@ -129,7 +130,17 @@ class ScanningAccountViewModel @Inject constructor(
                 }
             }
         }
+    }
 
+    suspend fun save(appKey: String) {
+        withContext(Dispatchers.IO) {
+            userInfoDao.updateOrInsert(allUser.map {
+                it.copy(
+                    id = "$appKey-${it.account}",
+                    appKey = appKey
+                )
+            })
+        }
     }
 
 }

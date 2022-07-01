@@ -1,7 +1,9 @@
-package com.baimsg.chat.fragment.scanning
+package com.baimsg.chat.fragment.scanning.account
 
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -11,11 +13,13 @@ import com.baimsg.chat.R
 import com.baimsg.chat.adapter.AccountMediumAdapter
 import com.baimsg.chat.base.BaseFragment
 import com.baimsg.chat.databinding.FragmentScanningAccountBinding
+import com.baimsg.chat.fragment.login.LoginViewModel
 import com.baimsg.chat.type.BatchStatus
 import com.baimsg.chat.util.extensions.*
 import com.chad.library.adapter.base.animation.AlphaInAnimation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 
 /**
@@ -27,6 +31,8 @@ class ScanningAccountFragment :
     BaseFragment<FragmentScanningAccountBinding>(R.layout.fragment_scanning_account) {
 
     private val scanningAccountViewModel by viewModels<ScanningAccountViewModel>()
+
+    private val loginViewModel by activityViewModels<LoginViewModel>()
 
     private val accountMediumAdapter by lazy {
         AccountMediumAdapter()
@@ -45,24 +51,20 @@ class ScanningAccountFragment :
             findNavController().navigateUp()
         }
 
-        binding.ivEdit.setOnClickListener {
-            findNavController().navigate(R.id.action_scanningAccountFragment_to_settingFragment)
-        }
 
         binding.ivClean.setOnClickListener {
             scanningAccountViewModel.stopSearchAccount()
         }
 
         binding.ivSave.setOnClickListener {
-
+            lifecycleScope.launch {
+                scanningAccountViewModel.save(loginViewModel.getLoginInfo().appKey)
+                showSuccess("已保存数据库")
+            }
         }
 
         binding.ivStart.setOnClickListener {
             scanningAccountViewModel.searchAccount()
-        }
-
-        binding.fabAdd.setOnClickListener {
-
         }
 
         binding.ryContent.apply {
@@ -99,10 +101,8 @@ class ScanningAccountFragment :
                         BatchStatus.RUNNING -> {
                             binding.ivStart.setImageResource(R.drawable.ic_pause)
                             binding.ivBack.hide()
-                            binding.ivEdit.hide()
                             binding.ivSave.hide()
                             binding.ivClean.hide()
-                            binding.fabAdd.hide()
                             binding.proLoading.show()
                             binding.editAccount.isEnabled = false
                             if (update) accountMediumAdapter.addData(users)
@@ -111,7 +111,6 @@ class ScanningAccountFragment :
                             binding.editAccount.setText(id)
                         }
                         BatchStatus.STOP -> {
-                            binding.fabAdd.hide()
                             binding.ivSave.hide()
                             binding.ivClean.hide()
                             accountMediumAdapter.setList(null)
@@ -120,11 +119,9 @@ class ScanningAccountFragment :
                         else -> {
                             binding.proLoading.hide(true)
                             binding.ivBack.show()
-                            binding.ivEdit.show()
                             if (allUser.isNotEmpty()) {
                                 binding.ivSave.show()
                                 binding.ivClean.show()
-                                binding.fabAdd.show()
                             }
                             binding.ivStart.setImageResource(R.drawable.ic_play)
                         }

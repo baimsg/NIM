@@ -21,7 +21,7 @@ object Constant {
 
     const val KEY_ADD_VERIFY = "key_key_add_verify"
 
-    const val kEY_ADD_FILTER = "key_add_filter"
+    const val KEY_ADD_FILTER = "key_add_filter"
 
     const val UMENG_APP_KEY = "62b2829b88ccdf4b7ea53d64"
 
@@ -41,7 +41,7 @@ object Constant {
         get() = KvUtils.getString(KEY_ADD_VERIFY, "你好！")
 
     val ADD_FILTER: String
-        get() = KvUtils.getString(kEY_ADD_FILTER, "")
+        get() = KvUtils.getString(KEY_ADD_FILTER, "")
 
     val ADD_MODE: Boolean
         get() = KvUtils.getBoolean(KEY_ADD_MODE, true)

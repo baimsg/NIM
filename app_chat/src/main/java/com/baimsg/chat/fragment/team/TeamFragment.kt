@@ -3,12 +3,14 @@ package com.baimsg.chat.fragment.team
 import android.view.View
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.baimsg.chat.R
 import com.baimsg.chat.adapter.TeamItemAdapter
 import com.baimsg.chat.base.BaseFragment
+import com.baimsg.chat.databinding.EmptyBaseBinding
 import com.baimsg.chat.databinding.FooterTeamChatBinding
 import com.baimsg.chat.databinding.FragmentTeamBinding
 import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
@@ -20,9 +22,7 @@ import kotlinx.coroutines.flow.collectLatest
 
 class TeamFragment : BaseFragment<FragmentTeamBinding>(R.layout.fragment_team) {
 
-    private val teamViewModel by activityViewModels<TeamViewModel>()
-
-
+    private val teamViewModel by viewModels<TeamViewModel>()
 
     private val teamItemAdapter by lazy {
         TeamItemAdapter()
@@ -49,6 +49,11 @@ class TeamFragment : BaseFragment<FragmentTeamBinding>(R.layout.fragment_team) {
             FooterTeamChatBinding.bind(footerView).apply {
                 teamItemAdapter.setFooterView(footerView)
                 this@TeamFragment.tvCount = tvCount
+            }
+            val emptyView = View.inflate(requireContext(), R.layout.empty_base, null)
+            EmptyBaseBinding.bind(emptyView).apply {
+                teamItemAdapter.setEmptyView(emptyView)
+                tvTip.text = "您还没有群聊哦：）"
             }
         }
 

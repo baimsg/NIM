@@ -1,7 +1,7 @@
 package com.baimsg.chat.fragment.setting.filter
 
-import android.view.View
 import android.widget.LinearLayout
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
@@ -10,7 +10,6 @@ import com.baimsg.chat.Constant
 import com.baimsg.chat.R
 import com.baimsg.chat.adapter.FilterAdapter
 import com.baimsg.chat.base.BaseFragment
-import com.baimsg.chat.databinding.FooterFilterBinding
 import com.baimsg.chat.databinding.FragmentFilterBinding
 import com.baimsg.data.model.DEFAULT_JSON_FORMAT
 import com.chad.library.adapter.base.animation.AlphaInAnimation
@@ -20,12 +19,7 @@ import kotlinx.serialization.builtins.serializer
 class FilterFragment : BaseFragment<FragmentFilterBinding>(R.layout.fragment_filter) {
 
     private val filters by lazy {
-        val data = Constant.ADD_FILTER
-        if (data.isNotBlank()) DEFAULT_JSON_FORMAT.decodeFromString(
-            ListSerializer(String.serializer()),
-            data
-        ).toMutableList()
-        else emptyList<String>().toMutableList()
+        Constant.ADD_FILTERS.toMutableList()
     }
 
     private val filterAdapter by lazy {
@@ -33,13 +27,29 @@ class FilterFragment : BaseFragment<FragmentFilterBinding>(R.layout.fragment_fil
     }
 
     override fun initView() {
+        binding.ivBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
         filterAdapter.setList(filters)
         update()
 
         filterAdapter.onRemove = { position ->
-            filters.removeAt(position - 1)
-            filterAdapter.removeAt(position - 1)
-            update()
+            if (position in filters.indices) {
+                filters.removeAt(position)
+                filterAdapter.removeAt(position)
+                update()
+            }
+        }
+
+        binding.tvAdd.setOnClickListener {
+            MaterialDialog(requireContext()).show {
+                input(hint = "请输入过滤关键词") { _, charSequence ->
+                    filterAdapter.addData(charSequence.toString())
+                    filters.add(charSequence.toString())
+                    update()
+                }
+            }
         }
 
         binding.srContent.apply {
@@ -55,19 +65,6 @@ class FilterFragment : BaseFragment<FragmentFilterBinding>(R.layout.fragment_fil
             filterAdapter.animationEnable = true
             filterAdapter.adapterAnimation = AlphaInAnimation()
 
-            val footerView = View.inflate(requireContext(), R.layout.footer_filter, null)
-            FooterFilterBinding.bind(footerView).apply {
-                filterAdapter.setHeaderView(footerView)
-                tvAdd.setOnClickListener {
-                    MaterialDialog(requireContext()).show {
-                        input(hint = "请输入过滤关键词") { _, charSequence ->
-                            filterAdapter.addData(charSequence.toString())
-                            filters.add(charSequence.toString())
-                            update()
-                        }
-                    }
-                }
-            }
             layoutManager = LinearLayoutManager(requireContext(), LinearLayout.VERTICAL, false)
             adapter = filterAdapter
         }
@@ -80,7 +77,7 @@ class FilterFragment : BaseFragment<FragmentFilterBinding>(R.layout.fragment_fil
     override fun onDestroyView() {
         super.onDestroyView()
         KvUtils.put(
-            Constant.kEY_ADD_FILTER,
+            Constant.KEY_ADD_FILTER,
             DEFAULT_JSON_FORMAT.encodeToString(ListSerializer(String.serializer()), filters)
         )
     }

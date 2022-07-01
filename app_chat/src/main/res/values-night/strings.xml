@@ -45,4 +45,5 @@
     <string name="account_hint">请输入account</string>
     <string name="token_hint">请输入token</string>
     <string name="local_account">本地账号</string>
+    <string name="refresh">刷新</string>
 </resources>

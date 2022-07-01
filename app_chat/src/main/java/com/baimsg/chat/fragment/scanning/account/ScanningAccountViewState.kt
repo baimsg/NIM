@@ -1,4 +1,4 @@
-package com.baimsg.chat.fragment.scanning
+package com.baimsg.chat.fragment.scanning.account
 
 import com.baimsg.chat.type.BatchStatus
 import com.baimsg.data.model.entities.NIMUserInfo

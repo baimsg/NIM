@@ -52,6 +52,20 @@
             app:exitAnim="@anim/fragment_open_exit"
             app:popEnterAnim="@anim/fragment_open_enter"
             app:popExitAnim="@anim/slide_out_left" />
+        <action
+            android:id="@+id/action_myFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
+            app:popExitAnim="@anim/slide_out_left" />
+        <action
+            android:id="@+id/action_myFragment_to_localFragment"
+            app:destination="@id/localFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
+            app:popExitAnim="@anim/slide_out_left" />
     </fragment>
 
     <fragment
@@ -159,7 +173,30 @@
     </fragment>
     <fragment
         android:id="@+id/scanningAccountFragment"
-        android:name="com.baimsg.chat.fragment.scanning.ScanningAccountFragment"
+        android:name="com.baimsg.chat.fragment.scanning.account.ScanningAccountFragment"
         android:label="ScanningAccountFragment"
-        tools:layout="@layout/fragment_scanning_account" />
+        tools:layout="@layout/fragment_scanning_account">
+        <action
+            android:id="@+id/action_scanningAccountFragment_to_settingFragment"
+            app:destination="@id/settingFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
+            app:popExitAnim="@anim/slide_out_left" />
+    </fragment>
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.baimsg.chat.fragment.setting.about.AboutFragment"
+        android:label="AboutFragment"
+        tools:layout="@layout/fragment_about" />
+    <fragment
+        android:id="@+id/localFragment"
+        android:name="com.baimsg.chat.fragment.local.LocalFragment"
+        android:label="LocalFragment"
+        tools:layout="@layout/fragment_local">
+        <argument
+            android:name="appKey"
+            android:defaultValue="null"
+            app:argType="string" />
+    </fragment>
 </navigation>

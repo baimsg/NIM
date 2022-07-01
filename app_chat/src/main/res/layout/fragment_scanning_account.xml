@@ -59,19 +59,6 @@
         tools:text="(10/100)" />
 
     <ImageView
-        android:id="@+id/ivEdit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/edit"
-        android:padding="16dp"
-        android:src="@drawable/ic_round_filter"
-        android:tint="@color/icon_click"
-        app:layout_constraintBottom_toBottomOf="@id/ivStart"
-        app:layout_constraintEnd_toStartOf="@id/ivClean"
-        app:layout_constraintTop_toTopOf="@id/ivStart"
-        tools:ignore="UseAppTint" />
-
-    <ImageView
         android:id="@+id/ivClean"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -99,7 +86,7 @@
         app:layout_constraintEnd_toStartOf="@id/ivStart"
         app:layout_constraintTop_toTopOf="@id/ivStart"
         tools:ignore="UseAppTint"
-        tools:visibility="visible"/>
+        tools:visibility="visible" />
 
     <ImageView
         android:id="@+id/ivStart"
@@ -126,6 +113,7 @@
         android:hint="@string/account"
         android:imeOptions="actionDone"
         android:inputType="number"
+        android:maxLength="11"
         android:maxLines="1"
         android:paddingHorizontal="4dp"
         android:textColor="@color/title_color"
@@ -134,7 +122,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvProgress" />
-
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/srContent"
@@ -152,20 +139,5 @@
             android:layout_height="match_parent" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAdd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="35dp"
-        android:contentDescription="@string/add"
-        android:elevation="10dp"
-        android:src="@drawable/ic_add"
-        android:visibility="gone"
-        app:backgroundTint="@color/color_primary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

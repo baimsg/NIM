@@ -1,21 +1,18 @@
 package com.baimsg.chat.fragment.my
 
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.baimsg.chat.R
 import com.baimsg.chat.base.BaseFragment
 import com.baimsg.chat.databinding.FragmentMyBinding
 import com.baimsg.chat.fragment.login.LoginViewModel
-import com.baimsg.chat.util.extensions.dp2px
+import com.baimsg.chat.util.extensions.loadImage
 import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
-import com.baimsg.chat.util.extensions.showWarning
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
-import com.netease.nimlib.sdk.StatusCode
+import com.baimsg.chat.util.extensions.show
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 /**
  * Create by Baimsg on 2022/6/14
@@ -32,36 +29,34 @@ class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
             findNavController().navigate(R.id.action_myFragment_to_settingFragment)
         }
 
+        binding.vDatabase.setOnClickListener {
+            lifecycleScope.launch {
+                findNavController().navigate(
+                    MyFragmentDirections.actionMyFragmentToLocalFragment(
+                        appKey = loginViewModel.getLoginInfo().appKey
+                    )
+                )
+            }
+        }
+
         binding.vAbout.setOnClickListener {
-            showWarning("此版本为定制版本")
+            findNavController().navigate(R.id.action_myFragment_to_aboutFragment)
         }
 
     }
 
     override fun initLiveData() {
         repeatOnLifecycleStarted {
-            loginViewModel.observerStatusCode.collectLatest {
-                if (it == StatusCode.LOGINED) loginViewModel.loadUserInfo()
-            }
-        }
-
-        repeatOnLifecycleStarted {
             loginViewModel.observeUserInfo.collectLatest {
                 it.apply {
+                    binding.proLoading.show(!loaded)
                     if (loaded) {
                         binding.tvName.text = name
-
                         binding.tvSignature.text = signature ?: "没有个性签名哦！"
-
                         binding.tvAccount.text = "账号:${account}"
-
-                        Glide.with(this@MyFragment).load(avatar).apply(
-                            RequestOptions()
-                                .transform(
-                                    CenterCrop(),
-                                    RoundedCorners(requireContext().dp2px(12.0f).toInt())
-                                )
-                        ).into(binding.ivAvatar)
+                        binding.ivAvatar.loadImage(avatar)
+                    } else {
+                        loginViewModel.loadUserInfo()
                     }
                 }
             }

@@ -45,6 +45,23 @@
                 app:layout_constraintBottom_toBottomOf="@id/tvSignature"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/proLoading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="35dp"
+                android:indeterminate="true"
+                android:padding="16dp"
+                android:visibility="visible"
+                app:indicatorColor="@color/color_primary"
+                app:indicatorSize="22dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:trackColor="@color/color_primary_translucent"
+                app:trackThickness="2dp" />
+
+
             <ImageView
                 android:id="@+id/ivAvatar"
                 android:layout_width="68dp"
@@ -144,6 +161,54 @@
                 app:layout_constraintTop_toBottomOf="@id/vSetting" />
 
             <View
+                android:id="@+id/vDatabase"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_item_white"
+                app:layout_constraintBottom_toBottomOf="@id/ivDatabase"
+                app:layout_constraintTop_toTopOf="@id/ivDatabase" />
+
+            <ImageView
+                android:id="@+id/ivDatabase"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/database"
+                android:padding="16dp"
+                android:src="@drawable/ic_database"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/vLineSetting" />
+
+            <TextView
+                android:id="@+id/tvDatabase"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:gravity="center_vertical"
+                android:text="@string/database"
+                android:textColor="@color/title_color"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@id/ivDatabase"
+                app:layout_constraintStart_toEndOf="@id/ivSetting"
+                app:layout_constraintTop_toTopOf="@id/ivDatabase" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/enter"
+                android:padding="16dp"
+                android:src="@drawable/ic_right"
+                app:layout_constraintBottom_toBottomOf="@id/ivDatabase"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/ivDatabase" />
+
+            <View
+                android:id="@+id/vLineDatabase"
+                android:layout_width="0dp"
+                android:layout_height="0.5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tvSetting"
+                app:layout_constraintTop_toBottomOf="@id/vDatabase" />
+
+            <View
                 android:id="@+id/vAbout"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -155,11 +220,11 @@
                 android:id="@+id/ivAbout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:contentDescription="@string/setting"
+                android:contentDescription="@string/about"
                 android:padding="16dp"
                 android:src="@drawable/ic_about"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/vLineSetting" />
+                app:layout_constraintTop_toBottomOf="@id/vLineDatabase" />
 
             <TextView
                 android:id="@+id/tvAbout"

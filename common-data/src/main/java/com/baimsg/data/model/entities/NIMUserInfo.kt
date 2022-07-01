@@ -1,6 +1,7 @@
 package com.baimsg.data.model.entities
 
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.baimsg.data.model.base.BaseEntity
 import com.netease.nimlib.sdk.uinfo.constant.GenderEnum
@@ -19,6 +20,8 @@ import kotlinx.serialization.Serializer
 @Entity(tableName = "nim_user_info")
 data class NIMUserInfo(
     @PrimaryKey
+    val id: String = "",
+    val appKey: String = "",
     val account: String = "",
     val name: String = "",
     val avatar: String? = null,
@@ -30,8 +33,8 @@ data class NIMUserInfo(
     val extension: String? = null,
     val extensionMap: Map<String, String>? = mutableMapOf(),
     val loaded: Boolean = false
-) : BaseEntity {
-    override fun getIdentifier(): String = account
+) : BaseEntity, java.io.Serializable {
+    override fun getIdentifier(): String = id
 }
 
 fun NimUserInfo?.asUser(): NIMUserInfo =

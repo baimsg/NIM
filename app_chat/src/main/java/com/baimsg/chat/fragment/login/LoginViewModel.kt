@@ -125,6 +125,7 @@ internal class LoginViewModel @Inject constructor(
      * 登录账号
      */
     fun login() {
+        _userInfo.value = NIMUserInfo()
         _viewState.value = LoginViewState.EMPTY
         val loginInfo = _loginInfo.value
         when {
@@ -176,6 +177,7 @@ internal class LoginViewModel @Inject constructor(
      */
     fun logout() {
         authService.logout()
+        _userInfo.value = NIMUserInfo()
     }
 
     /**
