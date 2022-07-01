@@ -196,18 +196,18 @@
                     app:layout_constraintTop_toBottomOf="@id/vTeamChat" />
 
                 <View
-                    android:id="@+id/vScan"
+                    android:id="@+id/v_scanning"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:background="@drawable/bg_item_white"
-                    app:layout_constraintBottom_toBottomOf="@id/ivScan"
-                    app:layout_constraintTop_toTopOf="@id/ivScan" />
+                    app:layout_constraintBottom_toBottomOf="@id/iv_scanning"
+                    app:layout_constraintTop_toTopOf="@id/iv_scanning" />
 
                 <ImageView
-                    android:id="@+id/ivScan"
+                    android:id="@+id/iv_scanning"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:contentDescription="@string/scan_user"
+                    android:contentDescription="@string/scanning_user"
                     android:paddingVertical="2dp"
                     android:src="@drawable/icon_search"
                     app:layout_constraintStart_toStartOf="@id/ivNewFriend"
@@ -217,12 +217,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:gravity="center_vertical"
-                    android:text="@string/scan_user"
+                    android:text="@string/scanning_user"
                     android:textColor="@color/title_color"
                     android:textSize="16sp"
-                    app:layout_constraintBottom_toBottomOf="@id/ivScan"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_scanning"
                     app:layout_constraintStart_toStartOf="@id/tvNewFriend"
-                    app:layout_constraintTop_toTopOf="@id/ivScan" />
+                    app:layout_constraintTop_toTopOf="@id/iv_scanning" />
 
                 <View
                     android:id="@+id/vLineScan"
@@ -231,7 +231,7 @@
                     android:background="@color/line_color"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@id/tvNewFriend"
-                    app:layout_constraintTop_toBottomOf="@id/vScan" />
+                    app:layout_constraintTop_toBottomOf="@id/v_scanning" />
 
                 <View
                     android:id="@+id/vBatchExe"

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.baimsg.base.util.extensions.logE
 import com.baimsg.chat.Constant
 import com.baimsg.chat.type.BatchStatus
+import com.baimsg.data.db.daos.UserInfoDao
 import com.baimsg.data.model.entities.NIMUserInfo
 import com.baimsg.data.model.entities.asUser
 import com.netease.nimlib.sdk.NIMClient
@@ -14,11 +15,16 @@ import com.netease.nimlib.sdk.friend.constant.VerifyType
 import com.netease.nimlib.sdk.friend.model.AddFriendData
 import com.netease.nimlib.sdk.uinfo.UserService
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SearchUserViewModel : ViewModel() {
+@HiltViewModel
+class SearchUserViewModel @Inject constructor(
+    private val userInfoDao: UserInfoDao
+) : ViewModel() {
 
     /**
      * 搜索参数

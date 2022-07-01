@@ -21,7 +21,7 @@
     <string name="new_friend">新的朋友</string>
     <string name="team_chat">群聊</string>
     <string name="friend_list">好友列表</string>
-    <string name="scan_user">扫描用户</string>
+    <string name="scanning_user">扫描用户</string>
     <string name="batch_exe">批量操作</string>
     <string name="add">添加</string>
     <string name="search">搜索</string>

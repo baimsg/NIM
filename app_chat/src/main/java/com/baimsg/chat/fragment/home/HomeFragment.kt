@@ -41,8 +41,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             findNavController().navigate(R.id.action_homeFragment_to_teamFragment)
         }
 
-        binding.vScan.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_searchUserFragment)
+        binding.vScanning.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_scanningAccountFragment)
         }
 
         binding.vBatchExe.setOnClickListener {

@@ -1,7 +1,7 @@
-package com.baimsg.chat.fragment.search
+package com.baimsg.chat.fragment.scanning
 
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -9,29 +9,32 @@ import com.baimsg.chat.Constant
 import com.baimsg.chat.R
 import com.baimsg.chat.adapter.AccountMediumAdapter
 import com.baimsg.chat.base.BaseFragment
-import com.baimsg.chat.databinding.FragmentSearchUserBinding
+import com.baimsg.chat.databinding.FragmentScanningAccountBinding
 import com.baimsg.chat.type.BatchStatus
 import com.baimsg.chat.util.extensions.*
 import com.chad.library.adapter.base.animation.AlphaInAnimation
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
+/**
+ * Create by Baimsg on 2022/7/1
+ *
+ **/
+@AndroidEntryPoint
+class ScanningAccountFragment :
+    BaseFragment<FragmentScanningAccountBinding>(R.layout.fragment_scanning_account) {
 
-class SearchUserFragment : BaseFragment<FragmentSearchUserBinding>(R.layout.fragment_search_user) {
-
-    private val searchUserViewModel by lazy {
-        ViewModelProvider(this)[SearchUserViewModel::class.java]
-    }
+    private val scanningAccountViewModel by viewModels<ScanningAccountViewModel>()
 
     private val accountMediumAdapter by lazy {
         AccountMediumAdapter()
     }
 
     override fun initView() {
-
         binding.srContent.apply {
             setColorSchemeResources(R.color.color_primary)
             setOnRefreshListener {
-                accountMediumAdapter.setList(searchUserViewModel.searchViewState.value.allUser.filter { it.loaded })
+                accountMediumAdapter.setList(scanningAccountViewModel.allUser.filter { it.loaded })
                 isRefreshing = false
             }
         }
@@ -45,7 +48,7 @@ class SearchUserFragment : BaseFragment<FragmentSearchUserBinding>(R.layout.frag
         }
 
         binding.ivClean.setOnClickListener {
-            searchUserViewModel.stopSearchUser()
+            scanningAccountViewModel.stopSearchAccount()
         }
 
         binding.ivSave.setOnClickListener {
@@ -53,13 +56,12 @@ class SearchUserFragment : BaseFragment<FragmentSearchUserBinding>(R.layout.frag
         }
 
         binding.ivStart.setOnClickListener {
-            searchUserViewModel.searchUser()
+            scanningAccountViewModel.searchAccount()
         }
 
         binding.fabAdd.setOnClickListener {
-            searchUserViewModel.addFriend()
-        }
 
+        }
 
         binding.ryContent.apply {
             accountMediumAdapter.animationEnable = true
@@ -74,7 +76,7 @@ class SearchUserFragment : BaseFragment<FragmentSearchUserBinding>(R.layout.frag
             addTextChangedListener {
                 try {
                     val account = if (it.isNullOrBlank()) 0 else it.toString().toLong()
-                    searchUserViewModel.updateAccount(account)
+                    scanningAccountViewModel.updateAccount(account)
                 } catch (e: Exception) {
                     showError("请检查您输入的内容")
                 }
@@ -85,13 +87,7 @@ class SearchUserFragment : BaseFragment<FragmentSearchUserBinding>(R.layout.frag
 
     override fun initLiveData() {
         repeatOnLifecycleStarted {
-            searchUserViewModel.addFriendViewState.collectLatest {
-                binding.tvProgress.text = "${it.user.account}-${it.message}"
-            }
-        }
-
-        repeatOnLifecycleStarted {
-            searchUserViewModel.searchViewState.collectLatest { value ->
+            scanningAccountViewModel.observeViewState.collectLatest { value ->
                 value.apply {
                     binding.tvCount.text = "(${allUser.size})"
                     binding.tvProgress.text = "(${count}/${Constant.SEARCH_COUNT})"
@@ -116,7 +112,7 @@ class SearchUserFragment : BaseFragment<FragmentSearchUserBinding>(R.layout.frag
                             binding.editAccount.isEnabled = true
                         }
                         else -> {
-                            binding.proLoading.hide()
+                            binding.proLoading.hide(true)
                             binding.ivBack.show()
                             binding.ivEdit.show()
                             if (allUser.isNotEmpty()) {
