@@ -1,18 +1,22 @@
 package com.baimsg.chat.fragment.setting
 
 import android.text.InputType
+import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.afollestad.materialdialogs.LayoutMode
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.bottomsheets.BottomSheet
+import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.input.input
 import com.baimsg.base.util.KvUtils
 import com.baimsg.chat.Constant
 import com.baimsg.chat.R
 import com.baimsg.chat.base.BaseFragment
+import com.baimsg.chat.databinding.BottomLoginBinding
 import com.baimsg.chat.databinding.FragmentSettingBinding
 import com.baimsg.chat.fragment.login.LoginViewModel
 import com.baimsg.chat.util.extensions.showSuccess
-import com.lxj.xpopup.XPopup
 
 
 class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_setting) {
@@ -87,22 +91,28 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
         }
 
         binding.tvQuit.setOnClickListener {
-            XPopup.Builder(requireContext())
-                .asBottomList(
-                    null,
-                    arrayOf(getString(R.string.logout), getString(R.string.exit_app))
-                ) { position, _ ->
-                    when (position) {
-                        0 -> {
-                            loginViewModel.logout()
-                            showSuccess("已退出本账号登录")
-                            findNavController().navigateUp()
-                        }
-                        else -> {
-                            loginViewModel.exit()
-                        }
+
+            MaterialDialog(requireContext(), BottomSheet(LayoutMode.WRAP_CONTENT)).show {
+                val view = View.inflate(requireContext(), R.layout.bottom_login, null)
+                BottomLoginBinding.bind(view).apply {
+                    customView(view = view)
+                    tvLogout.setOnClickListener {
+                        loginViewModel.logout()
+                        showSuccess("已退出本账号登录")
+                        findNavController().navigate(R.id.action_settingFragment_to_homeFragment)
+                        dismiss()
                     }
-                }.show()
+
+                    tvQuit.setOnClickListener {
+                        loginViewModel.exit()
+                        dismiss()
+                    }
+
+                    tvCancel.setOnClickListener {
+                        dismiss()
+                    }
+                }
+            }
         }
     }
 

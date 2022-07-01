@@ -35,8 +35,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
 
         binding.vFriendList.setOnClickListener {
-
         }
+
         binding.vTeamChat.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_teamFragment)
         }
@@ -46,8 +46,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         }
 
         binding.vBatchExe.setOnClickListener {
-
+            lifecycleScope.launch {
+                findNavController().navigate(
+                    HomeFragmentDirections.actionHomeFragmentToBatchExecuteFragment(
+                        appKey = loginViewModel.getLoginInfo().appKey
+                    )
+                )
+            }
         }
+
     }
 
     override fun initLiveData() {
