@@ -5,6 +5,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.baimsg.base.util.extensions.length
 import com.baimsg.chat.Constant
 import com.baimsg.chat.R
 import com.baimsg.chat.adapter.AccountMediumAdapter
@@ -15,6 +16,7 @@ import com.baimsg.chat.util.extensions.*
 import com.chad.library.adapter.base.animation.AlphaInAnimation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+
 
 /**
  * Create by Baimsg on 2022/7/1
@@ -44,7 +46,7 @@ class ScanningAccountFragment :
         }
 
         binding.ivEdit.setOnClickListener {
-            findNavController().navigate(R.id.action_searchUserFragment_to_settingFragment)
+            findNavController().navigate(R.id.action_scanningAccountFragment_to_settingFragment)
         }
 
         binding.ivClean.setOnClickListener {
@@ -89,8 +91,10 @@ class ScanningAccountFragment :
         repeatOnLifecycleStarted {
             scanningAccountViewModel.observeViewState.collectLatest { value ->
                 value.apply {
+                    val searchCount = Constant.SEARCH_COUNT
+                    val searchPrefix = Constant.SEARCH_PREFIX
                     binding.tvCount.text = "(${allUser.size})"
-                    binding.tvProgress.text = "(${count}/${Constant.SEARCH_COUNT})"
+                    binding.tvProgress.text = "(${count}/${searchCount})"
                     when (status) {
                         BatchStatus.RUNNING -> {
                             binding.ivStart.setImageResource(R.drawable.ic_pause)
@@ -102,7 +106,9 @@ class ScanningAccountFragment :
                             binding.proLoading.show()
                             binding.editAccount.isEnabled = false
                             if (update) accountMediumAdapter.addData(users)
-                            binding.editAccount.setText("${value.account}")
+                            val id =
+                                "$searchPrefix%0${searchCount.length()}d".format(account)
+                            binding.editAccount.setText(id)
                         }
                         BatchStatus.STOP -> {
                             binding.fabAdd.hide()

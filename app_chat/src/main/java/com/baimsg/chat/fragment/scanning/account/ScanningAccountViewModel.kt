@@ -3,7 +3,6 @@ package com.baimsg.chat.fragment.scanning
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.baimsg.base.util.extensions.length
-import com.baimsg.base.util.extensions.logE
 import com.baimsg.chat.Constant
 import com.baimsg.chat.type.BatchStatus
 import com.baimsg.data.db.daos.UserInfoDao
@@ -75,7 +74,7 @@ class ScanningAccountViewModel @Inject constructor(
                 value = value.copy(status = BatchStatus.PAUSE, update = false)
             } else {
                 value = value.copy(status = BatchStatus.RUNNING, update = false)
-                searchUser(account = value.account)
+                searchAccount(account = value.account)
             }
         }
     }
@@ -83,48 +82,51 @@ class ScanningAccountViewModel @Inject constructor(
     /**
      * 循环搜索用户
      */
-    private fun searchUser(account: Long) {
+    private fun searchAccount(account: Long) {
         viewModelScope.launch(Dispatchers.IO) {
-            _viewState.apply {
-                if (value.count >= Constant.SEARCH_COUNT || value.pause()) {
-                    value = value.copy(status = BatchStatus.PAUSE, update = false)
-                    return@launch
-                }
-                val accounts = mutableListOf<String>().apply {
-                    (0..149).forEach { index ->
-                        val id = Constant.run {
-                            "$SEARCH_PREFIX%0${SEARCH_COUNT.length()}d".format(account + index)
-                        }
-                        add(id)
-                        logE(id)
-                        value = value.copy(count = value.count + 1, update = false)
+            runBlocking {
+                val searchCount = Constant.SEARCH_COUNT
+                val searchPrefix = Constant.SEARCH_PREFIX
+                _viewState.apply {
+                    if (value.count >= searchCount || value.pause()) {
+                        value = value.copy(status = BatchStatus.PAUSE, update = false)
+                        return@runBlocking
                     }
-                }
-                userService.fetchUserInfo(accounts)
-                    .setCallback(object : RequestCallback<List<NimUserInfo>> {
-                        override fun onSuccess(mUsers: List<NimUserInfo>?) {
-                            val newUser = mUsers?.map { it.asUser() }
-                            value = value.copy(
-                                account = account + 150,
-                                users = newUser ?: emptyList(),
-                                update = true,
-                                allUser = value.allUser.toMutableList().apply {
-                                    if (newUser != null) {
-                                        addAll(newUser)
+                    val accounts = mutableListOf<String>().apply {
+                        (0..149).forEach { index ->
+                            if (value.count >= searchCount) return@forEach
+                            val id =
+                                "$searchPrefix%0${searchCount.length()}d".format(account + index)
+                            add(id)
+                            value = value.copy(count = value.count + 1, update = false)
+                        }
+                    }
+                    userService.fetchUserInfo(accounts)
+                        .setCallback(object : RequestCallback<List<NimUserInfo>> {
+                            override fun onSuccess(mUsers: List<NimUserInfo>?) {
+                                val newUser = mUsers?.map { it.asUser() }
+                                value = value.copy(
+                                    account = account + accounts.size,
+                                    users = newUser ?: emptyList(),
+                                    update = true,
+                                    allUser = value.allUser.toMutableList().apply {
+                                        if (newUser != null) {
+                                            addAll(newUser)
+                                        }
                                     }
-                                }
-                            )
-                            searchUser(account + 150)
-                        }
+                                )
+                                searchAccount(account + accounts.size)
+                            }
 
-                        override fun onFailed(code: Int) {
-                            searchUser(account)
-                        }
+                            override fun onFailed(code: Int) {
+                                searchAccount(account)
+                            }
 
-                        override fun onException(e: Throwable?) {
-                            searchUser(account)
-                        }
-                    })
+                            override fun onException(e: Throwable?) {
+                                searchAccount(account)
+                            }
+                        })
+                }
             }
         }
 
