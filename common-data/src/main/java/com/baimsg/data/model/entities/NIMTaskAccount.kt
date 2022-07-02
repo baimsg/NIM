@@ -14,10 +14,13 @@ data class NIMTaskAccount(
     val account: String = "",
     val name: String = "",
     val avatar: String? = null,
-    val createTime: Long = 0
+    val createTime: Long = 0,
+    val invite: Boolean = false,
+    val add: Boolean = false
 ) : BaseEntity, java.io.Serializable {
 
     override fun getIdentifier(): String = id
+
 }
 
 fun NIMUserInfo.asTask(): NIMTaskAccount = run {

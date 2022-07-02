@@ -8,7 +8,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
  *
  **/
 object DatabaseMigrations {
-    const val DB_VERSION = 2
+    const val DB_VERSION = 1
 
     val MIGRATIONS: Array<Migration>
         get() = arrayOf(
@@ -20,7 +20,8 @@ object DatabaseMigrations {
      */
     private fun migration1to2(): Migration = object : Migration(1, 2) {
         override fun migrate(database: SupportSQLiteDatabase) {
-            database.execSQL("CREATE TABLE IF NOT EXISTS `nim_task_account` (`id` TEXT NOT NULL, `appKey` TEXT NOT NULL, `account` TEXT NOT NULL, `name` TEXT NOT NULL, `avatar` TEXT,  `createTime` INTEGER NOT NULL, PRIMARY KEY(`id`))")
-        }
+            }
     }
+
+
 }

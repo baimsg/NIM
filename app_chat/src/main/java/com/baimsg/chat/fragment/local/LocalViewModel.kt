@@ -1,7 +1,9 @@
 package com.baimsg.chat.fragment.local
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.baimsg.chat.type.UpdateStatus
 import com.baimsg.chat.util.verifySensitiveWords
 import com.baimsg.data.db.daos.TaskAccountDao
 import com.baimsg.data.db.daos.UserInfoDao
@@ -20,22 +22,63 @@ import javax.inject.Inject
  **/
 @HiltViewModel
 class LocalViewModel @Inject constructor(
+    handle: SavedStateHandle,
     private val userInfoDao: UserInfoDao,
     private val taskAccountDao: TaskAccountDao
 ) : ViewModel() {
+    private val initAppKey = handle["appKey"] ?: ""
 
-    private val _allAccount by lazy {
-        MutableStateFlow(emptyList<NIMUserInfo>())
+    private val _viewState by lazy {
+        MutableStateFlow(LocalViewState.EMPTY)
     }
 
-    val observeAllAccount: StateFlow<List<NIMUserInfo>> = _allAccount
+    val observeViewState: StateFlow<LocalViewState> = _viewState
 
-    val allAccount: List<NIMUserInfo>
-        get() = _allAccount.value
+    val allAccounts: List<NIMUserInfo>
+        get() = _viewState.value.allAccounts
 
-    fun loadAllAccount(appKey: String) {
+    init {
+        loadAllAccount()
+    }
+
+    /**
+     * 加载数据库列表
+     */
+    fun loadAllAccount() {
         viewModelScope.launch(Dispatchers.IO) {
-            _allAccount.value = userInfoDao.entriesByAppKey(appKey = appKey)
+            _viewState.apply {
+                value = value.copy(
+                    allAccounts = userInfoDao.entriesByAppKey(appKey = initAppKey),
+                    updateStatus = UpdateStatus.REFRESH
+                )
+            }
+        }
+    }
+
+    /**
+     * 单个删除
+     * @param nimUserInfo 删除对象
+     */
+    fun deleteAccountById(nimUserInfo: NIMUserInfo) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _viewState.apply {
+                value = value.copy(allAccounts = allAccounts.toMutableList().apply {
+                    remove(nimUserInfo)
+                }, updateStatus = UpdateStatus.REMOVE)
+            }
+            userInfoDao.deleteById(nimUserInfo.id)
+        }
+    }
+
+    /**
+     * 全部删除
+     */
+    fun deleteAllByAppKey() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _viewState.apply {
+                value = value.copy(allAccounts = emptyList(), updateStatus = UpdateStatus.REFRESH)
+            }
+            userInfoDao.deleteByAppKey(initAppKey)
         }
     }
 
@@ -44,7 +87,7 @@ class LocalViewModel @Inject constructor(
      */
     fun addTaskAll() {
         viewModelScope.launch(Dispatchers.IO) {
-            val tasks = allAccount.filter { !it.name.verifySensitiveWords() }.map { it.asTask() }
+            val tasks = allAccounts.filter { !it.name.verifySensitiveWords() }.map { it.asTask() }
             taskAccountDao.updateOrInsert(tasks)
         }
     }
@@ -60,21 +103,5 @@ class LocalViewModel @Inject constructor(
         }
     }
 
-    /**
-     *
-     */
-    fun deleteAccountById(id: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            userInfoDao.deleteById(id)
-        }
-    }
 
-    /**
-     *
-     */
-    fun deleteAll(appKey: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            userInfoDao.deleteByAppKey(appKey)
-        }
-    }
 }

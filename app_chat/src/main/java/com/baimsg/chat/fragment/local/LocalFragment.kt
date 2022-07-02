@@ -1,8 +1,8 @@
 package com.baimsg.chat.fragment.local
 
+import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.LayoutMode
@@ -12,13 +12,14 @@ import com.afollestad.materialdialogs.list.listItems
 import com.baimsg.chat.R
 import com.baimsg.chat.adapter.AccountMediumAdapter
 import com.baimsg.chat.base.BaseFragment
+import com.baimsg.chat.databinding.EmptyBaseBinding
 import com.baimsg.chat.databinding.FragmentLocalBinding
+import com.baimsg.chat.type.UpdateStatus
 import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
+import com.baimsg.chat.util.extensions.showError
 import com.baimsg.chat.util.extensions.showSuccess
 import com.baimsg.chat.util.extensions.showWarning
-import com.baimsg.data.model.entities.NIMTaskAccount
 import com.baimsg.data.model.entities.NIMUserInfo
-import com.baimsg.data.model.entities.asTask
 import com.chad.library.adapter.base.animation.AlphaInAnimation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -32,15 +33,11 @@ class LocalFragment : BaseFragment<FragmentLocalBinding>(R.layout.fragment_local
 
     private val localViewModel by viewModels<LocalViewModel>()
 
-    private val args by navArgs<LocalFragmentArgs>()
-
     private val accountMediumAdapter by lazy {
         AccountMediumAdapter()
     }
 
     override fun initView() {
-        localViewModel.loadAllAccount(appKey = args.appKey)
-
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()
         }
@@ -51,8 +48,9 @@ class LocalFragment : BaseFragment<FragmentLocalBinding>(R.layout.fragment_local
 
         binding.ivMore.setOnClickListener {
             MaterialDialog(requireContext(), BottomSheet(LayoutMode.WRAP_CONTENT)).show {
-                listItems(items = listOf("导入数据", "导入数据", "清空数据")) { dialog, index, _ ->
+                listItems(items = listOf("导入数据", "导入数据", "清空数据", "一键加入任务")) { dialog, index, _ ->
                     dialog.dismiss()
+                    if (isEmpty()) return@listItems
                     when (index) {
                         0 -> {
                             showWarning("导入功能待完善")
@@ -62,8 +60,12 @@ class LocalFragment : BaseFragment<FragmentLocalBinding>(R.layout.fragment_local
                         }
                         2 -> {
                             accountMediumAdapter.setList(null)
-                            localViewModel.deleteAll(args.appKey)
-                            showWarning("已将数据库清空")
+                            localViewModel.deleteAllByAppKey()
+                            showSuccess("已将数据库清空")
+                        }
+                        3 -> {
+                            localViewModel.addTaskAll()
+                            showSuccess("数据已加入任务列表")
                         }
                     }
                 }
@@ -71,15 +73,10 @@ class LocalFragment : BaseFragment<FragmentLocalBinding>(R.layout.fragment_local
             }
         }
 
-        binding.fabAdd.setOnClickListener {
-            localViewModel.addTaskAll()
-            showSuccess("已将数据全部添加到任务")
-        }
-
         binding.srContent.apply {
             setColorSchemeResources(R.color.color_primary)
             setOnRefreshListener {
-                localViewModel.loadAllAccount(appKey = args.appKey)
+                localViewModel.loadAllAccount()
                 isRefreshing = false
             }
         }
@@ -90,6 +87,12 @@ class LocalFragment : BaseFragment<FragmentLocalBinding>(R.layout.fragment_local
 
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             adapter = accountMediumAdapter
+
+            val emptyView = View.inflate(requireContext(), R.layout.empty_base, null)
+            EmptyBaseBinding.bind(emptyView).apply {
+                accountMediumAdapter.setEmptyView(emptyView)
+                tvTip.text = "数据库暂时没有数据哦:)"
+            }
         }
 
         accountMediumAdapter.setOnItemClickListener { adapter, _, position ->
@@ -103,7 +106,7 @@ class LocalFragment : BaseFragment<FragmentLocalBinding>(R.layout.fragment_local
                             showSuccess("已将[${data.name}-${data.account}]添加到任务")
                         }
                         else -> {
-                            localViewModel.deleteAccountById(data.id)
+                            localViewModel.deleteAccountById(data)
                             accountMediumAdapter.removeAt(position)
                         }
                     }
@@ -115,10 +118,26 @@ class LocalFragment : BaseFragment<FragmentLocalBinding>(R.layout.fragment_local
 
     override fun initLiveData() {
         repeatOnLifecycleStarted {
-            localViewModel.observeAllAccount.collectLatest {
-                accountMediumAdapter.setList(it)
-                binding.tvCount.text = "(${it.size})"
+            localViewModel.observeViewState.collectLatest {
+                val allAccounts = it.allAccounts
+                binding.tvCount.text = "(${allAccounts.size})"
+                when (it.updateStatus) {
+                    UpdateStatus.REFRESH -> {
+                        accountMediumAdapter.setList(allAccounts)
+                    }
+                    else -> {}
+                }
             }
+        }
+    }
+
+
+    private fun isEmpty(): Boolean {
+        return if (localViewModel.allAccounts.isEmpty()) {
+            showError("数据库不存在数据:)")
+            true
+        } else {
+            false
         }
     }
 }
