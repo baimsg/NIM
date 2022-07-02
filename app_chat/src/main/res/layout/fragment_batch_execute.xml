@@ -10,46 +10,119 @@
         android:id="@+id/ivBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
         android:contentDescription="@string/back"
         android:padding="16dp"
         android:src="@drawable/ic_back"
+        app:layout_constraintBottom_toBottomOf="@id/ivStart"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@id/ivStart" />
 
-    <ImageView
-        android:id="@+id/ivMore"
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/proLoading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/more"
+        android:indeterminate="true"
         android:padding="16dp"
-        android:src="@drawable/ic_headlines"
-        app:layout_constraintBottom_toBottomOf="@id/ivBack"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/ivBack" />
+        android:visibility="gone"
+        app:indicatorColor="@color/color_primary"
+        app:indicatorSize="22dp"
+        app:layout_constraintBottom_toBottomOf="@id/ivStart"
+        app:layout_constraintStart_toEndOf="@id/ivBack"
+        app:layout_constraintTop_toTopOf="@id/ivStart"
+        app:trackColor="@color/color_primary_translucent"
+        app:trackThickness="2dp"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/tvCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="16dp"
         android:textColor="@color/color_primary"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@id/ivBack"
-        app:layout_constraintStart_toEndOf="@id/ivBack"
-        app:layout_constraintTop_toTopOf="@id/ivBack"
+        app:layout_constraintBottom_toBottomOf="@id/ivStart"
+        app:layout_constraintStart_toEndOf="@id/proLoading"
+        app:layout_constraintTop_toTopOf="@id/ivStart"
         tools:text="(0)" />
+
+
+    <ImageView
+        android:id="@+id/ivSetting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/setting"
+        android:padding="16dp"
+        android:src="@drawable/ic_setting"
+        android:tint="@color/icon_click"
+        app:layout_constraintBottom_toBottomOf="@id/ivStart"
+        app:layout_constraintEnd_toStartOf="@id/ivClean"
+        app:layout_constraintTop_toTopOf="@id/ivStart"
+        tools:ignore="UseAppTint" />
+
+    <ImageView
+        android:id="@+id/ivClean"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/edit"
+        android:padding="16dp"
+        android:src="@drawable/ic_clean"
+        android:tint="@color/icon_click"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/ivStart"
+        app:layout_constraintEnd_toStartOf="@id/ivStart"
+        app:layout_constraintTop_toTopOf="@id/ivStart"
+        tools:ignore="UseAppTint"
+        tools:visibility="visible" />
+
+
+    <ImageView
+        android:id="@+id/ivStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:contentDescription="@string/start"
+        android:padding="16dp"
+        android:src="@drawable/ic_play"
+        android:tint="@color/icon_click"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="UseAppTint" />
+
+    <TextView
+        android:id="@+id/tvProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:paddingVertical="4dp"
+        android:textColor="@color/title_color"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivStart"
+        tools:text="(10/100)" />
+
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/srContent"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ivBack">
+        app:layout_constraintTop_toBottomOf="@id/tvProgress">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/ryContent"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabQuit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="35dp"
+        android:contentDescription="@string/quit"
+        android:src="@drawable/ic_quit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

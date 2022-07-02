@@ -11,6 +11,7 @@ class TaskAccountAdapter(val a: Int = R.layout.item_task_account) :
     BaseBindingAdapter<ItemTaskAccountBinding, NIMTaskAccount>() {
     override fun convert(holder: VBViewHolder<ItemTaskAccountBinding>, item: NIMTaskAccount) {
         holder.vb.apply {
+            root.isEnabled = !item.processed
             ivAvatar.loadImage(item.avatar)
             tvName.text = item.name
             tvAccount.text = "账号:${item.account}"

@@ -2,7 +2,6 @@ package com.baimsg.chat.fragment.team
 
 import android.view.View
 import android.widget.TextView
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -62,17 +61,16 @@ class TeamFragment : BaseFragment<FragmentTeamBinding>(R.layout.fragment_team) {
         teamItemAdapter.setOnItemClickListener { adapter, _, position ->
             val data = adapter.data[position] as NIMTeam
             MaterialDialog(requireContext()).show {
-                title(text = data.name)
-                message(text = "[群容量] ${data.memberLimit}\n[群成员] ${data.memberCount} \n[ID] ${data.id}")
+                title(text = "群信息")
+                message(text = "[群名] ${data.name}\n[ID] ${data.id}\n[群容量] ${data.memberLimit}\n[群成员] ${data.memberCount}")
                 positiveButton(R.string.sure)
             }
         }
-
     }
 
     override fun initLiveData() {
         repeatOnLifecycleStarted {
-            teamViewModel.viewState.collectLatest {
+            teamViewModel.observeViewState.collectLatest {
                 when (val teams = it.teams) {
                     is Loading -> {
                         binding.srContent.isRefreshing = true

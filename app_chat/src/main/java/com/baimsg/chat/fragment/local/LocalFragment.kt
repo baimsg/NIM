@@ -48,7 +48,7 @@ class LocalFragment : BaseFragment<FragmentLocalBinding>(R.layout.fragment_local
 
         binding.ivMore.setOnClickListener {
             MaterialDialog(requireContext(), BottomSheet(LayoutMode.WRAP_CONTENT)).show {
-                listItems(items = listOf("导入数据", "导入数据", "清空数据", "一键加入任务")) { dialog, index, _ ->
+                listItems(items = listOf("导入数据", "导出数据", "清空数据", "一键加入任务")) { dialog, index, _ ->
                     dialog.dismiss()
                     if (isEmpty()) return@listItems
                     when (index) {

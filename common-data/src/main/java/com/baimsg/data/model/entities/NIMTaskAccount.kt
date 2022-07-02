@@ -15,11 +15,17 @@ data class NIMTaskAccount(
     val name: String = "",
     val avatar: String? = null,
     val createTime: Long = 0,
-    val invite: Boolean = false,
-    val add: Boolean = false
+    var processed: Boolean = false,
 ) : BaseEntity, java.io.Serializable {
 
     override fun getIdentifier(): String = id
+
+    override fun equals(other: Any?): Boolean {
+        return if (other is NIMTaskAccount) {
+            other.id == id
+        } else
+            super.equals(other)
+    }
 
 }
 

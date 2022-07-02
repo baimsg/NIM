@@ -1,26 +1,26 @@
 package com.baimsg.chat.fragment.batch
 
+import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.LayoutMode
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.afollestad.materialdialogs.list.listItems
-import com.afollestad.materialdialogs.list.listItemsMultiChoice
 import com.baimsg.chat.R
 import com.baimsg.chat.adapter.TaskAccountAdapter
 import com.baimsg.chat.base.BaseFragment
+import com.baimsg.chat.databinding.EmptyBaseBinding
 import com.baimsg.chat.databinding.FragmentBatchExecuteBinding
-import com.baimsg.chat.fragment.team.TeamViewModel
+import com.baimsg.chat.type.BatchStatus
+import com.baimsg.chat.type.BatchType
 import com.baimsg.chat.type.UpdateStatus
+import com.baimsg.chat.util.extensions.hide
 import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
-import com.baimsg.chat.util.extensions.showError
+import com.baimsg.chat.util.extensions.show
 import com.baimsg.chat.util.extensions.showWarning
-import com.baimsg.data.model.Fail
-import com.baimsg.data.model.Success
 import com.baimsg.data.model.entities.NIMTaskAccount
 import com.chad.library.adapter.base.animation.AlphaInAnimation
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,17 +36,15 @@ class BatchExecuteFragment :
 
     private val batchExecuteViewModel by viewModels<BatchExecuteViewModel>()
 
-    private val args by navArgs<BatchExecuteFragmentArgs>()
-
     private val taskAccountAdapter by lazy {
         TaskAccountAdapter()
     }
 
-    private val teamViewModel by viewModels<TeamViewModel>()
+    private val dialog: MaterialDialog
+        get() = MaterialDialog(requireContext()).cancelable(false).cancelOnTouchOutside(false)
+
 
     override fun initView() {
-        batchExecuteViewModel.loadAllAccount(appKey = args.appKey)
-
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()
         }
@@ -54,7 +52,7 @@ class BatchExecuteFragment :
         binding.srContent.apply {
             setColorSchemeResources(R.color.color_primary)
             setOnRefreshListener {
-                batchExecuteViewModel.loadAllAccount(appKey = args.appKey)
+                batchExecuteViewModel.loadAllAccount()
                 isRefreshing = false
             }
         }
@@ -65,11 +63,17 @@ class BatchExecuteFragment :
 
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             adapter = taskAccountAdapter
+
+            val emptyView = View.inflate(requireContext(), R.layout.empty_base, null)
+            EmptyBaseBinding.bind(emptyView).apply {
+                taskAccountAdapter.setEmptyView(emptyView)
+                tvTip.text = "暂时没有批量操作数据哦:)"
+            }
         }
 
         taskAccountAdapter.setOnItemClickListener { adapter, _, position ->
             val data = adapter.data[position] as NIMTaskAccount
-            MaterialDialog(requireContext()).show {
+            dialog.show {
                 title(text = "移除任务")
                 message(text = "[昵称] ${data.name}\n[id] ${data.account}\n你确定从批量操作中移除吗？")
                 negativeButton(R.string.cancel)
@@ -80,19 +84,44 @@ class BatchExecuteFragment :
             }
         }
 
-        binding.ivMore.setOnClickListener {
-            MaterialDialog(requireContext(), BottomSheet(LayoutMode.WRAP_CONTENT)).show {
-                listItems(items = listOf("清空数据")) { dialog, index, _ ->
-                    dialog.dismiss()
-                    when (index) {
-                        0 -> {
-                            taskAccountAdapter.setList(null)
-                            batchExecuteViewModel.deleteByAppKey(args.appKey)
-                            showWarning("已将数据库清空")
+        binding.ivClean.setOnClickListener {
+            dialog.show {
+                title(text = "清空任务")
+                message(text = "你确定清空批量操作任务吗？")
+                negativeButton(res = R.string.cancel)
+                positiveButton(res = R.string.sure) {
+                    taskAccountAdapter.setList(null)
+                    batchExecuteViewModel.deleteAll()
+                    showWarning("已清空")
+                }
+            }
+        }
+
+        binding.fabQuit.setOnClickListener {
+            batchExecuteViewModel.stop()
+        }
+
+        binding.ivStart.setOnClickListener {
+            if (batchExecuteViewModel.batchType == BatchType.UNKNOWN) {
+                dialog.show {
+                    title(text = "请选择操作类型")
+                    listItems(items = listOf("加好友", "邀请进群")) { dialog, index, _ ->
+                        dialog.dismiss()
+                        when (index) {
+                            0 -> {
+                                batchExecuteViewModel.start(batchType = BatchType.FRIEND)
+                            }
+                            else -> {
+                                batchExecuteViewModel.start(batchType = BatchType.FRIEND)
+
+                                showWarning("邀请进群待完善")
+                            }
                         }
                     }
+                    negativeButton(res = R.string.cancel)
                 }
-                negativeButton(res = R.string.cancel)
+            } else {
+                batchExecuteViewModel.start()
             }
         }
 
@@ -100,11 +129,19 @@ class BatchExecuteFragment :
 
     override fun initLiveData() {
         repeatOnLifecycleStarted {
-            batchExecuteViewModel.observeViewState.collectLatest {
+            batchExecuteViewModel.observeTaskAccountViewState.collectLatest {
                 binding.tvCount.text = "(${it.allTaskAccounts.size})"
+                binding.ivClean.show(it.allTaskAccounts.isNotEmpty() && !batchExecuteViewModel.batchExecuteViewState.running())
                 when (it.updateStatus) {
-                    UpdateStatus.REFRESH, UpdateStatus.REMOVE -> {
+                    UpdateStatus.REFRESH -> {
                         taskAccountAdapter.setList(it.allTaskAccounts)
+                    }
+                    UpdateStatus.REMOVE -> {
+                        taskAccountAdapter.remove(it.task)
+                    }
+                    UpdateStatus.UPDATE -> {
+                        val index = taskAccountAdapter.data.indexOf(it.task)
+                        if (index != -1) taskAccountAdapter.notifyItemChanged(index)
                     }
                     else -> {
                     }
@@ -113,41 +150,18 @@ class BatchExecuteFragment :
         }
 
         repeatOnLifecycleStarted {
-            batchExecuteViewModel.observeTestView.collectLatest {
-                binding.tvCount.text = "[${it.index}]-${it.executionStatus}-${it.name}"
-            }
-        }
-
-        repeatOnLifecycleStarted {
-            teamViewModel.viewState.collectLatest { data ->
-                when (val teams = data.teams) {
-                    is Fail -> {
-                        showError(teams.error.message ?: "")
+            batchExecuteViewModel.observeBatchExecuteViewState.collectLatest { value ->
+                value.apply {
+                    binding.tvProgress.apply {
+                        text = value.message
+                        show(!text.isNullOrBlank())
                     }
-                    is Success -> {
-                        val list = teams.invoke()
-                        if (list.isEmpty()) {
-                            showWarning("您还没有群聊哦")
-                            return@collectLatest
-                        }
-                        MaterialDialog(requireContext()).show {
-                            title(text = "选择要操作的群")
-                            listItemsMultiChoice(
-                                items = list.map { it.name }) { _, indices, _ ->
-                                indices.forEach { index ->
-                                    batchExecuteViewModel.addTeam(list[index])
-                                }
-                                batchExecuteViewModel.startInvite()
-                            }
-                            cancelable(false)
-                            cancelOnTouchOutside(false)
-                            negativeButton(R.string.cancel) {
-                                findNavController().navigateUp()
-                            }
-                            positiveButton(R.string.sure)
-                        }
-                    }
-                    else -> {}
+                    binding.proLoading.show(running())
+                    binding.fabQuit.show(pause())
+                    binding.ivBack.show(!running())
+                    binding.ivSetting.show(!running())
+                    binding.ivClean.show(batchExecuteViewModel.allTaskAccounts.isNotEmpty() && !running())
+                    binding.ivStart.setImageResource(if (running()) R.drawable.ic_pause else R.drawable.ic_play)
                 }
             }
         }
