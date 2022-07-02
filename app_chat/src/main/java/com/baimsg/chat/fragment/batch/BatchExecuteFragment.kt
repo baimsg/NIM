@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.LayoutMode
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
+import com.afollestad.materialdialogs.bottomsheets.expandBottomSheet
 import com.afollestad.materialdialogs.list.listItems
+import com.afollestad.materialdialogs.list.listItemsMultiChoice
 import com.baimsg.chat.R
 import com.baimsg.chat.adapter.TaskAccountAdapter
 import com.baimsg.chat.base.BaseFragment
@@ -72,6 +74,9 @@ class BatchExecuteFragment :
         }
 
         taskAccountAdapter.setOnItemClickListener { adapter, _, position ->
+            if (batchExecuteViewModel.batchExecuteViewState.running()) {
+                return@setOnItemClickListener
+            }
             val data = adapter.data[position] as NIMTaskAccount
             dialog.show {
                 title(text = "移除任务")
@@ -97,6 +102,10 @@ class BatchExecuteFragment :
             }
         }
 
+        binding.ivSetting.setOnClickListener {
+            findNavController().navigate(R.id.action_batchExecuteFragment_to_settingFragment)
+        }
+
         binding.fabQuit.setOnClickListener {
             batchExecuteViewModel.stop()
         }
@@ -112,9 +121,26 @@ class BatchExecuteFragment :
                                 batchExecuteViewModel.start(batchType = BatchType.FRIEND)
                             }
                             else -> {
-                                batchExecuteViewModel.start(batchType = BatchType.FRIEND)
+                                val allTeam = batchExecuteViewModel.allTeam
+                                if (allTeam.isEmpty()) {
+                                    showWarning("您还没有群聊哦：)")
+                                } else {
+                                    MaterialDialog(
+                                        requireContext(),
+                                        BottomSheet(LayoutMode.WRAP_CONTENT)
+                                    )
+                                        .cancelable(false)
+                                        .cancelOnTouchOutside(false)
+                                        .show {
+                                            listItemsMultiChoice(items = allTeam.map { it.name + "-" + it.id + "[${it.memberCount}]" })
+                                            { _, indices, _ ->
+                                                batchExecuteViewModel.updateTeam(indices)
+                                            }
+                                            negativeButton(res = R.string.cancel)
+                                            positiveButton(res = R.string.sure)
+                                        }
+                                }
 
-                                showWarning("邀请进群待完善")
                             }
                         }
                     }
@@ -156,6 +182,7 @@ class BatchExecuteFragment :
                         text = value.message
                         show(!text.isNullOrBlank())
                     }
+                    binding.srContent.isEnabled = !running()
                     binding.proLoading.show(running())
                     binding.fabQuit.show(pause())
                     binding.ivBack.show(!running())

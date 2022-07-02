@@ -11,7 +11,7 @@ data class NIMTeam(
     val announcement: String? = null,//通知
     val introduce: String? = null,//介绍
     val creator: String? = null,
-    val memberCount: Int = 0,
+    var memberCount: Int = 0,
     val memberLimit: Int = 0,
     val verifyType: VerifyTypeEnum = VerifyTypeEnum.Free,
     val createTime: Long = 0,
