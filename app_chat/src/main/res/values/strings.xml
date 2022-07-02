@@ -53,4 +53,5 @@
     <string name="friend">好友</string>
     <string name="team_chat_limit">群聊上限</string>
     <string name="more">更多</string>
+    <string name="retry">重试</string>
 </resources>

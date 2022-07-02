@@ -11,6 +11,8 @@ import kotlinx.serialization.builtins.serializer
  **/
 object Constant {
 
+    const val KEY_ID = "key_id"
+
     const val KEY_SEARCH_COUNT = "key_search_count"
 
     const val KEY_TEAM_LIMIT = "key_team_limit"
@@ -29,6 +31,8 @@ object Constant {
 
     const val BUGLY_KEY = "10ced88958"
 
+    val ID: String
+        get() = KvUtils.getString(KEY_ID, "")
 
     val SEARCH_COUNT: Long
         get() = KvUtils.getLong(KEY_SEARCH_COUNT, 100000)

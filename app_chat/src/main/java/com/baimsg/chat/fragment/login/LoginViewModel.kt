@@ -3,7 +3,12 @@ package com.baimsg.chat.fragment.login
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.baimsg.chat.type.ExecutionStatus
+import com.baimsg.data.api.BaseEndpoints
 import com.baimsg.data.db.daos.LoginRecordDao
+import com.baimsg.data.model.Async
+import com.baimsg.data.model.BaseConfig
+import com.baimsg.data.model.Fail
+import com.baimsg.data.model.Success
 import com.baimsg.data.model.entities.NIMLoginRecord
 import com.baimsg.data.model.entities.NIMUserInfo
 import com.baimsg.data.model.entities.asUser
@@ -28,7 +33,8 @@ import javax.inject.Inject
  **/
 @HiltViewModel
 internal class LoginViewModel @Inject constructor(
-    private val loginRecordDao: LoginRecordDao
+    private val loginRecordDao: LoginRecordDao,
+    private val baseEndpoints: BaseEndpoints
 ) : ViewModel() {
 
     private val authService by lazy {
@@ -66,8 +72,16 @@ internal class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             _loginInfo.value = getLoginInfo()
         }
-
     }
+
+    suspend fun getBaseConfig(): Async<BaseConfig> =
+        withContext(Dispatchers.IO) {
+            try {
+                Success(baseEndpoints.getKey())
+            } catch (e: Exception) {
+                Fail(e)
+            }
+        }
 
     suspend fun getLoginInfo() =
         withContext(Dispatchers.IO) { loginRecordDao.used().firstOrNull() ?: NIMLoginRecord() }
@@ -80,7 +94,6 @@ internal class LoginViewModel @Inject constructor(
         withContext(Dispatchers.IO) {
             loginRecordDao.entriesByAppKey(appKey)
         }
-
 
     /**
      * 更新 appKey

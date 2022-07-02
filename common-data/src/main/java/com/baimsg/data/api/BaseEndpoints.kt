@@ -1,5 +1,6 @@
 package com.baimsg.data.api
 
+import com.baimsg.data.model.BaseConfig
 import retrofit2.http.GET
 
 /**
@@ -8,5 +9,5 @@ import retrofit2.http.GET
  **/
 interface BaseEndpoints {
     @GET("key")
-    fun getKey(): String
+   suspend fun getKey(): BaseConfig
 }
