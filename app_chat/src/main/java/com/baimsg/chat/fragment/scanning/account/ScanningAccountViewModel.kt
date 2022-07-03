@@ -2,9 +2,9 @@ package com.baimsg.chat.fragment.scanning.account
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.baimsg.base.util.extensions.length
 import com.baimsg.chat.Constant
 import com.baimsg.chat.type.BatchStatus
+import com.baimsg.chat.util.getId
 import com.baimsg.data.db.daos.UserInfoDao
 import com.baimsg.data.model.entities.NIMUserInfo
 import com.baimsg.data.model.entities.asUser
@@ -87,7 +87,6 @@ class ScanningAccountViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             runBlocking {
                 val searchCount = Constant.SEARCH_COUNT
-                val searchPrefix = Constant.SEARCH_PREFIX
                 _viewState.apply {
                     if (value.count >= searchCount || value.pause()) {
                         value = value.copy(status = BatchStatus.PAUSE, update = false)
@@ -96,9 +95,7 @@ class ScanningAccountViewModel @Inject constructor(
                     val accounts = mutableListOf<String>().apply {
                         (0..149).forEach { index ->
                             if (value.count >= searchCount) return@forEach
-                            val id =
-                                "$searchPrefix%0${searchCount.length()}d".format(account + index)
-                            add(id)
+                            add((account + index).getId())
                             value = value.copy(count = value.count + 1, update = false)
                         }
                     }

@@ -77,7 +77,7 @@ class FilterFragment : BaseFragment<FragmentFilterBinding>(R.layout.fragment_fil
     override fun onDestroyView() {
         super.onDestroyView()
         KvUtils.put(
-            Constant.KEY_ADD_FILTER,
+            Constant.KEY_FILTER,
             DEFAULT_JSON_FORMAT.encodeToString(ListSerializer(String.serializer()), filters)
         )
     }

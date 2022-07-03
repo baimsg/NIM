@@ -31,8 +31,13 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
             findNavController().navigateUp()
         }
 
-        binding.scAddMode.setOnCheckedChangeListener { _, isChecked ->
-            KvUtils.put(Constant.KEY_ADD_MODE, isChecked)
+        binding.scAddDirect.setOnCheckedChangeListener { _, isChecked ->
+            KvUtils.put(Constant.KEY_ADD_DIRECT, isChecked)
+            updateView()
+        }
+
+        binding.scAutofill.setOnCheckedChangeListener { buttonView, isChecked ->
+            KvUtils.put(Constant.KEY_AUTO_FILL, isChecked)
             updateView()
         }
 
@@ -45,14 +50,14 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
             }
         }
 
-        binding.tvAddFriendDelay.setOnClickListener {
+        binding.tvDelay.setOnClickListener {
             MaterialDialog(requireContext()).show {
                 input(
                     hint = "请输入加好友延时/单位毫秒",
                     inputType = InputType.TYPE_CLASS_NUMBER,
                     maxLength = 8
                 ) { _, charSequence ->
-                    KvUtils.put(Constant.KEY_ADD_FRIEND_DELAY, charSequence.toString().toLong())
+                    KvUtils.put(Constant.KEY_DELAY, charSequence.toString().toLong())
                     updateView()
                 }
             }
@@ -71,12 +76,23 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
             }
         }
 
-        binding.tvVerify.setOnClickListener {
+        binding.tvFriendDescribe.setOnClickListener {
             MaterialDialog(requireContext()).show {
                 input(
                     hint = "请输入加好友验证信息",
                 ) { _, charSequence ->
-                    KvUtils.put(Constant.KEY_ADD_VERIFY, charSequence.toString())
+                    KvUtils.put(Constant.KEY_ADD_FRIEND_DESCRIBE, charSequence.toString())
+                    updateView()
+                }
+            }
+        }
+
+        binding.tvTeamDescribe.setOnClickListener {
+            MaterialDialog(requireContext()).show {
+                input(
+                    hint = "请输入邀请进群描述",
+                ) { _, charSequence ->
+                    KvUtils.put(Constant.KEY_TEAM_DESCRIBE, charSequence.toString())
                     updateView()
                 }
             }
@@ -131,22 +147,25 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
 
 
     private fun updateView() {
-        val addMode = Constant.ADD_MODE
+        val addMode = Constant.ADD_DIRECT
 
         binding.tvPrefixValue.text = Constant.SEARCH_PREFIX
 
-        binding.tvVerifyValue.text = Constant.ADD_VERIFY
+        binding.tvFriendDescribeValue.text = Constant.ADD_FRIEND_DESCRIBE
+        binding.tvFriendDescribeValue.isEnabled = !addMode
 
         binding.tvScopeValue.text = "${Constant.SEARCH_COUNT}次"
 
         binding.tvTeamLimitValue.text = "${Constant.TEAM_LIMIT}人"
 
-        binding.tvAddFriendDelayValue.text = "${Constant.ADD_FRIEND_DELAY}毫秒"
+        binding.tvDelayValue.text = "${Constant.DELAY}毫秒"
 
-        binding.scAddMode.isChecked = addMode
+        binding.scAddDirect.isChecked = addMode
 
-        binding.tvVerify.isEnabled = !addMode
+        binding.tvAddDirect.text = if (addMode) "直接添加" else "发送验证"
 
-        binding.tvAddMode.text = if (addMode) "直接添加" else "发送验证"
+        binding.scAutofill.isChecked = Constant.AUTO_FILL
+
+        binding.tvTeamDescribeValue.text = Constant.TEAM_DESCRIBE
     }
 }

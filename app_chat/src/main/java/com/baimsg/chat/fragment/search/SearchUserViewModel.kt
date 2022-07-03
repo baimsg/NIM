@@ -2,7 +2,6 @@ package com.baimsg.chat.fragment.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.baimsg.base.util.extensions.logE
 import com.baimsg.chat.Constant
 import com.baimsg.chat.type.BatchStatus
 import com.baimsg.data.db.daos.UserInfoDao
@@ -74,14 +73,14 @@ class SearchUserViewModel @Inject constructor(
     private fun addFriend(nimUserInfo: NIMUserInfo) {
         addFriendViewState.apply {
             if (nimUserInfo.name.verified()) {
-                val friend = if (Constant.ADD_MODE) AddFriendData(
+                val friend = if (Constant.ADD_DIRECT) AddFriendData(
                     nimUserInfo.account,
                     VerifyType.DIRECT_ADD,
                     null
                 ) else AddFriendData(
                     nimUserInfo.account,
                     VerifyType.VERIFY_REQUEST,
-                    Constant.KEY_ADD_VERIFY
+                    Constant.KEY_ADD_FRIEND_DESCRIBE
                 )
                 NIMClient.getService(FriendService::class.java).addFriend(friend)
                     .setCallback(object : RequestCallback<Void> {
@@ -115,7 +114,7 @@ class SearchUserViewModel @Inject constructor(
 
     private fun next() {
         viewModelScope.launch {
-            delay(Constant.ADD_FRIEND_DELAY)
+            delay(Constant.DELAY)
             val allUser = searchViewState.value.allUser
             val index = addFriendViewState.value.index
             if (index in allUser.indices) addFriend(allUser[index])

@@ -16,6 +16,7 @@ import com.baimsg.chat.databinding.FragmentScanningAccountBinding
 import com.baimsg.chat.fragment.login.LoginViewModel
 import com.baimsg.chat.type.BatchStatus
 import com.baimsg.chat.util.extensions.*
+import com.baimsg.chat.util.getId
 import com.chad.library.adapter.base.animation.AlphaInAnimation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -97,7 +98,6 @@ class ScanningAccountFragment :
             scanningAccountViewModel.observeViewState.collectLatest { value ->
                 value.apply {
                     val searchCount = Constant.SEARCH_COUNT
-                    val searchPrefix = Constant.SEARCH_PREFIX
                     binding.tvCount.text = "(${allUser.size})"
                     binding.tvProgress.text = "(${count}/${searchCount})"
                     when (status) {
@@ -110,9 +110,7 @@ class ScanningAccountFragment :
                             binding.proLoading.show()
                             binding.editAccount.isEnabled = false
                             if (update) accountMediumAdapter.addData(users)
-                            val id =
-                                "$searchPrefix%0${searchCount.length()}d".format(account)
-                            binding.editAccount.setText(id)
+                            binding.editAccount.setText(account.getId())
                         }
                         BatchStatus.STOP -> {
                             binding.ivSave.hide()

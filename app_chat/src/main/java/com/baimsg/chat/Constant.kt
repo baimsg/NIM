@@ -13,19 +13,23 @@ object Constant {
 
     const val KEY_ID = "key_id"
 
+    const val KEY_FILTER = "key_filter"
+
+    const val KEY_DELAY = "key_delay"
+
     const val KEY_SEARCH_COUNT = "key_search_count"
-
-    const val KEY_TEAM_LIMIT = "key_team_limit"
-
-    const val KEY_ADD_MODE = "key_add_mode"
-
-    const val KEY_ADD_FRIEND_DELAY = "key_add_friend_delay"
 
     const val KEY_SEARCH_PREFIX = "key_search_prefix"
 
-    const val KEY_ADD_VERIFY = "key_key_add_verify"
+    const val KEY_AUTO_FILL = "key_auto_fill"
 
-    const val KEY_ADD_FILTER = "key_add_filter"
+    const val KEY_ADD_DIRECT = "key_add_direct"
+
+    const val KEY_ADD_FRIEND_DESCRIBE = "key_add_friend_describe"
+
+    const val KEY_TEAM_LIMIT = "key_team_limit"
+
+    const val KEY_TEAM_DESCRIBE = "key_team_describe"
 
     const val UMENG_APP_KEY = "62b2829b88ccdf4b7ea53d64"
 
@@ -40,25 +44,31 @@ object Constant {
     val TEAM_LIMIT: Long
         get() = KvUtils.getLong(KEY_TEAM_LIMIT, 200)
 
-    val ADD_FRIEND_DELAY: Long
-        get() = KvUtils.getLong(KEY_ADD_FRIEND_DELAY, 1000)
+    val DELAY: Long
+        get() = KvUtils.getLong(KEY_DELAY, 1000)
 
     val SEARCH_PREFIX: String
         get() = KvUtils.getString(KEY_SEARCH_PREFIX, "659")
 
-    val ADD_VERIFY: String
-        get() = KvUtils.getString(KEY_ADD_VERIFY, "你好！")
+    val ADD_FRIEND_DESCRIBE: String
+        get() = KvUtils.getString(KEY_ADD_FRIEND_DESCRIBE, "你好！")
 
-    val ADD_FILTER: String
-        get() = KvUtils.getString(KEY_ADD_FILTER, "")
+    val TEAM_DESCRIBE: String
+        get() = KvUtils.getString(KEY_TEAM_DESCRIBE, "快来进群聊天")
 
-    val ADD_MODE: Boolean
-        get() = KvUtils.getBoolean(KEY_ADD_MODE, true)
+    private val FILTER: String
+        get() = KvUtils.getString(KEY_FILTER, "")
+
+    val ADD_DIRECT: Boolean
+        get() = KvUtils.getBoolean(KEY_ADD_DIRECT, true)
+
+    val AUTO_FILL: Boolean
+        get() = KvUtils.getBoolean(KEY_AUTO_FILL, true)
 
     val ADD_FILTERS: List<String>
-        get() = if (ADD_FILTER.isNotBlank()) DEFAULT_JSON_FORMAT.decodeFromString(
+        get() = if (FILTER.isNotBlank()) DEFAULT_JSON_FORMAT.decodeFromString(
             ListSerializer(String.serializer()),
-            ADD_FILTER
+            FILTER
         )
         else emptyList()
 

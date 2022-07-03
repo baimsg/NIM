@@ -39,7 +39,7 @@ android {
         applicationId = Dep.packageName
         minSdk = Dep.minSdk
         targetSdk = Dep.targetSdk
-        versionCode = 5
+        versionCode = 7
         versionName = Dep.version
 
         ndk {
@@ -80,6 +80,8 @@ android {
     }
 
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
+
         sourceCompatibility = Dep.javaVersion
         targetCompatibility = Dep.javaVersion
     }
@@ -105,4 +107,6 @@ dependencies {
     kapt(Dep.AndroidX.Room.compiler)
     //Lifecycle
     kapt(Dep.AndroidX.LifeCycle.compiler)
+
+    coreLibraryDesugaring(Dep.Libs.desugar)
 }

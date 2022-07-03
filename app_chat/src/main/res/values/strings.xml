@@ -31,7 +31,7 @@
     <string name="dictionary_scope">字典范围</string>
     <string name="about">关于软件</string>
     <string name="dictionary_filter">过滤词</string>
-    <string name="dictionary_verify">验证描述</string>
+    <string name="add_friend_describe">验证描述</string>
     <string name="switch_account">切换账号</string>
     <string name="remove">移除</string>
     <string name="add_data">添加数据</string>
@@ -40,7 +40,7 @@
     <string name="fast_add_friend">一键加好友</string>
     <string name="avatar">头像</string>
     <string name="setting_login">登录设置</string>
-    <string name="add_friend_delay">加好友延时</string>
+    <string name="operation_delay">操作延时</string>
     <string name="add_direct">直接添加</string>
     <string name="account_hint">请输入account</string>
     <string name="token_hint">请输入token</string>
@@ -54,4 +54,6 @@
     <string name="team_chat_limit">群聊上限</string>
     <string name="more">更多</string>
     <string name="retry">重试</string>
+    <string name="auto_fill">自动补位</string>
+    <string name="team_chat_describe">邀请描述</string>
 </resources>

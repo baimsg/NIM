@@ -4,13 +4,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.baimsg.chat.Constant
-import com.baimsg.chat.fragment.scanning.account.ScanningAccountViewState
 import com.baimsg.chat.type.BatchStatus
 import com.baimsg.chat.type.BatchType
 import com.baimsg.chat.type.UpdateStatus
 import com.baimsg.data.db.daos.TaskAccountDao
-import com.baimsg.data.model.Fail
-import com.baimsg.data.model.Success
 import com.baimsg.data.model.entities.NIMTaskAccount
 import com.baimsg.data.model.entities.NIMTeam
 import com.baimsg.data.model.entities.asTeam
@@ -21,7 +18,6 @@ import com.netease.nimlib.sdk.friend.constant.VerifyType
 import com.netease.nimlib.sdk.friend.model.AddFriendData
 import com.netease.nimlib.sdk.team.TeamService
 import com.netease.nimlib.sdk.team.model.Team
-import com.netease.nimlib.sdk.uinfo.UserService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -174,7 +170,7 @@ class BatchExecuteViewModel @Inject constructor(
     private fun addFriend() {
         viewModelScope.launch(Dispatchers.IO) {
             runBlocking {
-                delay(Constant.ADD_FRIEND_DELAY)
+                delay(Constant.DELAY)
                 _batchExecuteViewState.apply {
                     if (value.pause()) return@runBlocking
                     if (processedTaskAccounts.isEmpty()) {
@@ -193,8 +189,8 @@ class BatchExecuteViewModel @Inject constructor(
                     friendService.addFriend(
                         AddFriendData(
                             account,
-                            if (Constant.ADD_MODE) VerifyType.DIRECT_ADD else VerifyType.VERIFY_REQUEST,
-                            Constant.ADD_VERIFY
+                            if (Constant.ADD_DIRECT) VerifyType.DIRECT_ADD else VerifyType.VERIFY_REQUEST,
+                            Constant.ADD_FRIEND_DESCRIBE
                         )
                     ).setCallback(object : RequestCallback<Void> {
                         override fun onSuccess(a: Void?) {
@@ -236,7 +232,7 @@ class BatchExecuteViewModel @Inject constructor(
     private fun addMember() {
         viewModelScope.launch(Dispatchers.IO) {
             runBlocking {
-                delay(Constant.ADD_FRIEND_DELAY)
+                delay(Constant.DELAY)
                 _batchExecuteViewState.apply {
                     val teamLimit = Constant.TEAM_LIMIT
                     if (value.pause()) return@runBlocking
@@ -264,7 +260,7 @@ class BatchExecuteViewModel @Inject constructor(
                         addMember()
                         return@runBlocking
                     }
-                    teamService.addMembersEx(teamId, listOf(account), "快来群里聊天", null)
+                    teamService.addMembersEx(teamId, listOf(account), Constant.TEAM_DESCRIBE, null)
                         .setCallback(object : RequestCallback<List<String>> {
                             override fun onSuccess(accounts: List<String>?) {
                                 viewModelScope.launch(Dispatchers.IO) {
