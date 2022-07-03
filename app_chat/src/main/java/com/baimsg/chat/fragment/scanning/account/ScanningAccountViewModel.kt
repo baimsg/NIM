@@ -2,6 +2,7 @@ package com.baimsg.chat.fragment.scanning.account
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.baimsg.base.util.extensions.logE
 import com.baimsg.chat.Constant
 import com.baimsg.chat.type.BatchStatus
 import com.baimsg.chat.util.getId

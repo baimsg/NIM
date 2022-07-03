@@ -152,7 +152,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
         binding.tvPrefixValue.text = Constant.SEARCH_PREFIX
 
         binding.tvFriendDescribeValue.text = Constant.ADD_FRIEND_DESCRIBE
-        binding.tvFriendDescribeValue.isEnabled = !addMode
+        binding.tvFriendDescribe.isEnabled = !addMode
 
         binding.tvScopeValue.text = "${Constant.SEARCH_COUNT}次"
 
