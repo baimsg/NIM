@@ -2,6 +2,7 @@ package com.baimsg.chat.app
 
 import android.app.Application
 import android.content.Context
+import android.content.res.Configuration
 import androidx.multidex.MultiDex
 import com.baimsg.base.util.inititializer.AppInitializers
 import com.baimsg.chat.Constant

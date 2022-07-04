@@ -2,6 +2,7 @@ package com.baimsg.chat.di
 
 import android.app.Application
 import android.content.Context
+import android.view.Gravity
 import com.baimsg.base.util.inititializer.AppInitializer
 import com.baimsg.chat.Constant
 import com.baimsg.data.db.daos.LoginRecordDao
@@ -12,6 +13,7 @@ import com.netease.nimlib.sdk.auth.LoginInfo
 import com.tencent.bugly.Bugly
 import com.tencent.mmkv.MMKV
 import com.umeng.commonsdk.UMConfigure
+import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -30,6 +32,7 @@ class SDKAppInitializer @Inject constructor(
         initUmeng(application)
         Bugly.init(application, Constant.BUGLY_KEY, false)
         initIM(application)
+
     }
 
     /**

@@ -158,7 +158,6 @@ object Dep {
         const val glide = "com.github.bumptech.glide:glide:4.11.0"
         const val toasty = "com.github.GrenderG:Toasty:1.5.2"
         const val permissionX = "com.guolindev.permissionx:permissionx:1.6.4"
-        const val xPopup = "com.github.li-xiaojun:XPopup:2.8.5"
         const val tapTargetView = "com.getkeepsafe.taptargetview:taptargetview:1.13.3"
 
         object PinYin {

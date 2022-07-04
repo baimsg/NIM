@@ -1,5 +1,6 @@
 package com.baimsg.chat.activity
 
+import android.content.res.Configuration
 import android.view.View
 import androidx.activity.viewModels
 import androidx.navigation.fragment.NavHostFragment
@@ -32,6 +33,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     override fun initView() {
+        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+            Configuration.UI_MODE_NIGHT_NO -> {
+                setStatusBarLightMode()
+            }
+            Configuration.UI_MODE_NIGHT_YES -> {
+                setStatusBarDarkMode()
+            }
+        }
+
         /**
          * 初始化云信
          */

@@ -7,7 +7,6 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.actions.setActionButtonEnabled
 import com.afollestad.materialdialogs.customview.customView
-import com.afollestad.materialdialogs.input.getInputField
 import com.afollestad.materialdialogs.input.input
 import com.baimsg.base.util.KvUtils
 import com.baimsg.chat.Constant
@@ -15,14 +14,16 @@ import com.baimsg.chat.R
 import com.baimsg.chat.base.BaseFragment
 import com.baimsg.chat.databinding.FragmentHomeBinding
 import com.baimsg.chat.fragment.login.LoginViewModel
+import com.baimsg.chat.popwindow.ListOptionsPopWindow
+import com.baimsg.chat.util.extensions.dp2px
 import com.baimsg.chat.util.extensions.message
 import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
 import com.baimsg.chat.util.extensions.showInfo
 import com.baimsg.data.model.Fail
+import com.baimsg.data.model.ItemListOptions
 import com.baimsg.data.model.Success
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -43,7 +44,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     override fun initView() {
         binding.ivAdd.setOnClickListener {
-            showInfo("unknown 该功能待开发")
+            ListOptionsPopWindow(
+                activity = requireActivity(),
+                items = listOf(
+                    ItemListOptions(
+                        icon = R.drawable.ic_create_team_chat,
+                        name = "创建群聊"
+                    ),
+                    ItemListOptions(
+                        icon = R.drawable.ic_create_team_chat,
+                        name = "加好友/群"
+                    )
+                )
+            ) { a, b ->
+
+            }.showAsDropDown(binding.ivAdd)
         }
 
         binding.vNewFriend.setOnClickListener {
@@ -88,7 +103,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     }
 
     override fun initData() {
-        examine()
+//        examine()
     }
 
     private fun examine() {
