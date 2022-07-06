@@ -42,7 +42,7 @@
         app:layout_constraintEnd_toEndOf="@id/tvStatus"
         app:layout_constraintTop_toTopOf="@id/tvStatus" />
 
-    <com.baimsg.qmui.widget.pullLayout.QMUIPullLayout
+    <com.qmuiteam.qmui.widget.pullLayout.QMUIPullLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -266,7 +266,7 @@
 
         </androidx.core.widget.NestedScrollView>
 
-    </com.baimsg.qmui.widget.pullLayout.QMUIPullLayout>
+    </com.qmuiteam.qmui.widget.pullLayout.QMUIPullLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

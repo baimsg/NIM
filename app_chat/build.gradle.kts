@@ -98,7 +98,7 @@ dependencies {
     implementation(project(":base"))
     implementation(project(":base-android"))
     implementation(project(":common-data"))
-    implementation(project(":ui-qmui"))
+    implementation(project(":qmui"))
 
     implementation(Dep.Hilt.library)
     //hilt

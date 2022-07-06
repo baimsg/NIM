@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.baimsg.qmui.widget.pullLayout.QMUIPullLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.qmuiteam.qmui.widget.pullLayout.QMUIPullLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -253,5 +253,5 @@
 
     </androidx.core.widget.NestedScrollView>
 
-</com.baimsg.qmui.widget.pullLayout.QMUIPullLayout>
+</com.qmuiteam.qmui.widget.pullLayout.QMUIPullLayout>
 
