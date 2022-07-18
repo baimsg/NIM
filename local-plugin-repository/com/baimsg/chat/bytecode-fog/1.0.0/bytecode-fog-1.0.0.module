@@ -1,0 +1,87 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.baimsg.chat",
+    "module": "bytecode-fog",
+    "version": "1.0.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.3.3"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.environment": "standard-jvm",
+        "org.gradle.jvm.version": 11,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "files": [
+        {
+          "name": "bytecode-fog-1.0.0.jar",
+          "url": "bytecode-fog-1.0.0.jar",
+          "size": 18476,
+          "sha512": "e90807a1202963dbe0f79dba22d3461fcf262fe35638192ed83643a666997a39a3aae0b4e291a4b045474d8e65daaf46a8893a2c63d1a23e346e76721a3fd63a",
+          "sha256": "df1ff5c70824bc876ec0bd0f677fa574a3220df25d7c03cf251dbbc64551576a",
+          "sha1": "54012b1a61b5aed48dd7a4f08e8ec1d2bbbfb443",
+          "md5": "caefc3d6a76504fbd478c6f3300b919c"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.environment": "standard-jvm",
+        "org.gradle.jvm.version": 11,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "dependencies": [
+        {
+          "group": "org.ow2.asm",
+          "module": "asm-all",
+          "version": {
+            "requires": "6.0_BETA"
+          }
+        },
+        {
+          "group": "com.android.tools.build",
+          "module": "gradle-api",
+          "version": {
+            "requires": "7.2.1"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib",
+          "version": {
+            "requires": "1.6.21"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "bytecode-fog-1.0.0.jar",
+          "url": "bytecode-fog-1.0.0.jar",
+          "size": 18476,
+          "sha512": "e90807a1202963dbe0f79dba22d3461fcf262fe35638192ed83643a666997a39a3aae0b4e291a4b045474d8e65daaf46a8893a2c63d1a23e346e76721a3fd63a",
+          "sha256": "df1ff5c70824bc876ec0bd0f677fa574a3220df25d7c03cf251dbbc64551576a",
+          "sha1": "54012b1a61b5aed48dd7a4f08e8ec1d2bbbfb443",
+          "md5": "caefc3d6a76504fbd478c6f3300b919c"
+        }
+      ]
+    }
+  ]
+}
