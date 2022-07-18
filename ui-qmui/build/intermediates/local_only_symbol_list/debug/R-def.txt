@@ -1,0 +1,22 @@
+R_DEF: Internal format may change without notice
+local
+attr QMUIPullLayoutStyle
+attr? qmui_action_view_init_offset
+attr? qmui_can_over_pull
+attr? qmui_is_target
+attr? qmui_need_receive_fling_from_target_view
+attr? qmui_pull_edge
+attr? qmui_pull_enable_edge
+attr? qmui_pull_rate
+attr? qmui_received_fling_fraction
+attr? qmui_scroll_speed_per_pixel
+attr? qmui_scroll_to_trigger_offset_after_touch_up
+attr? qmui_target_view_trigger_offset
+attr? qmui_trigger_until_scroll_to_trigger_offset
+id bottom
+id left
+id right
+id top
+id wrap
+styleable QMUIPullLayout qmui_pull_enable_edge
+styleable QMUIPullLayout_Layout qmui_is_target qmui_pull_edge qmui_action_view_init_offset qmui_target_view_trigger_offset qmui_can_over_pull qmui_pull_rate qmui_received_fling_fraction qmui_need_receive_fling_from_target_view qmui_scroll_speed_per_pixel qmui_trigger_until_scroll_to_trigger_offset qmui_scroll_to_trigger_offset_after_touch_up

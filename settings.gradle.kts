@@ -7,7 +7,7 @@ pluginManagement {
 }
 
 
-includeBuild("./plugin")
+includeBuild("./plugins/depend-manage")
 include(":base")
 include(":base-android")
 include(":app_chat")
