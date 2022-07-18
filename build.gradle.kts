@@ -2,6 +2,7 @@ import com.baimsg.build.Dep
 
 plugins {
     id("plugin-dep")
+//    id("decompile-crasher") version "1.0.0"
     kotlin("plugin.serialization") version "1.6.21" apply false
     id("org.jetbrains.kotlin.android") version "1.6.21" apply false
     id("com.android.application") version "7.2.1" apply false

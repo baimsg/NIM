@@ -1,0 +1,87 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.baimsg.chat",
+    "module": "decompile-crasher",
+    "version": "1.0.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.3.3"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.environment": "standard-jvm",
+        "org.gradle.jvm.version": 11,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "files": [
+        {
+          "name": "decompile-crasher-1.0.0.jar",
+          "url": "decompile-crasher-1.0.0.jar",
+          "size": 44635,
+          "sha512": "f583e1b35806ca5a8941f5cfd0095f956b4bfa42ac2e72174d2cb18bd3b67391c78940cc9bacd30be084822aa9b732db5ca6377265e6307533ffde415c528ed9",
+          "sha256": "66b8ce7626b7bd80566122fa9fcf39c47e50c8b3fcc510c7af1cc74f1d9d5ba7",
+          "sha1": "8a5e3a8e7fd36f589b9414bfb47613cf8394a9ea",
+          "md5": "277315b427da8072e197615bd5ad9a56"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.environment": "standard-jvm",
+        "org.gradle.jvm.version": 11,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "dependencies": [
+        {
+          "group": "org.ow2.asm",
+          "module": "asm-all",
+          "version": {
+            "requires": "6.0_BETA"
+          }
+        },
+        {
+          "group": "com.android.tools.build",
+          "module": "gradle-api",
+          "version": {
+            "requires": "7.2.1"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib",
+          "version": {
+            "requires": "1.6.21"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "decompile-crasher-1.0.0.jar",
+          "url": "decompile-crasher-1.0.0.jar",
+          "size": 44635,
+          "sha512": "f583e1b35806ca5a8941f5cfd0095f956b4bfa42ac2e72174d2cb18bd3b67391c78940cc9bacd30be084822aa9b732db5ca6377265e6307533ffde415c528ed9",
+          "sha256": "66b8ce7626b7bd80566122fa9fcf39c47e50c8b3fcc510c7af1cc74f1d9d5ba7",
+          "sha1": "8a5e3a8e7fd36f589b9414bfb47613cf8394a9ea",
+          "md5": "277315b427da8072e197615bd5ad9a56"
+        }
+      ]
+    }
+  ]
+}

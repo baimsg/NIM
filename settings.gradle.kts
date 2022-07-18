@@ -1,8 +1,12 @@
 pluginManagement {
     repositories {
-        gradlePluginPortal()
+        maven {
+            name = "localPluginRepository"
+            url = uri("./local-plugin-repository")
+        }
         google()
         mavenCentral()
+        gradlePluginPortal()
     }
 }
 
@@ -13,3 +17,6 @@ include(":base-android")
 include(":app_chat")
 include(":common-data")
 include(":qmui")
+
+//插件
+include(":plugins:decompile-crasher")
