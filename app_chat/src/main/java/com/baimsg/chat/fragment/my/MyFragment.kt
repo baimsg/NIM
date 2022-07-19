@@ -33,7 +33,7 @@ class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
             lifecycleScope.launch {
                 findNavController().navigate(
                     MyFragmentDirections.actionMyFragmentToLocalFragment(
-                        appKey = loginViewModel.getLoginInfo().appKey
+                        appKey = loginViewModel.currentLoginRecord.appKey
                     )
                 )
             }

@@ -45,15 +45,27 @@ internal class LoginViewModel @Inject constructor(
         NIMClient.getService(UserService::class.java)
     }
 
-    private val _loginInfo by lazy {
-        MutableStateFlow(NIMLoginRecord())
-    }
-
     private val _viewState by lazy {
         MutableStateFlow(LoginViewState.EMPTY)
     }
 
     val observeViewState: StateFlow<LoginViewState> = _viewState
+
+    val allAppKeys: List<String>
+        get() = _viewState.value.allAppKeys
+
+    val currentLoginRecord: NIMLoginRecord
+        get() = _viewState.value.currentLoginRecord
+
+    val currentAppKey: String
+        get() = _viewState.value.currentLoginRecord.appKey
+
+    val currentAccount: String
+        get() = _viewState.value.currentLoginRecord.account
+
+    val currentToken: String
+        get() = _viewState.value.currentLoginRecord.token
+
 
     private val _statusCode by lazy {
         MutableStateFlow(StatusCode.INVALID)
@@ -68,12 +80,12 @@ internal class LoginViewModel @Inject constructor(
     val observeUserInfo: StateFlow<NIMUserInfo> = _userInfo
 
     init {
-        //初始化用户信息
-        viewModelScope.launch {
-            _loginInfo.value = getLoginInfo()
-        }
+        refreshData()
     }
 
+    /**
+     * 获取云端数据
+     */
     suspend fun getBaseConfig(): Async<BaseConfig> =
         withContext(Dispatchers.IO) {
             try {
@@ -83,25 +95,17 @@ internal class LoginViewModel @Inject constructor(
             }
         }
 
-    suspend fun getLoginInfo() =
-        withContext(Dispatchers.IO) { loginRecordDao.used().firstOrNull() ?: NIMLoginRecord() }
-
-    suspend fun appKeys() = withContext(Dispatchers.IO) {
-        loginRecordDao.appKeys()
-    }
-
-    suspend fun accounts(appKey: String) =
-        withContext(Dispatchers.IO) {
-            loginRecordDao.entriesByAppKey(appKey)
-        }
 
     /**
      * 更新 appKey
      * @param appKey
      */
     fun upDateAppKey(appKey: String) {
-        _loginInfo.apply {
-            value = value.copy(appKey = appKey)
+        _viewState.apply {
+            value = value.copy(
+                executionStatus = ExecutionStatus.UNKNOWN,
+                currentLoginRecord = value.currentLoginRecord.copy(appKey = appKey)
+            )
         }
     }
 
@@ -110,8 +114,11 @@ internal class LoginViewModel @Inject constructor(
      * @param account
      */
     fun updateAccount(account: String) {
-        _loginInfo.apply {
-            value = value.copy(account = account)
+        _viewState.apply {
+            value = value.copy(
+                executionStatus = ExecutionStatus.UNKNOWN,
+                currentLoginRecord = value.currentLoginRecord.copy(account = account)
+            )
         }
     }
 
@@ -120,49 +127,45 @@ internal class LoginViewModel @Inject constructor(
      * @param token
      */
     fun updateToken(token: String) {
-        _loginInfo.apply {
-            value = value.copy(token = token)
+        _viewState.apply {
+            value = value.copy(
+                executionStatus = ExecutionStatus.UNKNOWN,
+                currentLoginRecord = value.currentLoginRecord.copy(token = token)
+            )
         }
     }
 
-    /**
-     * 更新登录账号并登录
-     * @param loginInfo
-     */
-    fun updateLoginInfo(loginInfo: NIMLoginRecord) {
-        _loginInfo.value = loginInfo
-        login()
-    }
 
     /**
      * 登录账号
      */
     fun login() {
         _userInfo.value = NIMUserInfo()
-        _viewState.value = LoginViewState.EMPTY
-        val loginInfo = _loginInfo.value
         when {
-            loginInfo.appKeyEmpty() -> {
+            currentLoginRecord.appKeyEmpty() -> {
                 _viewState.apply {
                     value = value.copy(executionStatus = ExecutionStatus.FAIL, message = "appKey为空")
                 }
             }
-            loginInfo.mustEmpty() -> {
+            currentLoginRecord.mustEmpty() -> {
                 _viewState.apply {
                     value = value.copy(executionStatus = ExecutionStatus.FAIL, message = "账号或密码为空")
                 }
             }
             else -> {
-                authService.login(LoginInfo(loginInfo.account, loginInfo.token, loginInfo.appKey))
+                authService.login(
+                    LoginInfo(currentAccount, currentToken, currentAppKey)
+                )
                     .setCallback(object : RequestCallback<LoginInfo> {
                         override fun onSuccess(param: LoginInfo) {
                             viewModelScope.launch(Dispatchers.IO) {
-                                val id = "${loginInfo.appKey}-${loginInfo.account}"
+                                val id =
+                                    "${currentAppKey}-${currentAccount}"
                                 loginRecordDao.cancelUsed()
-                                loginRecordDao.updateOrInsert(loginInfo.run {
+                                loginRecordDao.updateOrInsert(currentLoginRecord.run {
                                     val t = System.currentTimeMillis()
                                     if (loginRecordDao.countById(id) == 0) copy(
-                                        id = "$appKey-$account",
+                                        id = id,
                                         createTIme = t,
                                         loginTime = t,
                                         used = true
@@ -171,15 +174,12 @@ internal class LoginViewModel @Inject constructor(
                             }
                             _viewState.apply {
                                 value = value.copy(executionStatus = ExecutionStatus.SUCCESS)
-                                value = LoginViewState.EMPTY
+                                refreshData()
                             }
                         }
 
-                        override fun onFailed(code: Int) {
-                        }
-
-                        override fun onException(exception: Throwable) {
-                        }
+                        override fun onFailed(code: Int) = Unit
+                        override fun onException(exception: Throwable) = Unit
                     })
             }
         }
@@ -189,8 +189,8 @@ internal class LoginViewModel @Inject constructor(
      * 退出登录
      */
     fun logout() {
-        authService.logout()
         _userInfo.value = NIMUserInfo()
+        authService.logout()
     }
 
     /**
@@ -212,7 +212,7 @@ internal class LoginViewModel @Inject constructor(
      * 加载用户信息
      */
     fun loadUserInfo() {
-        userService.fetchUserInfo(listOf(_loginInfo.value.account))
+        userService.fetchUserInfo(listOf(currentLoginRecord.account))
             .setCallback(object : RequestCallback<List<NimUserInfo>> {
                 override fun onSuccess(users: List<NimUserInfo>?) {
                     _userInfo.value = users?.firstOrNull().asUser()
@@ -222,6 +222,47 @@ internal class LoginViewModel @Inject constructor(
 
                 override fun onException(e: Throwable?) {}
             })
+    }
+
+    /**
+     * 根据appKey删除数据
+     * @param appKey
+     */
+    fun deleteAppKey(appKey: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            loginRecordDao.deleteByAppKey(appKey = appKey)
+            refreshData()
+        }
+    }
+
+    suspend fun accounts(appKey: String) =
+        withContext(Dispatchers.IO) {
+            loginRecordDao.entriesByAppKey(appKey)
+        }
+
+    /**
+     * 切换账号
+     * @param nimLoginRecord
+     */
+    fun switchAccount(nimLoginRecord: NIMLoginRecord) {
+        _viewState.apply {
+            value = value.copy(
+                executionStatus = ExecutionStatus.UNKNOWN,
+                currentLoginRecord = nimLoginRecord
+            )
+        }
+        login()
+    }
+
+    private fun refreshData() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _viewState.apply {
+                value = LoginViewState.EMPTY.copy(
+                    allAppKeys = loginRecordDao.appKeys(),
+                    currentLoginRecord = loginRecordDao.used() ?: NIMLoginRecord()
+                )
+            }
+        }
     }
 
 }

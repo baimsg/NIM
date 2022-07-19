@@ -62,7 +62,7 @@ class ScanningAccountFragment :
 
         binding.ivSave.setOnClickListener {
             lifecycleScope.launch {
-                scanningAccountViewModel.save(loginViewModel.getLoginInfo().appKey)
+                scanningAccountViewModel.save(loginViewModel.currentLoginRecord.appKey)
                 showSuccess("已保存数据库")
             }
         }

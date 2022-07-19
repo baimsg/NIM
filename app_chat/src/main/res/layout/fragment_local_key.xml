@@ -31,19 +31,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/ivBack" />
 
-    <ImageView
-        android:id="@+id/ivEdit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/edit"
-        android:padding="16dp"
-        android:src="@drawable/ic_round_filter"
-        android:tint="@color/icon_click"
-        app:layout_constraintBottom_toBottomOf="@id/ivBack"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/ivBack"
-        tools:ignore="UseAppTint" />
-
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/srContent"
         android:layout_width="0dp"

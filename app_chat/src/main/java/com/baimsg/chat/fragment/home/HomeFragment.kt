@@ -7,10 +7,7 @@ import com.afollestad.materialdialogs.LayoutMode
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.actions.setActionButtonEnabled
-import com.afollestad.materialdialogs.bottomsheets.BasicGridItem
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
-import com.afollestad.materialdialogs.bottomsheets.GridItem
-import com.afollestad.materialdialogs.bottomsheets.gridItems
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.input.input
 import com.afollestad.materialdialogs.list.listItems
@@ -20,15 +17,11 @@ import com.baimsg.chat.R
 import com.baimsg.chat.base.BaseFragment
 import com.baimsg.chat.databinding.FragmentHomeBinding
 import com.baimsg.chat.fragment.login.LoginViewModel
-import com.baimsg.chat.popwindow.ListOptionsPopWindow
-import com.baimsg.chat.util.extensions.dp2px
 import com.baimsg.chat.util.extensions.message
 import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
 import com.baimsg.chat.util.extensions.showInfo
 import com.baimsg.data.model.Fail
-import com.baimsg.data.model.ItemListOptions
 import com.baimsg.data.model.Success
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -91,7 +84,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             lifecycleScope.launch {
                 findNavController().navigate(
                     HomeFragmentDirections.actionHomeFragmentToBatchExecuteFragment(
-                        appKey = loginViewModel.getLoginInfo().appKey
+                        appKey = loginViewModel.currentLoginRecord.appKey
                     )
                 )
             }
@@ -104,8 +97,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             loginViewModel.observerStatusCode.collectLatest { status ->
                 binding.tvStatus.text = status.message()
                 lifecycleScope.launch(Dispatchers.Main) {
-                    val loginInfo = loginViewModel.getLoginInfo()
-                    if (status.wontAutoLogin() || loginInfo.mustEmpty() || loginInfo.appKeyEmpty()) openLogin
+                    val nimLoginRecord = loginViewModel.currentLoginRecord
+                    if (status.wontAutoLogin() || nimLoginRecord.mustEmpty() || nimLoginRecord.appKeyEmpty()) openLogin
                 }
             }
 
@@ -155,6 +148,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                             }
                         }
                 }
+                else -> {}
             }
 
         }

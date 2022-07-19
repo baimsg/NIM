@@ -79,9 +79,14 @@ abstract class LoginRecordDao : BaseDao<NIMLoginRecord>() {
     abstract fun cancelUsed()
 
     @Query("SELECT * FROM nim_login_record WHERE used = 1")
-    abstract fun used(): List<NIMLoginRecord>
+    abstract fun used(): NIMLoginRecord?
 
     @Transaction
     @Query("SELECT * FROM nim_login_record WHERE appKey = :appKey ORDER BY loginTime DESC")
     abstract fun entriesByAppKey(appKey: String): List<NIMLoginRecord>
+
+    @Transaction
+    @Query("DELETE  FROM nim_login_record WHERE appKey = :appKey")
+    abstract fun deleteByAppKey(appKey: String)
+
 }

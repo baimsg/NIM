@@ -1,6 +1,7 @@
 package com.baimsg.chat.adapter
 
 import com.baimsg.base.util.KvUtils
+import com.baimsg.chat.Constant
 import com.baimsg.chat.adapter.base.BaseBindingAdapter
 import com.baimsg.chat.adapter.base.VBViewHolder
 import com.baimsg.chat.databinding.ItemLocalKeyBinding
@@ -13,7 +14,7 @@ class LocalKeyAdapter : BaseBindingAdapter<ItemLocalKeyBinding, String>() {
 
     override fun convert(holder: VBViewHolder<ItemLocalKeyBinding>, item: String) {
         holder.vb.apply {
-            tvName.text = KvUtils.getString(item, "无备注")
+            tvName.text = "app -> ${Constant.appKeyRemark(item)}"
             tvAppKey.text = item
         }
     }

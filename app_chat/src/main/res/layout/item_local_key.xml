@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_item_white">
+    android:background="@drawable/bg_item_white"
+    android:orientation="vertical">
 
     <View
         android:id="@+id/vTop"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="@color/line_color"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:background="@color/line_color" />
 
     <TextView
         android:id="@+id/tvName"
@@ -22,20 +22,21 @@
         android:paddingVertical="4dp"
         android:textColor="@color/color_primary"
         android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/vTop"
-        tools:text="CoCo" />
+        tools:text="app -> CoCo" />
 
     <TextView
         android:id="@+id/tvAppKey"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
         android:paddingHorizontal="16dp"
-        android:paddingVertical="4dp"
         android:textColor="@color/subtitle_color"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvName"
         tools:text="fa515e1c6fc17ad8dfbd67228f90f897" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

@@ -74,4 +74,6 @@ object Constant {
 
     fun getChannel(): String = "default"
 
+    fun appKeyRemark(appKey: String): String = KvUtils.getString(appKey, "无备注")
+
 }

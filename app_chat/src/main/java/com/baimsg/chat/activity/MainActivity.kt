@@ -76,7 +76,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
     }
 
-
     override fun onBackPressed() {
         if (!onBackPressedDispatcher.hasEnabledCallbacks()) {
             super.onBackPressed()

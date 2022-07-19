@@ -78,12 +78,9 @@ class SDKAppInitializer @Inject constructor(
         }
     }
 
-
     private suspend fun loginRecord(): NIMLoginRecord {
         return withContext(Dispatchers.IO) {
-            loginRecordDao.entries().filter { it.used }.run {
-                if (isNotEmpty()) get(0) else NIMLoginRecord()
-            }
+            loginRecordDao.used() ?: NIMLoginRecord()
         }
     }
 

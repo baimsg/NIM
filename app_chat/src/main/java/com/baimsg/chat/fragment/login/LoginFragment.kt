@@ -12,7 +12,6 @@ import com.baimsg.chat.databinding.FragmentLoginBinding
 import com.baimsg.chat.type.ExecutionStatus
 import com.baimsg.chat.util.extensions.*
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -37,39 +36,31 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
         }
 
         binding.tvLocalAccount.apply {
-            lifecycleScope.launch {
-                show(loginViewModel.appKeys().isNotEmpty())
-            }
+            show(loginViewModel.allAppKeys.isNotEmpty())
             setOnClickListener {
                 findNavController().navigate(R.id.action_loginFragment_to_localKeyFragment)
             }
         }
 
         binding.editAppKey.apply {
-            lifecycleScope.launch(Dispatchers.Main) {
-                val appKey = loginViewModel.getLoginInfo().appKey
-                setText(appKey)
-                showKeyboard(true)
-                setSelection(appKey.length)
-            }
+            val appKey = loginViewModel.currentLoginRecord.appKey
+            setText(appKey)
+            showKeyboard(true)
+            setSelection(appKey.length)
             addTextChangedListener {
                 loginViewModel.upDateAppKey(it.toString())
             }
         }
 
         binding.editAccount.apply {
-            lifecycleScope.launch(Dispatchers.Main) {
-                setText(loginViewModel.getLoginInfo().account)
-            }
+            setText(loginViewModel.currentLoginRecord.account)
             addTextChangedListener {
                 loginViewModel.updateAccount(it.toString())
             }
         }
 
         binding.editToken.apply {
-            lifecycleScope.launch(Dispatchers.Main) {
-                setText(loginViewModel.getLoginInfo().token)
-            }
+            setText(loginViewModel.currentLoginRecord.token)
             addTextChangedListener {
                 loginViewModel.updateToken(it.toString())
             }
@@ -79,7 +70,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
             it?.hideKeyboard()
             loginViewModel.login()
         }
-
 
         if (args.hard) {
             requireActivity().onBackPressedDispatcher.addCallback(this) {
