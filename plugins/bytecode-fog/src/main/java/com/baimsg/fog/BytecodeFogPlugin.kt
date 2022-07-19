@@ -1,6 +1,5 @@
 package com.baimsg.fog
 
-import com.android.build.api.artifact.SingleArtifact
 import com.android.build.api.instrumentation.*
 import com.android.build.api.variant.AndroidComponentsExtension
 import org.gradle.api.Plugin
@@ -15,65 +14,20 @@ import java.io.PrintWriter
 class BytecodeFogPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
+
         val androidComponents = project.extensions.getByType(AndroidComponentsExtension::class.java)
-
-        androidComponents.onVariants { variant ->
-
-            val copyApksProvider =
-                project.tasks.register("copy${variant.name}Apks", CopyApksTask::class.java)
-
-            val transformationRequest = variant.artifacts.use(copyApksProvider)
-                .wiredWithDirectories(
-                    CopyApksTask::apkFolder,
-                    CopyApksTask::outFolder
-                )
-                .toTransformMany(SingleArtifact.APK)
-
-            copyApksProvider.configure {
-                this.transformationRequest.set(transformationRequest)
+        androidComponents.apply {
+            onVariants(selector().withName("release")) { variant ->
+                variant.instrumentation.transformClassesWith(
+                    ExampleClassVisitorFactory::class.java,
+                    InstrumentationScope.ALL
+                ) {
+                    it.writeToStdout.set(true)
+                }
+                variant.instrumentation.setAsmFramesComputationMode(FramesComputationMode.COPY_FRAMES)
             }
         }
 
-//        val gitVersionProvider =
-//            project.tasks.register("gitVersionProvider", GitVersionTask::class.java) {
-//                gitVersionOutputFile.set(
-//                    File(project.buildDir, "intermediates/gitVersionProvider/output")
-//                )
-//                outputs.upToDateWhen { false }
-//            }
-//
-//        val androidComponents = project.extensions.getByType(AndroidComponentsExtension::class.java)
-//
-//        androidComponents.onVariants { variant ->
-//            val manifestProducer =
-//                project.tasks.register(
-//                    variant.name + "ManifestProducer",
-//                    ManifestProducerTask::class.java
-//                ) {
-//                    gitInfoFile.set(gitVersionProvider.flatMap(GitVersionTask::gitVersionOutputFile))
-//                }
-//            variant.artifacts.use(manifestProducer)
-//                .wiredWithFiles(
-//                    ManifestProducerTask::mergedManifest,
-//                    ManifestProducerTask::updatedManifest)
-//                .toTransform(SingleArtifact.MERGED_MANIFEST)
-//
-//            project.tasks.register(variant.name + "Verifier", VerifyManifestTask::class.java) {
-//                apkFolder.set(variant.artifacts.get(SingleArtifact.APK))
-//                builtArtifactsLoader.set(variant.artifacts.getBuiltArtifactsLoader())
-//            }
-//        }
-
-//        val androidComponents = project.extensions.getByType(AndroidComponentsExtension::class.java)
-//        androidComponents.onVariants { variant ->
-//            variant.instrumentation.transformClassesWith(
-//                ExampleClassVisitorFactory::class.java,
-//                InstrumentationScope.ALL
-//            ) {
-//                it.writeToStdout.set(true)
-//            }
-//            variant.instrumentation.setAsmFramesComputationMode(FramesComputationMode.COPY_FRAMES)
-//        }
     }
 
     interface ExampleParams : InstrumentationParameters {
@@ -81,8 +35,7 @@ class BytecodeFogPlugin : Plugin<Project> {
         val writeToStdout: Property<Boolean>
     }
 
-    abstract class ExampleClassVisitorFactory :
-        AsmClassVisitorFactory<ExampleParams> {
+    abstract class ExampleClassVisitorFactory : AsmClassVisitorFactory<ExampleParams> {
 
         override fun createClassVisitor(
             classContext: ClassContext,
