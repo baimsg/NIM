@@ -34,6 +34,10 @@ class LocalAccountFragment :
     }
 
     override fun initView() {
+        binding.ivBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
         binding.srContent.apply {
             setColorSchemeResources(R.color.color_primary)
             setOnRefreshListener {

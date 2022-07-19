@@ -54,11 +54,20 @@ class LocalKeyFragment :
 
         localKeyAdapter.setOnItemClickListener { adapter, _, position ->
             val appKey = adapter.data[position] as String
+            findNavController().navigate(
+                LocalKeyFragmentDirections.actionLocalKeyFragmentToLocalAccountFragment(
+                    appKey = appKey
+                )
+            )
+        }
+
+        localKeyAdapter.setOnItemLongClickListener { adapter, _, position ->
+            val appKey = adapter.data[position] as String
             MaterialDialog(requireContext())
                 .cancelOnTouchOutside(false)
                 .show {
                     title(res = R.string.select_action)
-                    listItems(items = listOf("修改备注", "删除数据", "查看账号列表")) { dialog, index, text ->
+                    listItems(items = listOf("修改备注", "删除数据")) { dialog, index, _ ->
                         dialog.dismiss()
                         when (index) {
                             0 -> {
@@ -74,20 +83,12 @@ class LocalKeyFragment :
                                 loginViewModel.deleteAppKey(appKey)
                                 adapter.removeAt(position)
                             }
-                            else -> {
-                                findNavController().navigate(
-                                    LocalKeyFragmentDirections.actionLocalKeyFragmentToLocalAccountFragment(
-                                        appKey = appKey
-                                    )
-                                )
-                            }
                         }
                     }
                     negativeButton()
                 }
-
+            true
         }
-
 
     }
 }
