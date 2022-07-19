@@ -3,11 +3,17 @@ package com.baimsg.chat.fragment.home
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.afollestad.materialdialogs.LayoutMode
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.actions.setActionButtonEnabled
+import com.afollestad.materialdialogs.bottomsheets.BasicGridItem
+import com.afollestad.materialdialogs.bottomsheets.BottomSheet
+import com.afollestad.materialdialogs.bottomsheets.GridItem
+import com.afollestad.materialdialogs.bottomsheets.gridItems
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.input.input
+import com.afollestad.materialdialogs.list.listItems
 import com.baimsg.base.util.KvUtils
 import com.baimsg.chat.Constant
 import com.baimsg.chat.R
@@ -22,6 +28,7 @@ import com.baimsg.chat.util.extensions.showInfo
 import com.baimsg.data.model.Fail
 import com.baimsg.data.model.ItemListOptions
 import com.baimsg.data.model.Success
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -44,21 +51,24 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     override fun initView() {
         binding.ivAdd.setOnClickListener {
-            ListOptionsPopWindow(
-                activity = requireActivity(),
-                items = listOf(
-                    ItemListOptions(
-                        icon = R.drawable.ic_create_team_chat,
-                        name = "创建群聊"
-                    ),
-                    ItemListOptions(
-                        icon = R.drawable.ic_create_team_chat,
-                        name = "加好友/群"
-                    )
-                )
-            ) { a, b ->
+            MaterialDialog(requireContext(), BottomSheet(LayoutMode.WRAP_CONTENT)).show {
+                listItems(
+                    items = listOf("创建群聊", "加好友/群")
+                ) { dialog, index, _ ->
+                    dialog.dismiss()
+                    when (index) {
+                        0 -> {
 
-            }.showAsDropDown(binding.ivAdd)
+                        }
+                        else -> {
+
+                        }
+                    }
+                }
+                negativeButton {
+                    dismiss()
+                }
+            }
         }
 
         binding.vNewFriend.setOnClickListener {
@@ -66,7 +76,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         }
 
         binding.vFriendList.setOnClickListener {
-            showInfo("unknown 该功能待开发")
+            findNavController().navigate(R.id.action_homeFragment_to_friendFragment)
         }
 
         binding.vTeamChat.setOnClickListener {

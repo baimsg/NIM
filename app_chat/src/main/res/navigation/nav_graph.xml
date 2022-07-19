@@ -45,6 +45,13 @@
             app:exitAnim="@anim/fragment_open_exit"
             app:popEnterAnim="@anim/fragment_open_enter"
             app:popExitAnim="@anim/slide_out_left" />
+        <action
+            android:id="@+id/action_homeFragment_to_friendFragment"
+            app:destination="@id/friendFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
+            app:popExitAnim="@anim/slide_out_left" />
     </fragment>
 
     <fragment
@@ -239,4 +246,9 @@
             app:popEnterAnim="@anim/fragment_open_enter"
             app:popExitAnim="@anim/slide_out_left" />
     </fragment>
+    <fragment
+        android:id="@+id/friendFragment"
+        android:name="com.baimsg.chat.fragment.friend.FriendFragment"
+        android:label="FriendFragment"
+        tools:layout="@layout/fragment_friend" />
 </navigation>

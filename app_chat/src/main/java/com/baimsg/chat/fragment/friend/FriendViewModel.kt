@@ -1,6 +1,7 @@
 package com.baimsg.chat.fragment.friend
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.baimsg.chat.type.ExecutionStatus
 import com.baimsg.data.model.entities.asUser
 import com.netease.nimlib.sdk.NIMClient
@@ -8,53 +9,62 @@ import com.netease.nimlib.sdk.RequestCallback
 import com.netease.nimlib.sdk.friend.FriendService
 import com.netease.nimlib.sdk.uinfo.UserService
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class FriendViewModel : ViewModel() {
+
+@HiltViewModel
+class FriendViewModel @Inject constructor() : ViewModel() {
 
     private val userService by lazy {
         NIMClient.getService(UserService::class.java)
     }
 
+    private val friendService by lazy {
+        NIMClient.getService(FriendService::class.java)
+    }
+
     /**
      * 好友用户信息
      */
-    val friendViewState by lazy {
+    private val _viewState by lazy {
         MutableStateFlow(FriendViewState.EMPTY)
     }
 
-    /**
-     * 当前页码
-     */
-    var friendPage = 0
+    val observeViewState: StateFlow<FriendViewState> = _viewState
 
-    /**
-     * 好友列表
-     */
-    val friends by lazy {
-        MutableStateFlow(emptyList<String?>())
-    }
+    val allAccounts: List<String> = _viewState.value.allAccounts
+
+    val page: Int = _viewState.value.page
 
     /**
      * 加载好友列表
      */
     fun loadFriends() {
-        /**
-         * 重制页码
-         */
-        friendPage = 0
-        val list = NIMClient.getService(FriendService::class.java)?.friendAccounts
-        if (list == null) {
-            friendViewState.value =
-                FriendViewState.EMPTY.copy(executionStatus = ExecutionStatus.FAIL)
-        } else {
-            friends.value = list
-            getUserInfo()
+        viewModelScope.launch {
+            _viewState.apply {
+                val all = friendService.friendAccounts
+                value = value.copy(
+                    executionStatus =
+                    if (all.isNullOrEmpty()) ExecutionStatus.FAIL else value.executionStatus,
+                    allAccounts = all,
+                    page = 0
+                )
+            }
         }
+        getUserInfo()
     }
 
-    fun nextPageUserInfo() {
-        friendPage++
+    /**
+     * 下一页数据
+     */
+    fun nextPage() {
+        _viewState.apply {
+            value = value.copy(executionStatus = ExecutionStatus.UNKNOWN, page = value.page + 1)
+        }
         getUserInfo()
     }
 
@@ -63,36 +73,45 @@ class FriendViewModel : ViewModel() {
      * @param limit 返回数量
      */
     private fun getUserInfo(limit: Int = 20) {
-        friendViewState.value = FriendViewState.EMPTY
-        val start = friendPage * limit
+        val start = page * limit
         val end = start + limit
-        val accounts = mutableListOf<String?>()
-        (start until end).forEachIndexed { _, i ->
-            if (i in friends.value.indices) accounts.add(friends.value[i])
+        val accounts = mutableListOf<String?>().apply {
+            (start until end).forEachIndexed { _, i ->
+                if (i in allAccounts.indices) add(allAccounts[i])
+            }
         }
+
         if (accounts.isEmpty()) {
-            friendViewState.value =
-                FriendViewState.EMPTY.copy(executionStatus = ExecutionStatus.EMPTY)
+            _viewState.apply {
+                value = value.copy(executionStatus = ExecutionStatus.EMPTY)
+            }
             return
         }
         userService.fetchUserInfo(accounts)
             .setCallback(object : RequestCallback<List<NimUserInfo>> {
                 override fun onSuccess(mUsers: List<NimUserInfo>?) {
                     val users = mUsers?.map { it.asUser() } ?: emptyList()
-                    friendViewState.value = FriendViewState(
-                        executionStatus = ExecutionStatus.SUCCESS,
-                        users = users
-                    )
+                    _viewState.apply {
+                        value = value.copy(
+                            executionStatus = ExecutionStatus.SUCCESS,
+                            allUsers = value.allUsers.toMutableList().apply {
+                                addAll(users)
+                            },
+                            newUsers = users
+                        )
+                    }
                 }
 
                 override fun onFailed(code: Int) {
-                    friendViewState.value =
-                        FriendViewState.EMPTY.copy(executionStatus = ExecutionStatus.FAIL)
+                    _viewState.apply {
+                        value = value.copy(executionStatus = ExecutionStatus.FAIL)
+                    }
                 }
 
                 override fun onException(e: Throwable?) {
-                    friendViewState.value =
-                        FriendViewState.EMPTY.copy(executionStatus = ExecutionStatus.FAIL)
+                    _viewState.apply {
+                        value = value.copy(executionStatus = ExecutionStatus.FAIL)
+                    }
                 }
             })
     }
