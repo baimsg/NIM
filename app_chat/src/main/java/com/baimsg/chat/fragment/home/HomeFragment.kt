@@ -51,7 +51,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                     dialog.dismiss()
                     when (index) {
                         0 -> {
-
+                            findNavController().navigate(R.id.action_homeFragment_to_createTeamFragment)
                         }
                         else -> {
 

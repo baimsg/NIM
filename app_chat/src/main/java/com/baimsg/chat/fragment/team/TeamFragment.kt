@@ -19,8 +19,10 @@ import com.baimsg.data.model.Fail
 import com.baimsg.data.model.Loading
 import com.baimsg.data.model.Success
 import com.baimsg.data.model.entities.NIMTeam
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
+@AndroidEntryPoint
 class TeamFragment : BaseFragment<FragmentTeamBinding>(R.layout.fragment_team) {
 
     private val teamViewModel by viewModels<TeamViewModel>()
@@ -40,6 +42,12 @@ class TeamFragment : BaseFragment<FragmentTeamBinding>(R.layout.fragment_team) {
             setColorSchemeResources(R.color.color_primary)
             setOnRefreshListener {
                 teamViewModel.loadTeams()
+            }
+        }
+
+        binding.tvClear.setOnClickListener {
+            teamViewModel.allTeam?.map { it.id }?.forEachIndexed { index, s ->
+                teamViewModel.dismissTeam(s)
             }
         }
 

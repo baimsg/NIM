@@ -32,6 +32,22 @@
         app:layout_constraintTop_toTopOf="@id/ivBack" />
 
     <TextView
+        android:id="@+id/tvClear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:background="?android:selectableItemBackground"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="4dp"
+        android:text="@string/remove"
+        android:textColor="@color/color_primary"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/ivBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/ivBack" />
+
+    <TextView
         android:id="@+id/tvTeamChat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

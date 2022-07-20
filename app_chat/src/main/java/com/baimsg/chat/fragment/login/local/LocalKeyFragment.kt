@@ -64,30 +64,28 @@ class LocalKeyFragment :
 
         localKeyAdapter.setOnItemLongClickListener { adapter, _, position ->
             val appKey = adapter.data[position] as String
-            MaterialDialog(requireContext())
-                .cancelOnTouchOutside(false)
-                .show {
-                    title(res = R.string.select_action)
-                    listItems(items = listOf("修改备注", "删除数据")) { dialog, index, _ ->
-                        dialog.dismiss()
-                        when (index) {
-                            0 -> {
-                                MaterialDialog(requireContext()).show {
-                                    input(hint = "请输入备注") { materialDialog, charSequence ->
-                                        materialDialog.dismiss()
-                                        KvUtils.put(appKey, charSequence.toString())
-                                        adapter.notifyItemChanged(position)
-                                    }
+            MaterialDialog(requireContext()).show {
+                title(res = R.string.select_action)
+                listItems(items = listOf("修改备注", "删除数据")) { dialog, index, _ ->
+                    dialog.dismiss()
+                    when (index) {
+                        0 -> {
+                            MaterialDialog(requireContext()).show {
+                                input(hint = "请输入备注") { materialDialog, charSequence ->
+                                    materialDialog.dismiss()
+                                    KvUtils.put(appKey, charSequence.toString())
+                                    adapter.notifyItemChanged(position)
                                 }
                             }
-                            1 -> {
-                                loginViewModel.deleteByAppKey(appKey)
-                                adapter.removeAt(position)
-                            }
+                        }
+                        1 -> {
+                            loginViewModel.deleteByAppKey(appKey)
+                            adapter.removeAt(position)
                         }
                     }
-                    negativeButton()
                 }
+                negativeButton()
+            }
             true
         }
 

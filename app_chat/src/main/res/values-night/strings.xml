@@ -55,4 +55,14 @@
     <string name="auto_fill">自动补位</string>
     <string name="team_chat_describe">邀请描述</string>
     <string name="select_action">请选择操作</string>
+    <string name="create_team">创建群聊</string>
+    <string name="team_name">群聊名称</string>
+    <string name="team_icon">群头像</string>
+    <string name="be_invite_mode">直接邀请进群</string>
+    <string name="introduce">群简介</string>
+    <string name="team_update_mode">修改群聊资料</string>
+    <string name="team_sum">创建数量</string>
+    <string name="announcement">群公告</string>
+    <string name="all_mute">全员禁言</string>
+    <string name="verify_type">验证模式</string>
 </resources>

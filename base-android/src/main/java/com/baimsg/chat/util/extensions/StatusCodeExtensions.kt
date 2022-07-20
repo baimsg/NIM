@@ -1,6 +1,7 @@
 package com.baimsg.chat.util.extensions
 
 import com.netease.nimlib.sdk.StatusCode
+import com.netease.nimlib.sdk.team.constant.VerifyTypeEnum
 
 /**
  * Create by Baimsg on 2022/6/14
@@ -20,4 +21,10 @@ fun StatusCode.message(): String = when (this) {
     StatusCode.PWD_ERROR -> "用户名或密码错误"
     StatusCode.DATA_UPGRADE -> "数据库需要迁移到加密状态"
     else -> "未定义"
+}
+
+fun VerifyTypeEnum.message() = when (this) {
+    VerifyTypeEnum.Apply -> "需要审核"
+    VerifyTypeEnum.Free -> "不需理审核"
+    else -> "不允许加群"
 }
