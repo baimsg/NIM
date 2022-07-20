@@ -3,7 +3,6 @@ package com.baimsg.chat.fragment.login
 import androidx.activity.addCallback
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.baimsg.chat.R
@@ -13,7 +12,6 @@ import com.baimsg.chat.type.ExecutionStatus
 import com.baimsg.chat.util.extensions.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 /**
  * Create by Baimsg on 2022/6/13
@@ -43,32 +41,22 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
         }
 
         binding.editAppKey.apply {
-            val appKey = loginViewModel.currentLoginRecord.appKey
-            setText(appKey)
+            setText(loginViewModel.currentAppKey)
             showKeyboard(true)
-            setSelection(appKey.length)
-            addTextChangedListener {
-                loginViewModel.upDateAppKey(it.toString())
-            }
+            setSelection(loginViewModel.currentAppKey.length)
         }
 
-        binding.editAccount.apply {
-            setText(loginViewModel.currentLoginRecord.account)
-            addTextChangedListener {
-                loginViewModel.updateAccount(it.toString())
-            }
-        }
+        binding.editAccount.setText(loginViewModel.currentAccount)
 
-        binding.editToken.apply {
-            setText(loginViewModel.currentLoginRecord.token)
-            addTextChangedListener {
-                loginViewModel.updateToken(it.toString())
-            }
-        }
+        binding.editToken.setText(loginViewModel.currentToken)
 
         binding.btnLogin.setOnClickListener {
             it?.hideKeyboard()
-            loginViewModel.login()
+            loginViewModel.login(
+                appKey = binding.editAppKey.text.toString(),
+                account = binding.editAccount.text.toString(),
+                token = binding.editToken.text.toString()
+            )
         }
 
         if (args.hard) {
@@ -96,7 +84,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
                             R.id.action_loginFragment_to_homeFragment
                         )
                     ExecutionStatus.FAIL -> showError(it.message)
-                    else -> {}
+                    else -> Unit
                 }
             }
         }

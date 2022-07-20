@@ -1,7 +1,7 @@
 package com.baimsg.chat.fragment.login.local
 
+import android.view.View
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,9 +12,9 @@ import com.baimsg.base.util.KvUtils
 import com.baimsg.chat.R
 import com.baimsg.chat.adapter.LocalKeyAdapter
 import com.baimsg.chat.base.BaseFragment
+import com.baimsg.chat.databinding.EmptyBaseBinding
 import com.baimsg.chat.databinding.FragmentLocalKeyBinding
 import com.baimsg.chat.fragment.login.LoginViewModel
-import kotlinx.coroutines.launch
 
 /**
  * Create by Baimsg on 2022/6/29
@@ -37,18 +37,19 @@ class LocalKeyFragment :
         binding.srContent.apply {
             setColorSchemeResources(R.color.color_primary)
             setOnRefreshListener {
-                lifecycleScope.launch {
-                    localKeyAdapter.setList(loginViewModel.allAppKeys)
-                    isRefreshing = false
-                }
+                localKeyAdapter.setList(loginViewModel.allAppKeys)
+                isRefreshing = false
             }
         }
 
         binding.ryContent.apply {
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             adapter = localKeyAdapter
-            lifecycleScope.launch {
-                localKeyAdapter.setList(loginViewModel.allAppKeys)
+            localKeyAdapter.setList(loginViewModel.allAppKeys)
+            val emptyView = View.inflate(requireContext(), R.layout.empty_base, null)
+            EmptyBaseBinding.bind(emptyView).apply {
+                localKeyAdapter.setEmptyView(emptyView)
+                tvTip.text = "本地账号为空：）"
             }
         }
 
@@ -80,7 +81,7 @@ class LocalKeyFragment :
                                 }
                             }
                             1 -> {
-                                loginViewModel.deleteAppKey(appKey)
+                                loginViewModel.deleteByAppKey(appKey)
                                 adapter.removeAt(position)
                             }
                         }

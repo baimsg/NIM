@@ -98,7 +98,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                 binding.tvStatus.text = status.message()
                 lifecycleScope.launch(Dispatchers.Main) {
                     val nimLoginRecord = loginViewModel.currentLoginRecord
-                    if (status.wontAutoLogin() || nimLoginRecord.mustEmpty() || nimLoginRecord.appKeyEmpty()) openLogin
+                    if (nimLoginRecord.mustEmpty() || nimLoginRecord.appKeyEmpty() || status.wontAutoLogin()) openLogin
                 }
             }
 

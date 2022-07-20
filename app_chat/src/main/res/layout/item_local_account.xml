@@ -13,55 +13,56 @@
         android:background="@color/line_color"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tvAccount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="4dp"
-        android:text="@string/account"
-        android:textColor="@color/title_color"
-        android:textSize="14sp"
+    <ImageView
+        android:id="@+id/ivAvatar"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_marginVertical="8dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/bg_avatar_round"
+        android:contentDescription="@string/avatar"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/vTop" />
 
     <TextView
-        android:id="@+id/tvAccountValue"
+        android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="4dp"
-        android:textColor="@color/subtitle_color"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@id/tvAccount"
-        app:layout_constraintStart_toEndOf="@id/tvAccount"
-        app:layout_constraintTop_toTopOf="@id/tvAccount"
-        tools:text="0897654367890879" />
-
-    <TextView
-        android:id="@+id/tvToken"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="4dp"
-        android:text="@string/token"
+        android:layout_gravity="center"
+        android:layout_marginStart="16dp"
+        android:maxLines="1"
         android:textColor="@color/title_color"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvAccount" />
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/ivAvatar"
+        app:layout_constraintBottom_toTopOf="@id/tvAccount"
+        app:layout_constraintStart_toEndOf="@id/ivAvatar"
+        app:layout_constraintTop_toTopOf="@id/ivAvatar"
+        tools:text="baimsg" />
+
 
     <TextView
-        android:id="@+id/tvTokenValue"
+        android:id="@+id/tvAccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="4dp"
+        android:maxLines="1"
         android:textColor="@color/subtitle_color"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@id/tvToken"
-        app:layout_constraintStart_toStartOf="@id/tvAccountValue"
-        app:layout_constraintTop_toTopOf="@id/tvToken"
-        tools:text="0897654367890879" />
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@id/ivAvatar"
+        app:layout_constraintStart_toStartOf="@id/tvName"
+        app:layout_constraintTop_toBottomOf="@id/tvName"
+        tools:text="08976543" />
 
+    <TextView
+        android:id="@+id/tvLastLogin"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:textColor="@color/color_primary"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/ivAvatar"
+        tools:text="登录于：2021-07-20 10:10:00" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

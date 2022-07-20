@@ -96,50 +96,24 @@ internal class LoginViewModel @Inject constructor(
         }
 
 
-    /**
-     * 更新 appKey
-     * @param appKey
-     */
-    fun upDateAppKey(appKey: String) {
+    fun login(appKey: String, account: String, token: String) {
         _viewState.apply {
             value = value.copy(
                 executionStatus = ExecutionStatus.UNKNOWN,
-                currentLoginRecord = value.currentLoginRecord.copy(appKey = appKey)
+                currentLoginRecord = value.currentLoginRecord.copy(
+                    appKey = appKey,
+                    account = account,
+                    token = token
+                )
             )
         }
+        login()
     }
-
-    /**
-     * 更新 account
-     * @param account
-     */
-    fun updateAccount(account: String) {
-        _viewState.apply {
-            value = value.copy(
-                executionStatus = ExecutionStatus.UNKNOWN,
-                currentLoginRecord = value.currentLoginRecord.copy(account = account)
-            )
-        }
-    }
-
-    /**
-     * 更新 token
-     * @param token
-     */
-    fun updateToken(token: String) {
-        _viewState.apply {
-            value = value.copy(
-                executionStatus = ExecutionStatus.UNKNOWN,
-                currentLoginRecord = value.currentLoginRecord.copy(token = token)
-            )
-        }
-    }
-
 
     /**
      * 登录账号
      */
-    fun login() {
+    private fun login() {
         _userInfo.value = NIMUserInfo()
         when {
             currentLoginRecord.appKeyEmpty() -> {
@@ -171,9 +145,9 @@ internal class LoginViewModel @Inject constructor(
                                         used = true
                                     ) else copy(loginTime = t, used = true)
                                 })
-                            }
-                            _viewState.apply {
-                                value = value.copy(executionStatus = ExecutionStatus.SUCCESS)
+                                _viewState.apply {
+                                    value = value.copy(executionStatus = ExecutionStatus.SUCCESS)
+                                }
                                 refreshData()
                             }
                         }
@@ -189,8 +163,14 @@ internal class LoginViewModel @Inject constructor(
      * 退出登录
      */
     fun logout() {
-        _userInfo.value = NIMUserInfo()
-        authService.logout()
+        viewModelScope.launch(Dispatchers.IO) {
+            loginRecordDao.updateOrInsert(currentLoginRecord.copy(used = false))
+            _userInfo.value = NIMUserInfo()
+            authService.logout()
+            _statusCode.value = StatusCode.UNLOGIN
+            refreshData()
+        }
+
     }
 
     /**
@@ -218,23 +198,36 @@ internal class LoginViewModel @Inject constructor(
                     _userInfo.value = users?.firstOrNull().asUser()
                 }
 
-                override fun onFailed(code: Int) {}
-
-                override fun onException(e: Throwable?) {}
+                override fun onFailed(code: Int) = Unit
+                override fun onException(e: Throwable?) = Unit
             })
+    }
+
+    /**
+     * 根据id删除数据
+     * @param id
+     */
+    fun deleteById(id: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            loginRecordDao.deleteById(id = id)
+            refreshData()
+        }
     }
 
     /**
      * 根据appKey删除数据
      * @param appKey
      */
-    fun deleteAppKey(appKey: String) {
+    fun deleteByAppKey(appKey: String) {
         viewModelScope.launch(Dispatchers.IO) {
             loginRecordDao.deleteByAppKey(appKey = appKey)
             refreshData()
         }
     }
 
+    /**
+     * 获取账号列表
+     */
     suspend fun accounts(appKey: String) =
         withContext(Dispatchers.IO) {
             loginRecordDao.entriesByAppKey(appKey)
