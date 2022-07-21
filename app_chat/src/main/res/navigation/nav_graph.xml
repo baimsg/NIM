@@ -168,7 +168,15 @@
         android:id="@+id/teamFragment"
         android:name="com.baimsg.chat.fragment.team.TeamFragment"
         android:label="TeamFragment"
-        tools:layout="@layout/fragment_team" />
+        tools:layout="@layout/fragment_team">
+        <action
+            android:id="@+id/action_teamFragment_to_teamDetailFragment"
+            app:destination="@id/teamDetailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
+            app:popExitAnim="@anim/slide_out_left" />
+    </fragment>
     <fragment
         android:id="@+id/localKeyFragment"
         android:name="com.baimsg.chat.fragment.login.local.LocalKeyFragment"
@@ -272,5 +280,16 @@
             app:exitAnim="@anim/fragment_open_exit"
             app:popEnterAnim="@anim/fragment_open_enter"
             app:popExitAnim="@anim/slide_out_left" />
+    </fragment>
+    <fragment
+        android:id="@+id/teamDetailFragment"
+        android:name="com.baimsg.chat.fragment.team.detail.TeamDetailFragment"
+        android:label="TeamDetailFragment"
+        tools:layout="@layout/fragment_team_detail">
+        <argument
+            android:name="teamInfo"
+            android:defaultValue="@null"
+            app:argType="com.baimsg.data.model.entities.NIMTeam"
+            app:nullable="true" />
     </fragment>
 </navigation>

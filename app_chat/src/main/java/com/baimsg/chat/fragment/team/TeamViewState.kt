@@ -1,6 +1,5 @@
 package com.baimsg.chat.fragment.team
 
-import com.baimsg.chat.type.ExecutionStatus
 import com.baimsg.data.model.Async
 import com.baimsg.data.model.Uninitialized
 import com.baimsg.data.model.entities.NIMTeam

@@ -2,7 +2,9 @@ package com.baimsg.data.model.entities
 
 import com.netease.nimlib.sdk.team.constant.*
 import com.netease.nimlib.sdk.team.model.Team
+import java.io.Serializable
 
+@kotlinx.serialization.Serializable
 data class NIMTeam(
     val id: String = "",
     val name: String = "",
@@ -25,7 +27,7 @@ data class NIMTeam(
     val teamExtensionUpdateMode: TeamExtensionUpdateModeEnum = TeamExtensionUpdateModeEnum.All,
     val allMute: Boolean = false,
     val muteMode: TeamAllMuteModeEnum = TeamAllMuteModeEnum.MuteNormal,
-)
+) : Serializable
 
 fun Team?.asTeam(): NIMTeam =
     this?.run {

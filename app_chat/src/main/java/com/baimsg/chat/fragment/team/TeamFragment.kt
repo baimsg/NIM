@@ -46,7 +46,7 @@ class TeamFragment : BaseFragment<FragmentTeamBinding>(R.layout.fragment_team) {
         }
 
         binding.tvClear.setOnClickListener {
-            teamViewModel.allTeam?.map { it.id }?.forEachIndexed { index, s ->
+            teamViewModel.allTeam?.map { it.id }?.forEachIndexed { _, s ->
                 teamViewModel.dismissTeam(s)
             }
         }
@@ -67,12 +67,11 @@ class TeamFragment : BaseFragment<FragmentTeamBinding>(R.layout.fragment_team) {
         }
 
         teamItemAdapter.setOnItemClickListener { adapter, _, position ->
-            val data = adapter.data[position] as NIMTeam
-            MaterialDialog(requireContext()).show {
-                title(text = "群信息")
-                message(text = "[群名] ${data.name}\n[ID] ${data.id}\n[群容量] ${data.memberLimit}\n[群成员] ${data.memberCount}")
-                positiveButton(R.string.sure)
-            }
+            findNavController().navigate(
+                TeamFragmentDirections.actionTeamFragmentToTeamDetailFragment(
+                    teamInfo = adapter.data[position] as NIMTeam
+                )
+            )
         }
     }
 
