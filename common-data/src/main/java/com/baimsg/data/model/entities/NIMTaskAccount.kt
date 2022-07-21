@@ -27,6 +27,17 @@ data class NIMTaskAccount(
             super.equals(other)
     }
 
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        result = 31 * result + appKey.hashCode()
+        result = 31 * result + account.hashCode()
+        result = 31 * result + name.hashCode()
+        result = 31 * result + (avatar?.hashCode() ?: 0)
+        result = 31 * result + createTime.hashCode()
+        result = 31 * result + processed.hashCode()
+        return result
+    }
+
 }
 
 fun NIMUserInfo.asTask(): NIMTaskAccount = run {

@@ -2,6 +2,10 @@ package com.baimsg.chat.fragment.team
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.baimsg.chat.Constant
+import com.baimsg.chat.fragment.team.create.CreateTeamViewState
+import com.baimsg.chat.type.BatchStatus
+import com.baimsg.chat.type.BatchType
 import com.baimsg.chat.type.ExecutionStatus
 import com.baimsg.data.model.Fail
 import com.baimsg.data.model.Loading
@@ -16,10 +20,12 @@ import com.netease.nimlib.sdk.team.constant.TeamTypeEnum
 import com.netease.nimlib.sdk.team.model.CreateTeamResult
 import com.netease.nimlib.sdk.team.model.Team
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.io.Serializable
 import javax.inject.Inject
 
@@ -42,10 +48,13 @@ class TeamViewModel @Inject constructor(
         get() = _viewState.value.teams.invoke()
 
     private val _createTeamState by lazy {
-        MutableStateFlow(CreateTeamState.EMPTY)
+        MutableStateFlow(CreateTeamViewState.EMPTY)
     }
 
-    val observeCreateTeamState: StateFlow<CreateTeamState> = _createTeamState
+    val observeCreateTeamState: StateFlow<CreateTeamViewState> = _createTeamState
+
+    private val fields: Map<TeamFieldEnum, Serializable>
+        get() = _createTeamState.value.fields
 
     init {
         loadTeams()
@@ -80,72 +89,87 @@ class TeamViewModel @Inject constructor(
         }
     }
 
-    fun batchCreateTeam(
-        sum: Int,
-        fields: MutableMap<TeamFieldEnum, Serializable?>,
-        type: TeamTypeEnum,
-        postscript: String?,
-        members: List<String>
-    ) {
-        viewModelScope.launch {
-            val name = fields[TeamFieldEnum.Name]
-            repeat(sum) {
-                _createTeamState.apply {
-                    value =
-                        value.copy(
-                            executionStatus = ExecutionStatus.UNKNOWN,
-                            name = if (it != 0) "$name$it" else name.toString()
-                        )
+    /**
+     * 中缀函数改变群聊参数
+     * @param value 参数值
+     */
+    infix fun TeamFieldEnum.set(value: Serializable) {
+        _createTeamState.apply {
+            this.value = this.value.copy(
+                fields = fields.toMutableMap().apply {
+                    put(this@set, value)
                 }
-                createTeam(
-                    fields = fields.apply {
-                        if (it != 0) put(TeamFieldEnum.Name, "$name$it")
-                    },
-                    type = type,
-                    postscript = postscript,
-                    members = members
-                )
-                delay(1500)
-            }
-            _createTeamState.apply {
-                value = value.copy(executionStatus = ExecutionStatus.EMPTY)
+            )
+        }
+    }
+
+    operator fun plus(limit: Int) {
+        _createTeamState.apply {
+            this.value = this.value.copy(
+                limit = limit
+            )
+        }
+    }
+
+    fun stopBatchCreateTeam() {
+        _createTeamState.apply {
+            value = CreateTeamViewState.EMPTY
+        }
+    }
+
+    fun startBatchCreateTeam() {
+        _createTeamState.apply {
+            if (value.running()) {
+                value = value.copy(status = BatchStatus.PAUSE)
+            } else {
+                value = value.copy(status = BatchStatus.RUNNING)
+                batchCreateTeam()
             }
         }
-
     }
 
-    fun createTeam(
-        fields: Map<TeamFieldEnum, Serializable?>,
-        type: TeamTypeEnum,
-        postscript: String?,
-        members: List<String>
-    ) {
-        teamService.createTeam(fields, type, postscript, members)
-            .setCallback(object : RequestCallback<CreateTeamResult> {
-                override fun onSuccess(result: CreateTeamResult?) {
-                    _createTeamState.apply {
-                        value = value.copy(executionStatus = ExecutionStatus.SUCCESS)
+    /**
+     * 批量创建群
+     */
+    private fun batchCreateTeam() {
+        viewModelScope.launch(Dispatchers.IO) {
+            runBlocking {
+                delay(Constant.DELAY)
+                _createTeamState.apply {
+                    if (value.pause()) return@runBlocking
+                    value = value.copy(status = BatchStatus.RUNNING)
+                    if (value.index >= value.limit) {
+                        value = value.copy(status = BatchStatus.STOP)
+                        return@runBlocking
                     }
                 }
+                teamService.createTeam(fields, TeamTypeEnum.Advanced, "", listOf())
+                    .setCallback(object : RequestCallback<CreateTeamResult> {
+                        override fun onSuccess(result: CreateTeamResult?) {
+                            _createTeamState.apply {
+                                value = value.copy(message = "创建成功", index = value.index + 1)
+                            }
+                            batchCreateTeam()
+                        }
 
-                override fun onFailed(code: Int) {
-                    _createTeamState.apply {
-                        value = value.copy(
-                            executionStatus = ExecutionStatus.FAIL,
-                            message = "错误码[$code]"
-                        )
-                    }
-                }
+                        override fun onFailed(code: Int) {
+                            _createTeamState.apply {
+                                value = value.copy(message = "创建失败「$code」")
+                            }
+                            batchCreateTeam()
+                        }
 
-                override fun onException(e: Throwable?) {
-                    _createTeamState.apply {
-                        value = value.copy(
-                            executionStatus = ExecutionStatus.FAIL, message = "[${e?.message}]"
-                        )
-                    }
-                }
-            })
+                        override fun onException(e: Throwable?) {
+                            _createTeamState.apply {
+                                value = value.copy(message = "创建失败「${e?.message}」")
+                            }
+                            batchCreateTeam()
+                        }
+                    })
+            }
+        }
     }
+
 
     fun dismissTeam(teamId: String) {
         teamService.dismissTeam(teamId)

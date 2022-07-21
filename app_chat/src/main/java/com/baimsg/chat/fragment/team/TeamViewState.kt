@@ -13,13 +13,3 @@ data class TeamViewState(
         val EMPTY = TeamViewState(Uninitialized)
     }
 }
-
-data class CreateTeamState(
-    val executionStatus: ExecutionStatus,
-    val name: String,
-    val message: String,
-) {
-    companion object {
-        val EMPTY = CreateTeamState(ExecutionStatus.UNKNOWN, name = "", message = "")
-    }
-}

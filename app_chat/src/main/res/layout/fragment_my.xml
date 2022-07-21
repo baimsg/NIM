@@ -10,20 +10,20 @@
         android:layout_height="wrap_content"
         app:qmui_action_view_init_offset="-160dp"
         app:qmui_can_over_pull="false"
-        app:qmui_need_receive_fling_from_target_view="true"
+        app:qmui_need_receive_fling_from_target_view="false"
         app:qmui_pull_edge="top"
-        app:qmui_pull_rate="0.3"
+        app:qmui_pull_rate="0.1"
         app:qmui_target_view_trigger_offset="wrap" />
 
     <View
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/background"
-        app:qmui_action_view_init_offset="0dp"
+        app:qmui_action_view_init_offset="120dp"
         app:qmui_can_over_pull="false"
-        app:qmui_need_receive_fling_from_target_view="true"
+        app:qmui_need_receive_fling_from_target_view="false"
         app:qmui_pull_edge="bottom"
-        app:qmui_pull_rate="0.3"
+        app:qmui_pull_rate="0.1"
         app:qmui_target_view_trigger_offset="wrap" />
 
     <androidx.core.widget.NestedScrollView

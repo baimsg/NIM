@@ -17,25 +17,76 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tvCreate"
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/proLoading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="4dp"
-        android:background="?android:selectableItemBackground"
-        android:paddingHorizontal="12dp"
-        android:paddingVertical="4dp"
-        android:text="@string/create_team"
-        android:textColor="@color/color_primary"
-        android:textSize="16sp"
-        android:textStyle="bold"
+        android:indeterminate="true"
+        android:padding="16dp"
+        android:visibility="gone"
+        app:indicatorColor="@color/color_primary"
+        app:indicatorSize="22dp"
+        app:layout_constraintBottom_toBottomOf="@id/ivBack"
+        app:layout_constraintStart_toEndOf="@id/ivBack"
+        app:layout_constraintTop_toTopOf="@id/ivBack"
+        app:trackColor="@color/color_primary_translucent"
+        app:trackThickness="2dp"
+        tools:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/ivSetting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/setting"
+        android:padding="16dp"
+        android:src="@drawable/ic_setting"
+        app:layout_constraintBottom_toBottomOf="@id/ivBack"
+        app:layout_constraintEnd_toStartOf="@id/ivCreate"
+        app:layout_constraintTop_toTopOf="@id/ivBack" />
+
+    <ImageView
+        android:id="@+id/ivCreate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/create_team"
+        android:padding="16dp"
+        android:src="@drawable/ic_play"
         app:layout_constraintBottom_toBottomOf="@id/ivBack"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/ivBack" />
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/groupTip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="ryContent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/ryContent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivBack" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabQuit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="35dp"
+        android:contentDescription="@string/quit"
+        android:src="@drawable/ic_quit"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <com.qmuiteam.qmui.widget.pullLayout.QMUIPullLayout
+        android:id="@+id/qplSetting"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:visibility="gone"
         android:background="@color/background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ivBack">
@@ -43,21 +94,21 @@
         <View
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:qmui_action_view_init_offset="-160dp"
+            app:qmui_action_view_init_offset="0dp"
             app:qmui_can_over_pull="false"
-            app:qmui_need_receive_fling_from_target_view="true"
+            app:qmui_need_receive_fling_from_target_view="false"
             app:qmui_pull_edge="top"
-            app:qmui_pull_rate="0.5"
+            app:qmui_pull_rate="0.1"
             app:qmui_target_view_trigger_offset="wrap" />
 
         <View
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:qmui_action_view_init_offset="-20dp"
-            app:qmui_can_over_pull="true"
-            app:qmui_need_receive_fling_from_target_view="true"
+            app:qmui_action_view_init_offset="0dp"
+            app:qmui_can_over_pull="false"
+            app:qmui_need_receive_fling_from_target_view="false"
             app:qmui_pull_edge="bottom"
-            app:qmui_pull_rate="0.5"
+            app:qmui_pull_rate="0.1"
             app:qmui_target_view_trigger_offset="wrap" />
 
         <androidx.core.widget.NestedScrollView
@@ -467,7 +518,6 @@
                     app:layout_constraintBottom_toBottomOf="@id/tvAllMute"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/tvAllMute" />
-
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

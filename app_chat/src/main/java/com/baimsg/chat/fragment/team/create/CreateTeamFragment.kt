@@ -1,28 +1,23 @@
 package com.baimsg.chat.fragment.team.create
 
 import android.text.InputType
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.input.input
 import com.afollestad.materialdialogs.list.listItems
 import com.baimsg.chat.R
+import com.baimsg.chat.adapter.TipAdapter
 import com.baimsg.chat.base.BaseFragment
 import com.baimsg.chat.databinding.FragmentTeamCreateBinding
-import com.baimsg.chat.fragment.login.LoginViewModel
 import com.baimsg.chat.fragment.team.TeamViewModel
-import com.baimsg.chat.type.ExecutionStatus
-import com.baimsg.chat.util.extensions.message
-import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
-import com.baimsg.chat.util.extensions.show
-import com.baimsg.chat.util.extensions.showWarning
+import com.baimsg.chat.type.BatchStatus
+import com.baimsg.chat.util.extensions.*
 import com.netease.nimlib.sdk.team.constant.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import java.io.Serializable
-import java.lang.StringBuilder
 
 /**
  * Create by Baimsg on 2022/7/19
@@ -33,50 +28,32 @@ class CreateTeamFragment : BaseFragment<FragmentTeamCreateBinding>(R.layout.frag
 
     private val teamViewModel by viewModels<TeamViewModel>()
 
-    private val loginViewModel by activityViewModels<LoginViewModel>()
-
-    private val loadDialog by lazy {
-        MaterialDialog(requireContext()).cancelable(false)
-            .cancelOnTouchOutside(false)
-            .customView(R.layout.dialog_loading)
-    }
-
-    private val fields: MutableMap<TeamFieldEnum, Serializable?> by lazy {
-        mutableMapOf(
-            TeamFieldEnum.Announcement to "",
-            TeamFieldEnum.Introduce to "",
-            TeamFieldEnum.Name to "群聊",
-            TeamFieldEnum.VerifyType to VerifyTypeEnum.Apply,
-            TeamFieldEnum.BeInviteMode to TeamBeInviteModeEnum.NoAuth,
-            TeamFieldEnum.InviteMode to TeamInviteModeEnum.Manager,
-            TeamFieldEnum.TeamUpdateMode to TeamUpdateModeEnum.Manager,
-            TeamFieldEnum.AllMute to TeamAllMuteModeEnum.MuteALL,
-        )
-    }
-
-    private var teamSum = 1
-
-    private val sb by lazy {
-        StringBuilder()
+    private val tipAdapter by lazy {
+        TipAdapter()
     }
 
     override fun initView() {
-        updateView()
 
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()
         }
 
-        binding.tvCreate.setOnClickListener {
-            sb.delete(0, sb.length)
-            loadDialog.show()
-            teamViewModel.batchCreateTeam(
-                teamSum,
-                fields = fields,
-                type = TeamTypeEnum.Advanced,
-                postscript = null,
-                members = listOf(loginViewModel.currentAccount)
-            )
+        binding.ivSetting.setOnClickListener {
+            findNavController().navigate(R.id.action_createTeamFragment_to_settingFragment)
+        }
+
+        binding.fabQuit.setOnClickListener {
+            tipAdapter.setList(null)
+            teamViewModel.stopBatchCreateTeam()
+        }
+
+        binding.ivCreate.setOnClickListener {
+            teamViewModel.startBatchCreateTeam()
+        }
+
+        binding.ryContent.apply {
+            layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+            adapter = tipAdapter
         }
 
         binding.vIntroduce.setOnClickListener {
@@ -85,8 +62,9 @@ class CreateTeamFragment : BaseFragment<FragmentTeamCreateBinding>(R.layout.frag
                 .show {
                     title(R.string.introduce)
                     input(hint = "请输入群简介", allowEmpty = true) { _, sequence ->
-                        fields[TeamFieldEnum.Introduce] = sequence.toString()
-                        updateView()
+                        teamViewModel.apply {
+                            TeamFieldEnum.Introduce set sequence.toString()
+                        }
                     }
                 }
         }
@@ -97,8 +75,9 @@ class CreateTeamFragment : BaseFragment<FragmentTeamCreateBinding>(R.layout.frag
                 .show {
                     title(R.string.announcement)
                     input(hint = "请输入群公告", allowEmpty = true) { _, sequence ->
-                        fields[TeamFieldEnum.Announcement] = sequence.toString()
-                        updateView()
+                        teamViewModel.apply {
+                            TeamFieldEnum.Announcement set sequence.toString()
+                        }
                     }
                 }
         }
@@ -109,8 +88,9 @@ class CreateTeamFragment : BaseFragment<FragmentTeamCreateBinding>(R.layout.frag
                 .show {
                     title(R.string.team_name)
                     input(hint = "请输入群聊名称") { _, sequence ->
-                        fields[TeamFieldEnum.Name] = sequence.toString()
-                        updateView()
+                        teamViewModel.apply {
+                            TeamFieldEnum.Name set sequence.toString()
+                        }
                     }
                 }
         }
@@ -129,8 +109,7 @@ class CreateTeamFragment : BaseFragment<FragmentTeamCreateBinding>(R.layout.frag
                         inputType = InputType.TYPE_CLASS_NUMBER,
                         maxLength = 4
                     ) { _, sequence ->
-                        teamSum = sequence.toString().toInt()
-                        updateView()
+                        teamViewModel + sequence.toString().toInt()
                     }
                 }
         }
@@ -148,103 +127,109 @@ class CreateTeamFragment : BaseFragment<FragmentTeamCreateBinding>(R.layout.frag
                         )
                     ) { dialog, index, _ ->
                         dialog.dismiss()
-                        fields[TeamFieldEnum.VerifyType] = when (index) {
-                            0 -> VerifyTypeEnum.Apply
-                            1 -> VerifyTypeEnum.Free
-                            else -> VerifyTypeEnum.Private
+                        teamViewModel.apply {
+                            TeamFieldEnum.VerifyType set when (index) {
+                                0 -> VerifyTypeEnum.Apply
+                                1 -> VerifyTypeEnum.Free
+                                else -> VerifyTypeEnum.Private
+                            }
                         }
-                        updateView()
                     }
                     negativeButton()
                 }
         }
 
         binding.scBeInviteMode.setOnCheckedChangeListener { _, isChecked ->
-            fields[TeamFieldEnum.BeInviteMode] =
-                if (isChecked) TeamBeInviteModeEnum.NoAuth else TeamBeInviteModeEnum.NeedAuth
+            teamViewModel.apply {
+                TeamFieldEnum.BeInviteMode set if (isChecked) TeamBeInviteModeEnum.NoAuth else TeamBeInviteModeEnum.NeedAuth
+            }
         }
 
         binding.scInviteMode.setOnCheckedChangeListener { _, isChecked ->
-            fields[TeamFieldEnum.InviteMode] =
-                if (isChecked) TeamInviteModeEnum.Manager else TeamInviteModeEnum.All
-            updateView()
+            teamViewModel.apply {
+                TeamFieldEnum.InviteMode set if (isChecked) TeamInviteModeEnum.Manager else TeamInviteModeEnum.All
+            }
         }
 
         binding.scTeamUpdateMode.setOnCheckedChangeListener { _, isChecked ->
-            fields[TeamFieldEnum.TeamUpdateMode] =
-                if (isChecked) TeamUpdateModeEnum.Manager else TeamUpdateModeEnum.All
-            updateView()
+            teamViewModel.apply {
+                TeamFieldEnum.TeamUpdateMode set if (isChecked) TeamUpdateModeEnum.Manager else TeamUpdateModeEnum.All
+            }
         }
 
         binding.scAllMute.setOnCheckedChangeListener { _, isChecked ->
-            fields[TeamFieldEnum.AllMute] =
-                if (isChecked) TeamAllMuteModeEnum.MuteALL else TeamAllMuteModeEnum.Cancel
+            teamViewModel.apply {
+                TeamFieldEnum.AllMute set if (isChecked) TeamAllMuteModeEnum.MuteALL else TeamAllMuteModeEnum.Cancel
+            }
         }
-
 
     }
 
     override fun initLiveData() {
         repeatOnLifecycleStarted {
-            teamViewModel.observeCreateTeamState.collectLatest {
-                when (it.executionStatus) {
-                    ExecutionStatus.EMPTY -> {
-                        loadDialog.dismiss()
-                        MaterialDialog(requireContext()).show {
-                            message(text = sb.toString())
-                            positiveButton()
+            teamViewModel.observeCreateTeamState.collectLatest { viewState ->
+                viewState.apply {
+                    binding.proLoading.show(running())
+                    binding.fabQuit.show(pause() || stop())
+                    binding.qplSetting.show(unknown())
+                    binding.groupTip.show(!unknown())
+                    binding.ivCreate.setImageResource(if (running()) R.drawable.ic_pause else R.drawable.ic_play)
+                    when (status) {
+                        BatchStatus.UNKNOWN -> {
+                            updateView(this)
                         }
+                        BatchStatus.RUNNING -> {
+                            if (message.isNotBlank()) {
+                                tipAdapter.addData("序号[${if (message.contains("成功")) index else index + 1}] 「${fields[TeamFieldEnum.Name]}」 -> $message")
+                            }
+                        }
+                        else -> Unit
                     }
-                    ExecutionStatus.SUCCESS -> {
-                        sb.append("「" + it.name + "」创建成功\n")
-                    }
-                    ExecutionStatus.FAIL -> {
-                        sb.append("「" + it.name + "」${it.message}\n")
-                    }
-                    else -> Unit
                 }
             }
         }
     }
 
-    private fun updateView() {
+    private fun updateView(createTeamViewState: CreateTeamViewState) {
+        createTeamViewState.apply {
+            binding.tvTeamNameValue.text = fields[TeamFieldEnum.Name].toString()
 
-        binding.tvTeamNameValue.text = fields[TeamFieldEnum.Name].toString()
+            binding.tvTeamSumValue.text = "$limit"
 
-        binding.tvTeamSumValue.text = "$teamSum"
+            binding.tvVerifyTypeValue.text =
+                (fields[TeamFieldEnum.VerifyType] as VerifyTypeEnum).message()
 
-        binding.tvVerifyTypeValue.text =
-            (fields[TeamFieldEnum.VerifyType] as VerifyTypeEnum).message()
+            binding.tvIntroduceValue.apply {
+                val introduce = fields[TeamFieldEnum.Introduce]?.toString()
+                show(!introduce.isNullOrEmpty())
+                text = introduce
+            }
 
-        binding.tvIntroduceValue.apply {
-            val introduce = fields[TeamFieldEnum.Introduce]?.toString()
-            show(!introduce.isNullOrEmpty())
-            text = introduce
+            binding.tvAnnouncementValue.apply {
+                val announcement = fields[TeamFieldEnum.Announcement]?.toString()
+                show(!announcement.isNullOrEmpty())
+                text = announcement
+            }
+
+            binding.scBeInviteMode.isChecked =
+                fields[TeamFieldEnum.BeInviteMode] == TeamBeInviteModeEnum.NoAuth
+
+            binding.scInviteMode.apply {
+                isChecked =
+                    fields[TeamFieldEnum.InviteMode] == TeamInviteModeEnum.Manager
+                binding.tvInviteModeValue.text = if (isChecked) "仅管理" else "任何人"
+            }
+
+            binding.scTeamUpdateMode.apply {
+                isChecked =
+                    fields[TeamFieldEnum.TeamUpdateMode] == TeamUpdateModeEnum.Manager
+                binding.tvTeamUpdateModeValue.text = if (isChecked) "仅管理" else "任何人"
+            }
+
+            binding.scAllMute.isChecked =
+                fields[TeamFieldEnum.AllMute] == TeamAllMuteModeEnum.MuteALL
+
         }
-
-        binding.tvAnnouncementValue.apply {
-            val announcement = fields[TeamFieldEnum.Announcement]?.toString()
-            show(!announcement.isNullOrEmpty())
-            text = announcement
-        }
-
-        binding.scBeInviteMode.isChecked =
-            fields[TeamFieldEnum.BeInviteMode] == TeamBeInviteModeEnum.NoAuth
-
-        binding.scInviteMode.apply {
-            isChecked =
-                fields[TeamFieldEnum.InviteMode] == TeamInviteModeEnum.Manager
-            binding.tvInviteModeValue.text = if (isChecked) "仅管理" else "任何人"
-        }
-
-        binding.scTeamUpdateMode.apply {
-            isChecked =
-                fields[TeamFieldEnum.TeamUpdateMode] == TeamUpdateModeEnum.Manager
-            binding.tvTeamUpdateModeValue.text = if (isChecked) "仅管理" else "任何人"
-        }
-
-        binding.scAllMute.isChecked =
-            fields[TeamFieldEnum.AllMute] == TeamAllMuteModeEnum.MuteALL
 
     }
 }
