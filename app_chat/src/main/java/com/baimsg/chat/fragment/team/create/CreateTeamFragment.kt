@@ -5,7 +5,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.afollestad.materialdialogs.LayoutMode
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.afollestad.materialdialogs.input.input
 import com.afollestad.materialdialogs.list.listItems
 import com.baimsg.chat.R
@@ -14,7 +16,10 @@ import com.baimsg.chat.base.BaseFragment
 import com.baimsg.chat.databinding.FragmentTeamCreateBinding
 import com.baimsg.chat.fragment.team.TeamViewModel
 import com.baimsg.chat.type.BatchStatus
-import com.baimsg.chat.util.extensions.*
+import com.baimsg.chat.util.extensions.message
+import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
+import com.baimsg.chat.util.extensions.show
+import com.baimsg.chat.util.extensions.showWarning
 import com.netease.nimlib.sdk.team.constant.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -56,30 +61,8 @@ class CreateTeamFragment : BaseFragment<FragmentTeamCreateBinding>(R.layout.frag
             adapter = tipAdapter
         }
 
-        binding.vIntroduce.setOnClickListener {
-            MaterialDialog(requireContext())
-                .cancelOnTouchOutside(false)
-                .show {
-                    title(R.string.introduce)
-                    input(hint = "请输入群简介", allowEmpty = true) { _, sequence ->
-                        teamViewModel.apply {
-                            TeamFieldEnum.Introduce set sequence.toString()
-                        }
-                    }
-                }
-        }
-
-        binding.vAnnouncement.setOnClickListener {
-            MaterialDialog(requireContext())
-                .cancelOnTouchOutside(false)
-                .show {
-                    title(R.string.announcement)
-                    input(hint = "请输入群公告", allowEmpty = true) { _, sequence ->
-                        teamViewModel.apply {
-                            TeamFieldEnum.Announcement set sequence.toString()
-                        }
-                    }
-                }
+        binding.tvTeamIcon.setOnClickListener {
+            showWarning("暂时不支持设置群头像")
         }
 
         binding.tvTeamName.setOnClickListener {
@@ -93,10 +76,6 @@ class CreateTeamFragment : BaseFragment<FragmentTeamCreateBinding>(R.layout.frag
                         }
                     }
                 }
-        }
-
-        binding.tvTeamIcon.setOnClickListener {
-            showWarning("暂时不支持设置群头像")
         }
 
         binding.tvTeamSum.setOnClickListener {
@@ -115,15 +94,14 @@ class CreateTeamFragment : BaseFragment<FragmentTeamCreateBinding>(R.layout.frag
         }
 
         binding.tvVerifyType.setOnClickListener {
-            MaterialDialog(requireContext())
-                .cancelOnTouchOutside(false)
+            MaterialDialog(requireContext(), BottomSheet(LayoutMode.WRAP_CONTENT))
                 .show {
                     title(R.string.verify_type)
                     listItems(
                         items = listOf(
-                            "需要审核",
-                            "不需要审核",
-                            "不允许加群"
+                            "需要身份验证",
+                            "允许任何人加入",
+                            "不允许任何人加入"
                         )
                     ) { dialog, index, _ ->
                         dialog.dismiss()
@@ -157,11 +135,6 @@ class CreateTeamFragment : BaseFragment<FragmentTeamCreateBinding>(R.layout.frag
             }
         }
 
-        binding.scAllMute.setOnCheckedChangeListener { _, isChecked ->
-            teamViewModel.apply {
-                TeamFieldEnum.AllMute set if (isChecked) TeamAllMuteModeEnum.MuteALL else TeamAllMuteModeEnum.Cancel
-            }
-        }
 
     }
 
@@ -199,17 +172,6 @@ class CreateTeamFragment : BaseFragment<FragmentTeamCreateBinding>(R.layout.frag
             binding.tvVerifyTypeValue.text =
                 (fields[TeamFieldEnum.VerifyType] as VerifyTypeEnum).message()
 
-            binding.tvIntroduceValue.apply {
-                val introduce = fields[TeamFieldEnum.Introduce]?.toString()
-                show(!introduce.isNullOrEmpty())
-                text = introduce
-            }
-
-            binding.tvAnnouncementValue.apply {
-                val announcement = fields[TeamFieldEnum.Announcement]?.toString()
-                show(!announcement.isNullOrEmpty())
-                text = announcement
-            }
 
             binding.scBeInviteMode.isChecked =
                 fields[TeamFieldEnum.BeInviteMode] == TeamBeInviteModeEnum.NoAuth
@@ -225,9 +187,6 @@ class CreateTeamFragment : BaseFragment<FragmentTeamCreateBinding>(R.layout.frag
                     fields[TeamFieldEnum.TeamUpdateMode] == TeamUpdateModeEnum.Manager
                 binding.tvTeamUpdateModeValue.text = if (isChecked) "仅管理" else "任何人"
             }
-
-            binding.scAllMute.isChecked =
-                fields[TeamFieldEnum.AllMute] == TeamAllMuteModeEnum.MuteALL
 
         }
 

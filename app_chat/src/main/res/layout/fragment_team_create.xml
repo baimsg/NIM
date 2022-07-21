@@ -119,97 +119,51 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <View
-                    android:id="@+id/vAnnouncement"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:background="@drawable/bg_item_white"
-                    app:layout_constraintBottom_toBottomOf="@id/tvAnnouncementValue"
-                    app:layout_constraintTop_toTopOf="@id/tvAnnouncement" />
-
                 <TextView
-                    android:id="@+id/tvAnnouncement"
+                    android:id="@+id/tvTeamIcon"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/bg_item_white"
                     android:gravity="start|center_vertical"
                     android:paddingHorizontal="16dp"
                     android:paddingVertical="16dp"
-                    android:text="@string/announcement"
+                    android:text="@string/team_icon"
                     android:textColor="@color/title_color"
                     android:textSize="16sp"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/enter"
-                    android:src="@drawable/ic_right"
-                    app:layout_constraintBottom_toBottomOf="@id/tvAnnouncement"
-                    app:layout_constraintEnd_toEndOf="@id/ivEnter"
-                    app:layout_constraintTop_toTopOf="@id/tvAnnouncement" />
-
-                <TextView
-                    android:id="@+id/tvAnnouncementValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:gravity="center"
-                    android:paddingHorizontal="16dp"
-                    android:paddingBottom="16dp"
-                    android:textColor="@color/subtitle_color"
-                    android:textSize="14sp"
-                    app:layout_constraintStart_toStartOf="@id/tvAnnouncement"
-                    app:layout_constraintTop_toBottomOf="@id/tvAnnouncement"
-                    tools:text="这是一个群聊" />
-
-                <View
-                    android:id="@+id/vIntroduce"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:background="@drawable/bg_item_white"
-                    app:layout_constraintBottom_toBottomOf="@id/tvIntroduceValue"
-                    app:layout_constraintTop_toTopOf="@id/tvIntroduce" />
-
-                <TextView
-                    android:id="@+id/tvIntroduce"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:gravity="start|center_vertical"
-                    android:paddingHorizontal="16dp"
-                    android:paddingVertical="12dp"
-                    android:text="@string/introduce"
-                    android:textColor="@color/title_color"
-                    android:textSize="16sp"
-                    app:layout_constraintTop_toBottomOf="@id/vAnnouncement" />
-
+                    android:id="@+id/ivAvatar"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:layout_marginVertical="8dp"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/bg_avatar_round"
+                    android:contentDescription="@string/avatar"
+                    app:layout_constraintBottom_toBottomOf="@id/tvTeamIcon"
+                    app:layout_constraintEnd_toStartOf="@id/ivEnter"
+                    app:layout_constraintTop_toTopOf="@id/tvTeamIcon" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/enter"
                     android:src="@drawable/ic_right"
-                    app:layout_constraintBottom_toBottomOf="@id/tvIntroduce"
+                    app:layout_constraintBottom_toBottomOf="@id/tvTeamIcon"
                     app:layout_constraintEnd_toEndOf="@id/ivEnter"
-                    app:layout_constraintTop_toTopOf="@id/tvIntroduce" />
+                    app:layout_constraintTop_toTopOf="@id/tvTeamIcon" />
 
-                <TextView
-                    android:id="@+id/tvIntroduceValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:gravity="center"
-                    android:paddingHorizontal="16dp"
-                    android:paddingBottom="16dp"
-                    android:textColor="@color/subtitle_color"
-                    android:textSize="14sp"
-                    app:layout_constraintStart_toStartOf="@id/tvIntroduce"
-                    app:layout_constraintTop_toBottomOf="@id/tvIntroduce"
-                    tools:text="这是一个群聊" />
+                <View
+                    android:id="@+id/vLineTeamIcon"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/line_color"
+                    app:layout_constraintTop_toBottomOf="@id/tvTeamIcon" />
 
                 <TextView
                     android:id="@+id/tvTeamName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
                     android:background="@drawable/bg_item_white"
                     android:gravity="start|center_vertical"
                     android:paddingHorizontal="16dp"
@@ -217,7 +171,7 @@
                     android:text="@string/team_name"
                     android:textColor="@color/title_color"
                     android:textSize="16sp"
-                    app:layout_constraintTop_toBottomOf="@id/vIntroduce" />
+                    app:layout_constraintTop_toBottomOf="@id/vLineTeamIcon" />
 
                 <TextView
                     android:id="@+id/tvTeamNameValue"
@@ -250,46 +204,6 @@
                     android:background="@color/line_color"
                     app:layout_constraintTop_toBottomOf="@id/tvTeamName" />
 
-                <TextView
-                    android:id="@+id/tvTeamIcon"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_item_white"
-                    android:gravity="start|center_vertical"
-                    android:paddingHorizontal="16dp"
-                    android:paddingVertical="16dp"
-                    android:text="@string/team_icon"
-                    android:textColor="@color/title_color"
-                    android:textSize="16sp"
-                    app:layout_constraintTop_toBottomOf="@id/vLineTeamName" />
-
-                <ImageView
-                    android:id="@+id/ivAvatar"
-                    android:layout_width="38dp"
-                    android:layout_height="38dp"
-                    android:layout_marginVertical="8dp"
-                    android:layout_marginStart="16dp"
-                    android:background="@drawable/bg_avatar_round"
-                    android:contentDescription="@string/avatar"
-                    app:layout_constraintBottom_toBottomOf="@id/tvTeamIcon"
-                    app:layout_constraintEnd_toStartOf="@id/ivEnter"
-                    app:layout_constraintTop_toTopOf="@id/tvTeamIcon" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/enter"
-                    android:src="@drawable/ic_right"
-                    app:layout_constraintBottom_toBottomOf="@id/tvTeamIcon"
-                    app:layout_constraintEnd_toEndOf="@id/ivEnter"
-                    app:layout_constraintTop_toTopOf="@id/tvTeamIcon" />
-
-                <View
-                    android:id="@+id/vLineTeamIcon"
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:background="@color/line_color"
-                    app:layout_constraintTop_toBottomOf="@id/tvTeamIcon" />
 
                 <TextView
                     android:id="@+id/tvTeamSum"
@@ -302,7 +216,7 @@
                     android:text="@string/team_sum"
                     android:textColor="@color/title_color"
                     android:textSize="16sp"
-                    app:layout_constraintTop_toBottomOf="@id/vLineTeamIcon" />
+                    app:layout_constraintTop_toBottomOf="@id/vLineTeamName" />
 
                 <TextView
                     android:id="@+id/tvTeamSumValue"
@@ -488,35 +402,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/tvTeamUpdateMode" />
 
-                <View
-                    android:id="@+id/vAllMute"
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:background="@color/line_color"
-                    app:layout_constraintTop_toBottomOf="@id/tvTeamUpdateMode" />
-
-                <TextView
-                    android:id="@+id/tvAllMute"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_item_white"
-                    android:gravity="start|center_vertical"
-                    android:paddingHorizontal="16dp"
-                    android:paddingVertical="16dp"
-                    android:text="@string/all_mute"
-                    android:textColor="@color/title_color"
-                    android:textSize="16sp"
-                    app:layout_constraintTop_toBottomOf="@id/vAllMute" />
-
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/scAllMute"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:checked="true"
-                    app:layout_constraintBottom_toBottomOf="@id/tvAllMute"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/tvAllMute" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
