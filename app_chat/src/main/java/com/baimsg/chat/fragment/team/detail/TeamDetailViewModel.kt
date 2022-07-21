@@ -101,7 +101,7 @@ class TeamDetailViewModel @Inject constructor(
             teamService.muteAllTeamMember(value.id, isMute).setCallback(object :
                 RequestCallback<Void> {
                 override fun onSuccess(p0: Void?) {
-                    value = value.copy(allMute = isMute)
+                    value = value.copy(allMute = isMute, muteMode = muteMode(isMute))
                 }
 
                 override fun onFailed(p0: Int) {
@@ -114,7 +114,9 @@ class TeamDetailViewModel @Inject constructor(
 
             })
         }
-
     }
+
+    private fun muteMode(isMute: Boolean) =
+        if (isMute) TeamAllMuteModeEnum.MuteALL else TeamAllMuteModeEnum.Cancel
 
 }

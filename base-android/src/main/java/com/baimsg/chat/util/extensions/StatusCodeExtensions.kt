@@ -45,9 +45,8 @@ fun TeamUpdateModeEnum.message() = when (this) {
 }
 
 fun TeamAllMuteModeEnum.message() = when (this) {
-    TeamAllMuteModeEnum.MuteALL -> "全体禁言"
-    TeamAllMuteModeEnum.MuteNormal -> "默认禁言"
-    else -> "取消禁言"
+    TeamAllMuteModeEnum.Cancel -> "取消禁言"
+    else -> "全体禁言"
 }
 
 

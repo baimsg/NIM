@@ -1,7 +1,9 @@
 package com.baimsg.chat.fragment.team.detail
 
 import androidx.fragment.app.viewModels
+import com.afollestad.materialdialogs.LayoutMode
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.input.input
 import com.afollestad.materialdialogs.list.listItems
@@ -81,15 +83,14 @@ class TeamDetailFragment : BaseFragment<FragmentTeamDetailBinding>(R.layout.frag
         }
 
         binding.tvVerifyType.setOnClickListener {
-            MaterialDialog(requireContext())
-                .cancelOnTouchOutside(false)
+            MaterialDialog(requireContext(), BottomSheet(LayoutMode.WRAP_CONTENT))
                 .show {
                     title(R.string.verify_type)
                     listItems(
                         items = listOf(
-                            "需要审核",
-                            "不需要审核",
-                            "不允许加群"
+                            "需要身份验证",
+                            "允许任何人加入",
+                            "不允许任何人加入"
                         )
                     ) { dialog, index, _ ->
                         dialog.dismiss()
@@ -105,27 +106,54 @@ class TeamDetailFragment : BaseFragment<FragmentTeamDetailBinding>(R.layout.frag
                 }
         }
 
-        binding.scBeInviteMode.setOnCheckedChangeListener { _, isChecked ->
+        binding.tvBeInviteMode.setOnClickListener {
             detailViewModel.apply {
-                TeamFieldEnum.BeInviteMode set if (isChecked) TeamBeInviteModeEnum.NoAuth else TeamBeInviteModeEnum.NeedAuth
+                MaterialDialog(requireContext(), BottomSheet(LayoutMode.WRAP_CONTENT)).show {
+                    title(R.string.be_invite_mode)
+                    listItems(items = listOf("不需要同意", "需要对方同意")) { dialog, index, text ->
+                        dialog.dismiss()
+                        TeamFieldEnum.BeInviteMode set if (index == 0) TeamBeInviteModeEnum.NoAuth else TeamBeInviteModeEnum.NeedAuth
+                    }
+                    negativeButton()
+                }
             }
         }
 
-        binding.scInviteMode.setOnCheckedChangeListener { _, isChecked ->
+        binding.tvInviteMode.setOnClickListener {
             detailViewModel.apply {
-                TeamFieldEnum.InviteMode set if (isChecked) TeamInviteModeEnum.Manager else TeamInviteModeEnum.All
+                MaterialDialog(requireContext(), BottomSheet(LayoutMode.WRAP_CONTENT)).show {
+                    title(R.string.invite_mode)
+                    listItems(items = listOf("仅管理", "任何人")) { dialog, index, text ->
+                        dialog.dismiss()
+                        TeamFieldEnum.InviteMode set if (index == 0) TeamInviteModeEnum.Manager else TeamInviteModeEnum.All
+                    }
+                    negativeButton()
+                }
             }
         }
 
-        binding.scTeamUpdateMode.setOnCheckedChangeListener { _, isChecked ->
+        binding.tvTeamUpdateMode.setOnClickListener {
             detailViewModel.apply {
-                TeamFieldEnum.TeamUpdateMode set if (isChecked) TeamUpdateModeEnum.Manager else TeamUpdateModeEnum.All
+                MaterialDialog(requireContext(), BottomSheet(LayoutMode.WRAP_CONTENT)).show {
+                    title(R.string.team_update_mode)
+                    listItems(items = listOf("仅管理", "任何人")) { dialog, index, text ->
+                        dialog.dismiss()
+                        TeamFieldEnum.TeamUpdateMode set if (index == 0) TeamUpdateModeEnum.Manager else TeamUpdateModeEnum.All
+                    }
+                    negativeButton()
+                }
             }
         }
 
-
-        binding.scAllMute.setOnCheckedChangeListener { _, isChecked ->
-            detailViewModel.allMute(isChecked)
+        binding.tvAllMute.setOnClickListener {
+            MaterialDialog(requireContext(), BottomSheet(LayoutMode.WRAP_CONTENT)).show {
+                title(R.string.all_mute)
+                listItems(items = listOf("全体禁言", "取消禁言")) { dialog, index, text ->
+                    dialog.dismiss()
+                    detailViewModel.allMute(index == 0)
+                }
+                negativeButton()
+            }
         }
     }
 
@@ -145,16 +173,16 @@ class TeamDetailFragment : BaseFragment<FragmentTeamDetailBinding>(R.layout.frag
 
                     binding.tvVerifyTypeValue.text = verifyType.message()
 
-                    binding.scBeInviteMode.isChecked =
-                        teamBeInviteMode == TeamBeInviteModeEnum.NoAuth
+                    binding.tvBeInviteModeValue.text =
+                        teamBeInviteMode.message()
 
-                    binding.scInviteMode.isChecked =
-                        teamInviteMode == TeamInviteModeEnum.Manager
+                    binding.tvInviteModeValue.text =
+                        teamInviteMode.message()
 
-                    binding.scTeamUpdateMode.isChecked =
-                        teamUpdateMode == TeamUpdateModeEnum.Manager
+                    binding.tvTeamUpdateModeValue.text =
+                        teamUpdateMode.message()
 
-                    binding.scAllMute.isChecked = allMute
+                    binding.tvAllMuteValue.text = muteMode.message()
 
                 }
 

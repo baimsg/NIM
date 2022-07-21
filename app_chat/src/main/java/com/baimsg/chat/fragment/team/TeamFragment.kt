@@ -34,6 +34,8 @@ class TeamFragment : BaseFragment<FragmentTeamBinding>(R.layout.fragment_team) {
     private lateinit var tvCount: TextView
 
     override fun initView() {
+        teamViewModel.loadTeams()
+
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()
         }

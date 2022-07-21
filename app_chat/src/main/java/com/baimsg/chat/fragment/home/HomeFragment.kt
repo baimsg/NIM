@@ -106,7 +106,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     }
 
     override fun initData() {
-//        examine()
+        examine()
     }
 
     private fun examine() {

@@ -88,7 +88,7 @@
                     android:id="@+id/tvAnnouncementValue"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
-                    android:gravity="center"
+                    android:gravity="start"
                     android:paddingHorizontal="16dp"
                     android:paddingBottom="16dp"
                     android:textColor="@color/subtitle_color"
@@ -132,7 +132,7 @@
                     android:id="@+id/tvIntroduceValue"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
-                    android:gravity="center"
+                    android:gravity="start"
                     android:paddingHorizontal="16dp"
                     android:paddingBottom="16dp"
                     android:textColor="@color/subtitle_color"
@@ -269,7 +269,6 @@
                     app:layout_constraintEnd_toEndOf="@id/ivEnter"
                     app:layout_constraintTop_toTopOf="@id/tvVerifyType" />
 
-
                 <View
                     android:id="@+id/vLineVerifyType"
                     android:layout_width="match_parent"
@@ -290,14 +289,27 @@
                     android:textSize="16sp"
                     app:layout_constraintTop_toBottomOf="@id/vLineVerifyType" />
 
-                <androidx.appcompat.widget.SwitchCompat
+                <TextView
+                    android:id="@+id/tvBeInviteModeValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:textColor="@color/subtitle_color"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="@id/tvBeInviteMode"
+                    app:layout_constraintEnd_toStartOf="@id/ivEnter"
+                    app:layout_constraintTop_toTopOf="@id/tvBeInviteMode"
+                    tools:text="不需要同意" />
+
+                <ImageView
                     android:id="@+id/scBeInviteMode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:checked="true"
+                    android:contentDescription="@string/enter"
+                    android:src="@drawable/ic_right"
                     app:layout_constraintBottom_toBottomOf="@id/tvBeInviteMode"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/ivEnter"
                     app:layout_constraintTop_toTopOf="@id/tvBeInviteMode" />
 
                 <View
@@ -330,18 +342,17 @@
                     android:textColor="@color/subtitle_color"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="@id/tvInviteMode"
-                    app:layout_constraintEnd_toStartOf="@id/scInviteMode"
+                    app:layout_constraintEnd_toStartOf="@id/ivEnter"
                     app:layout_constraintTop_toTopOf="@id/tvInviteMode"
                     tools:text="仅管理" />
 
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/scInviteMode"
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:checked="true"
+                    android:contentDescription="@string/enter"
+                    android:src="@drawable/ic_right"
                     app:layout_constraintBottom_toBottomOf="@id/tvInviteMode"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/ivEnter"
                     app:layout_constraintTop_toTopOf="@id/tvInviteMode" />
 
                 <View
@@ -374,18 +385,17 @@
                     android:textColor="@color/subtitle_color"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="@id/tvTeamUpdateMode"
-                    app:layout_constraintEnd_toStartOf="@id/scTeamUpdateMode"
+                    app:layout_constraintEnd_toStartOf="@id/ivEnter"
                     app:layout_constraintTop_toTopOf="@id/tvTeamUpdateMode"
                     tools:text="仅管理" />
 
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/scTeamUpdateMode"
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:checked="true"
+                    android:contentDescription="@string/enter"
+                    android:src="@drawable/ic_right"
                     app:layout_constraintBottom_toBottomOf="@id/tvTeamUpdateMode"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/ivEnter"
                     app:layout_constraintTop_toTopOf="@id/tvTeamUpdateMode" />
 
                 <View
@@ -408,14 +418,27 @@
                     android:textSize="16sp"
                     app:layout_constraintTop_toBottomOf="@id/vAllMute" />
 
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/scAllMute"
+                <TextView
+                    android:id="@+id/tvAllMuteValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:textColor="@color/subtitle_color"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="@id/tvAllMute"
+                    app:layout_constraintEnd_toStartOf="@id/ivEnter"
+                    app:layout_constraintTop_toTopOf="@id/tvAllMute"
+                    tools:text="仅管理" />
+
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:checked="true"
+                    android:contentDescription="@string/enter"
+                    android:src="@drawable/ic_right"
                     app:layout_constraintBottom_toBottomOf="@id/tvAllMute"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/ivEnter"
                     app:layout_constraintTop_toTopOf="@id/tvAllMute" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
