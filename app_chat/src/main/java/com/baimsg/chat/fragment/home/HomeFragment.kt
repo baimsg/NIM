@@ -5,14 +5,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.LayoutMode
 import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.WhichButton
-import com.afollestad.materialdialogs.actions.setActionButtonEnabled
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.afollestad.materialdialogs.customview.customView
-import com.afollestad.materialdialogs.input.input
 import com.afollestad.materialdialogs.list.listItems
-import com.baimsg.base.util.KvUtils
-import com.baimsg.chat.Constant
 import com.baimsg.chat.R
 import com.baimsg.chat.base.BaseFragment
 import com.baimsg.chat.databinding.FragmentHomeBinding
@@ -20,8 +15,6 @@ import com.baimsg.chat.fragment.login.LoginViewModel
 import com.baimsg.chat.util.extensions.message
 import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
 import com.baimsg.chat.util.extensions.showInfo
-import com.baimsg.data.model.Fail
-import com.baimsg.data.model.Success
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -31,12 +24,6 @@ import kotlinx.coroutines.launch
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private val loginViewModel by activityViewModels<LoginViewModel>()
-
-    private val loadDialog by lazy {
-        MaterialDialog(requireContext()).cancelable(false)
-            .cancelOnTouchOutside(false)
-            .customView(R.layout.dialog_loading)
-    }
 
     private val openLogin by lazy {
         findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToLoginFragment(hard = true))
@@ -105,53 +92,5 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         }
     }
 
-    override fun initData() {
-        examine()
-    }
-
-    private fun examine() {
-        lifecycleScope.launch {
-            loadDialog.show()
-            val base = loginViewModel.getBaseConfig()
-            loadDialog.dismiss()
-            when (base) {
-                is Success -> {
-                    if (base().id != Constant.ID) {
-                        MaterialDialog(requireContext())
-                            .cancelable(false)
-                            .cancelOnTouchOutside(false).show {
-                                input(
-                                    hint = "id",
-                                    waitForPositiveButton = false
-                                ) { materialDialog, charSequence ->
-                                    val isValid = charSequence.toString() == base().id
-                                    materialDialog.setActionButtonEnabled(
-                                        WhichButton.POSITIVE,
-                                        isValid
-                                    )
-                                    KvUtils.put(Constant.KEY_ID, charSequence.toString())
-                                }
-                                negativeButton(R.string.cancel) { loginViewModel.exit() }
-                                positiveButton(R.string.sure)
-                            }
-                    }
-                }
-                is Fail -> {
-                    MaterialDialog(requireContext())
-                        .cancelable(false)
-                        .cancelOnTouchOutside(false).show {
-                            title(text = "网络异常")
-                            message(text = "你的网络好像已经丢失了:)")
-                            negativeButton(R.string.cancel) { loginViewModel.exit() }
-                            positiveButton(R.string.retry) {
-                                examine()
-                            }
-                        }
-                }
-                else -> {}
-            }
-
-        }
-    }
 
 }

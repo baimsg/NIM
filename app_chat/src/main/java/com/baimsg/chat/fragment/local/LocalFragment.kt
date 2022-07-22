@@ -2,12 +2,14 @@ package com.baimsg.chat.fragment.local
 
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.LayoutMode
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
+import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.list.listItems
 import com.baimsg.chat.R
 import com.baimsg.chat.adapter.AccountMediumAdapter
@@ -23,6 +25,7 @@ import com.baimsg.data.model.entities.NIMUserInfo
 import com.chad.library.adapter.base.animation.AlphaInAnimation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 /**
  * Create by Baimsg on 2022/7/1
@@ -35,6 +38,12 @@ class LocalFragment : BaseFragment<FragmentLocalBinding>(R.layout.fragment_local
 
     private val accountMediumAdapter by lazy {
         AccountMediumAdapter()
+    }
+
+    private val loadDialog by lazy {
+        MaterialDialog(requireContext()).cancelable(false)
+            .cancelOnTouchOutside(false)
+            .customView(R.layout.dialog_loading)
     }
 
     override fun initView() {
@@ -59,13 +68,22 @@ class LocalFragment : BaseFragment<FragmentLocalBinding>(R.layout.fragment_local
                             showWarning("导出功能待完善")
                         }
                         2 -> {
-                            accountMediumAdapter.setList(null)
-                            localViewModel.deleteAllByAppKey()
-                            showSuccess("已将数据库清空")
+                            lifecycleScope.launch {
+                                loadDialog.show()
+                                localViewModel.deleteAllByAppKey()
+                                accountMediumAdapter.setList(null)
+                                loadDialog.dismiss()
+                                showSuccess("已将数据库清空")
+                            }
                         }
                         3 -> {
-                            localViewModel.addTaskAll()
-                            showSuccess("数据已加入任务列表")
+                            lifecycleScope.launch {
+                                loadDialog.show()
+                                localViewModel.addTaskAll()
+                                loadDialog.dismiss()
+                                showSuccess("数据已加入任务列表")
+                            }
+
                         }
                     }
                 }

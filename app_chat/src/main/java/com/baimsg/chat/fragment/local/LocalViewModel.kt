@@ -14,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 /**
@@ -42,7 +43,7 @@ class LocalViewModel @Inject constructor(
     }
 
     /**
-     * 加载数据库列表
+     * 加载数据库数据
      */
     fun loadAllAccount() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -56,46 +57,35 @@ class LocalViewModel @Inject constructor(
     }
 
     /**
-     * 单个删除
+     * 数据一条删除
      * @param nimUserInfo 删除对象
      */
     fun deleteAccountById(nimUserInfo: NIMUserInfo) {
         viewModelScope.launch(Dispatchers.IO) {
+            userInfoDao.deleteById(nimUserInfo.id)
             _viewState.apply {
                 value = value.copy(allAccounts = allAccounts.toMutableList().apply {
                     remove(nimUserInfo)
                 }, updateStatus = UpdateStatus.REMOVE)
             }
-            userInfoDao.deleteById(nimUserInfo.id)
         }
     }
 
     /**
-     * 全部删除
+     * 删除全部数据
      */
-    fun deleteAllByAppKey() {
-        viewModelScope.launch(Dispatchers.IO) {
+    suspend fun deleteAllByAppKey() {
+        withContext(Dispatchers.IO) {
+            userInfoDao.deleteByAppKey(initAppKey)
             _viewState.apply {
                 value = value.copy(allAccounts = emptyList(), updateStatus = UpdateStatus.REFRESH)
             }
-            userInfoDao.deleteByAppKey(initAppKey)
         }
     }
 
     /**
-     * 全部加入任务
-     */
-    fun addTaskAll() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val tasks = allAccounts.filter { !it.name.verifySensitiveWords() }.map { it.asTask() }
-            taskAccountDao.updateOrInsert(tasks)
-        }
-    }
-
-
-    /**
-     * 添加到任务
-     * @param nimUserInfo
+     * 添加一条数据到任务
+     * @param nimUserInfo 数据
      */
     fun addTask(nimUserInfo: NIMUserInfo) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -103,5 +93,14 @@ class LocalViewModel @Inject constructor(
         }
     }
 
+    /**
+     * 全部添加到任务
+     */
+    suspend fun addTaskAll() {
+        withContext(Dispatchers.IO) {
+            val tasks = allAccounts.filter { !it.name.verifySensitiveWords() }.map { it.asTask() }
+            taskAccountDao.updateOrInsert(tasks)
+        }
+    }
 
 }

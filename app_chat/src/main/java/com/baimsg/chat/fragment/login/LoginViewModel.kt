@@ -3,12 +3,7 @@ package com.baimsg.chat.fragment.login
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.baimsg.chat.type.ExecutionStatus
-import com.baimsg.data.api.BaseEndpoints
 import com.baimsg.data.db.daos.LoginRecordDao
-import com.baimsg.data.model.Async
-import com.baimsg.data.model.BaseConfig
-import com.baimsg.data.model.Fail
-import com.baimsg.data.model.Success
 import com.baimsg.data.model.entities.NIMLoginRecord
 import com.baimsg.data.model.entities.NIMUserInfo
 import com.baimsg.data.model.entities.asUser
@@ -33,8 +28,7 @@ import javax.inject.Inject
  **/
 @HiltViewModel
 internal class LoginViewModel @Inject constructor(
-    private val loginRecordDao: LoginRecordDao,
-    private val baseEndpoints: BaseEndpoints
+    private val loginRecordDao: LoginRecordDao
 ) : ViewModel() {
 
     private val authService by lazy {
@@ -82,19 +76,6 @@ internal class LoginViewModel @Inject constructor(
     init {
         refreshData()
     }
-
-    /**
-     * 获取云端数据
-     */
-    suspend fun getBaseConfig(): Async<BaseConfig> =
-        withContext(Dispatchers.IO) {
-            try {
-                Success(baseEndpoints.getKey())
-            } catch (e: Exception) {
-                Fail(e)
-            }
-        }
-
 
     fun login(appKey: String, account: String, token: String) {
         _viewState.apply {

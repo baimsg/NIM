@@ -20,7 +20,6 @@ class AppViewModel @Inject constructor(
     private val baseEndpoints: BaseEndpoints
 ) : ViewModel() {
 
-
     /**
      * 获取云端数据
      */
