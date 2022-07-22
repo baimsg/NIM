@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.baimsg.base.util.extensions.logE
 import com.baimsg.chat.Constant
 import com.baimsg.chat.type.BatchStatus
+import com.baimsg.chat.type.UpdateStatus
 import com.baimsg.chat.util.getId
 import com.baimsg.data.db.daos.UserInfoDao
 import com.baimsg.data.model.entities.NIMUserInfo
@@ -29,16 +30,12 @@ import javax.inject.Inject
 @HiltViewModel
 class ScanningAccountViewModel @Inject constructor(
     private val userInfoDao: UserInfoDao
-) :
-    ViewModel() {
+) : ViewModel() {
 
     private val userService by lazy {
         NIMClient.getService(UserService::class.java)
     }
 
-    /**
-     * 搜索参数
-     */
     private val _viewState by lazy {
         MutableStateFlow(ScanningAccountViewState.EMPTY)
     }
@@ -54,16 +51,25 @@ class ScanningAccountViewModel @Inject constructor(
      */
     fun updateAccount(account: Long) {
         _viewState.apply {
-            if (value.isDestroy()) value = ScanningAccountViewState.EMPTY.copy(account = account)
+            if (value.unknown()) value = ScanningAccountViewState.EMPTY.copy(account = account)
         }
     }
 
     /**
-     * 停止搜索
+     * 清空已扫描到数据
+     */
+    fun cleanSearchAccount() {
+        _viewState.apply {
+            value = value.copy(allUser = emptyList(), updateStatus = UpdateStatus.CLEAN)
+        }
+    }
+
+    /**
+     * 清空已扫描到数据
      */
     fun stopSearchAccount() {
         _viewState.apply {
-            value = ScanningAccountViewState.EMPTY.copy(status = BatchStatus.STOP)
+            value = ScanningAccountViewState.EMPTY
         }
     }
 
@@ -73,9 +79,10 @@ class ScanningAccountViewModel @Inject constructor(
     fun searchAccount() {
         _viewState.apply {
             if (value.running()) {
-                value = value.copy(status = BatchStatus.PAUSE, update = false)
+                value = value.copy(status = BatchStatus.PAUSE, updateStatus = UpdateStatus.DEFAULT)
             } else {
-                value = value.copy(status = BatchStatus.RUNNING, update = false)
+                value =
+                    value.copy(status = BatchStatus.RUNNING, updateStatus = UpdateStatus.DEFAULT)
                 searchAccount(account = value.account)
             }
         }
@@ -89,15 +96,23 @@ class ScanningAccountViewModel @Inject constructor(
             runBlocking {
                 val searchCount = Constant.SEARCH_COUNT
                 _viewState.apply {
-                    if (value.count >= searchCount || value.pause()) {
-                        value = value.copy(status = BatchStatus.PAUSE, update = false)
+                    if (value.pause()) return@runBlocking
+                    if (value.count >= searchCount) {
+                        value = value.copy(
+                            status = BatchStatus.STOP,
+                            updateStatus = UpdateStatus.DEFAULT
+                        )
                         return@runBlocking
                     }
                     val accounts = mutableListOf<String>().apply {
                         (0..149).forEach { index ->
                             if (value.count >= searchCount) return@forEach
                             add((account + index).getId())
-                            value = value.copy(count = value.count + 1, update = false)
+                            logE((account + index).getId())
+                            value = value.copy(
+                                count = value.count + 1,
+                                updateStatus = UpdateStatus.DEFAULT
+                            )
                         }
                     }
                     userService.fetchUserInfo(accounts)
@@ -106,8 +121,8 @@ class ScanningAccountViewModel @Inject constructor(
                                 val newUser = mUsers?.map { it.asUser() }
                                 value = value.copy(
                                     account = account + accounts.size,
-                                    users = newUser ?: emptyList(),
-                                    update = true,
+                                    newUsers = newUser ?: emptyList(),
+                                    updateStatus = UpdateStatus.APPEND,
                                     allUser = value.allUser.toMutableList().apply {
                                         if (newUser != null) {
                                             addAll(newUser)
@@ -130,7 +145,11 @@ class ScanningAccountViewModel @Inject constructor(
         }
     }
 
-    suspend fun save(appKey: String) {
+    /**
+     * 保存到数据库
+     * @param appKey 当前登录的key
+     */
+    suspend fun saveDatabase(appKey: String) {
         withContext(Dispatchers.IO) {
             userInfoDao.updateOrInsert(allUser.map {
                 it.copy(

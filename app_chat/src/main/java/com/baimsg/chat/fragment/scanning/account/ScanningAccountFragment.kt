@@ -7,14 +7,15 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.baimsg.base.util.extensions.length
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.customview.customView
 import com.baimsg.chat.Constant
 import com.baimsg.chat.R
 import com.baimsg.chat.adapter.AccountMediumAdapter
 import com.baimsg.chat.base.BaseFragment
 import com.baimsg.chat.databinding.FragmentScanningAccountBinding
 import com.baimsg.chat.fragment.login.LoginViewModel
-import com.baimsg.chat.type.BatchStatus
+import com.baimsg.chat.type.UpdateStatus
 import com.baimsg.chat.util.extensions.*
 import com.baimsg.chat.util.getId
 import com.chad.library.adapter.base.animation.AlphaInAnimation
@@ -30,6 +31,12 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class ScanningAccountFragment :
     BaseFragment<FragmentScanningAccountBinding>(R.layout.fragment_scanning_account) {
+
+    private val loadDialog by lazy {
+        MaterialDialog(requireContext()).cancelable(false)
+            .cancelOnTouchOutside(false)
+            .customView(R.layout.dialog_loading)
+    }
 
     private val scanningAccountViewModel by viewModels<ScanningAccountViewModel>()
 
@@ -48,6 +55,14 @@ class ScanningAccountFragment :
             }
         }
 
+        binding.ryContent.apply {
+            accountMediumAdapter.animationEnable = true
+            accountMediumAdapter.adapterAnimation = AlphaInAnimation()
+
+            layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+            adapter = accountMediumAdapter
+        }
+
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()
         }
@@ -57,26 +72,20 @@ class ScanningAccountFragment :
         }
 
         binding.ivClean.setOnClickListener {
-            scanningAccountViewModel.stopSearchAccount()
+            scanningAccountViewModel.cleanSearchAccount()
         }
 
         binding.ivSave.setOnClickListener {
             lifecycleScope.launch {
-                scanningAccountViewModel.save(loginViewModel.currentLoginRecord.appKey)
+                loadDialog.show()
+                scanningAccountViewModel.saveDatabase(loginViewModel.currentLoginRecord.appKey)
+                loadDialog.dismiss()
                 showSuccess("已保存数据库")
             }
         }
 
         binding.ivStart.setOnClickListener {
             scanningAccountViewModel.searchAccount()
-        }
-
-        binding.ryContent.apply {
-            accountMediumAdapter.animationEnable = true
-            accountMediumAdapter.adapterAnimation = AlphaInAnimation()
-
-            layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-            adapter = accountMediumAdapter
         }
 
         binding.editAccount.apply {
@@ -91,50 +100,45 @@ class ScanningAccountFragment :
             }
         }
 
+        binding.fabQuit.setOnClickListener {
+            accountMediumAdapter.setList(null)
+            scanningAccountViewModel.stopSearchAccount()
+        }
+
     }
 
     override fun initLiveData() {
         repeatOnLifecycleStarted {
             scanningAccountViewModel.observeViewState.collectLatest { value ->
                 value.apply {
+                    binding.proLoading.show(running())
+                    binding.ivBack.show(!running())
+                    binding.ivSave.show(!running() && allUser.isNotEmpty())
+                    binding.ivClean.show(!running() && allUser.isNotEmpty())
+                    binding.ivSetting.show(!running())
+                    binding.ivStart.setImageResource(if (running()) R.drawable.ic_pause else R.drawable.ic_play)
+                    binding.editAccount.isEnabled = unknown()
+
+                    binding.fabQuit.show(pause() || stop())
+
                     val searchCount = Constant.SEARCH_COUNT
                     binding.tvCount.text = "(${allUser.size})"
                     binding.tvProgress.text = "(${count}/${searchCount})"
-                    when (status) {
-                        BatchStatus.RUNNING -> {
-                            binding.ivStart.setImageResource(R.drawable.ic_pause)
-                            binding.ivBack.hide()
-                            binding.ivSave.hide()
-                            binding.ivClean.hide()
-                            binding.ivSetting.hide()
-                            binding.proLoading.show()
-                            binding.editAccount.isEnabled = false
-                            if (update) accountMediumAdapter.addData(users)
-                            binding.editAccount.setText(account.getId())
-                        }
-                        BatchStatus.STOP -> {
-                            binding.ivSave.hide()
-                            binding.ivClean.hide()
-                            accountMediumAdapter.setList(null)
-                            binding.editAccount.isEnabled = true
-                        }
-                        else -> {
-                            binding.proLoading.hide(true)
-                            binding.ivBack.show()
-                            binding.ivSetting.show()
-                            if (allUser.isNotEmpty()) {
-                                binding.ivSave.show()
-                                binding.ivClean.show()
-                            }
-                            binding.ivStart.setImageResource(R.drawable.ic_play)
-                        }
+
+                    if (running()) binding.editAccount.setText(account.getId())
+
+                    when (updateStatus) {
+                        UpdateStatus.APPEND -> accountMediumAdapter.addData(newUsers)
+                        UpdateStatus.REFRESH, UpdateStatus.CLEAN ->
+                            accountMediumAdapter.setList(allUser)
+                        else -> Unit
                     }
                 }
-
             }
         }
 
     }
+
 
     override fun onPause() {
         super.onPause()

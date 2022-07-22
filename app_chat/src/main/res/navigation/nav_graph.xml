@@ -153,9 +153,9 @@
         tools:layout="@layout/fragment_filter" />
     <fragment
         android:id="@+id/searchUserFragment"
-        android:name="com.baimsg.chat.fragment.search.SearchUserFragment"
+        android:name="com.baimsg.chat.fragment.search.SearchFragment"
         android:label="SearchUserFragment"
-        tools:layout="@layout/fragment_search_user">
+        tools:layout="@layout/fragment_search">
         <action
             android:id="@+id/action_searchUserFragment_to_settingFragment"
             app:destination="@id/settingFragment"
