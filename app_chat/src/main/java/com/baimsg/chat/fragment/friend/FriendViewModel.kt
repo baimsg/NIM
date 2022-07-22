@@ -27,9 +27,6 @@ class FriendViewModel @Inject constructor() : ViewModel() {
         NIMClient.getService(FriendService::class.java)
     }
 
-    /**
-     * 好友用户信息
-     */
     private val _viewState by lazy {
         MutableStateFlow(FriendViewState.EMPTY)
     }
@@ -38,22 +35,14 @@ class FriendViewModel @Inject constructor() : ViewModel() {
 
     val allAccounts: List<String> = _viewState.value.allAccounts
 
-    val page: Int = _viewState.value.page
+    private val page: Int = _viewState.value.page
 
     /**
      * 加载好友列表
      */
     fun loadFriends() {
-        viewModelScope.launch {
-            _viewState.apply {
-                val all = friendService.friendAccounts
-                value = value.copy(
-                    executionStatus =
-                    if (all.isNullOrEmpty()) ExecutionStatus.FAIL else value.executionStatus,
-                    allAccounts = all,
-                    page = 0
-                )
-            }
+        _viewState.apply {
+            value = FriendViewState.EMPTY.copy(allAccounts = friendService.friendAccounts)
         }
         getUserInfo()
     }

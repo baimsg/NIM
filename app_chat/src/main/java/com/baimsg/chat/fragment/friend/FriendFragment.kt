@@ -73,13 +73,16 @@ class FriendFragment : BaseFragment<FragmentFriendBinding>(R.layout.fragment_fri
             friendViewModel.observeViewState.collectLatest {
                 when (it.executionStatus) {
                     ExecutionStatus.SUCCESS -> {
+                        binding.srContent.isRefreshing = false
                         accountSmallAdapter.addData(it.newUsers)
                         accountSmallAdapter.loadMoreModule.loadMoreComplete()
                     }
                     ExecutionStatus.FAIL -> {
+                        binding.srContent.isRefreshing = false
                         accountSmallAdapter.loadMoreModule.loadMoreFail()
                     }
                     ExecutionStatus.EMPTY -> {
+                        binding.srContent.isRefreshing = false
                         accountSmallAdapter.loadMoreModule.loadMoreEnd()
                     }
                     else -> Unit
