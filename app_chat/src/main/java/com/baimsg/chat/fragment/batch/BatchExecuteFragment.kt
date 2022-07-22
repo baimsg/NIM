@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.LayoutMode
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
-import com.afollestad.materialdialogs.bottomsheets.expandBottomSheet
 import com.afollestad.materialdialogs.list.listItems
 import com.afollestad.materialdialogs.list.listItemsMultiChoice
 import com.baimsg.chat.R
@@ -16,10 +15,8 @@ import com.baimsg.chat.adapter.TaskAccountAdapter
 import com.baimsg.chat.base.BaseFragment
 import com.baimsg.chat.databinding.EmptyBaseBinding
 import com.baimsg.chat.databinding.FragmentBatchExecuteBinding
-import com.baimsg.chat.type.BatchStatus
 import com.baimsg.chat.type.BatchType
 import com.baimsg.chat.type.UpdateStatus
-import com.baimsg.chat.util.extensions.hide
 import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
 import com.baimsg.chat.util.extensions.show
 import com.baimsg.chat.util.extensions.showWarning
@@ -128,17 +125,14 @@ class BatchExecuteFragment :
                                     MaterialDialog(
                                         requireContext(),
                                         BottomSheet(LayoutMode.WRAP_CONTENT)
-                                    )
-                                        .cancelable(false)
-                                        .cancelOnTouchOutside(false)
-                                        .show {
-                                            listItemsMultiChoice(items = allTeam.map { it.name + "-" + it.id + "[${it.memberCount}]" })
-                                            { _, indices, _ ->
-                                                batchExecuteViewModel.updateTeam(indices)
-                                            }
-                                            negativeButton(res = R.string.cancel)
-                                            positiveButton(res = R.string.sure)
+                                    ).show {
+                                        listItemsMultiChoice(items = allTeam.map { it.name + "-" + it.id + "[${it.memberCount}]" })
+                                        { _, indices, _ ->
+                                            batchExecuteViewModel.updateTeam(indices)
                                         }
+                                        negativeButton()
+                                        positiveButton()
+                                    }
                                 }
 
                             }

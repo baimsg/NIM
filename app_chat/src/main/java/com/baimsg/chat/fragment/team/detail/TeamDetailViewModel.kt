@@ -2,6 +2,7 @@ package com.baimsg.chat.fragment.team.detail
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import com.baimsg.chat.type.ExecutionStatus
 import com.baimsg.data.model.entities.NIMTeam
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.RequestCallback
@@ -27,7 +28,6 @@ class TeamDetailViewModel @Inject constructor(
         NIMClient.getService(TeamService::class.java)
     }
 
-
     private val _teamInfo by lazy {
         MutableStateFlow(handle["teamInfo"] ?: NIMTeam())
     }
@@ -36,6 +36,18 @@ class TeamDetailViewModel @Inject constructor(
 
     val announcement: String?
         get() = _teamInfo.value.announcement
+
+    val id: String
+        get() = _teamInfo.value.id
+
+    val introduce: String?
+        get() = _teamInfo.value.introduce
+
+    private val _dismissTeamViewState by lazy {
+        MutableStateFlow(DismissTeamViewState.EMPTY)
+    }
+
+    val observeDismissTeamViewState: StateFlow<DismissTeamViewState> = _dismissTeamViewState
 
     infix fun TeamFieldEnum.set(value: Serializable) {
         teamService.updateTeam(_teamInfo.value.id, this, value)
@@ -96,6 +108,10 @@ class TeamDetailViewModel @Inject constructor(
         }
     }
 
+    /**
+     * 开启或关闭全体禁言
+     * @param isMute 是否禁言
+     */
     fun allMute(isMute: Boolean) {
         _teamInfo.apply {
             teamService.muteAllTeamMember(value.id, isMute).setCallback(object :
@@ -116,7 +132,47 @@ class TeamDetailViewModel @Inject constructor(
         }
     }
 
+    /**
+     * 获取禁言枚举类型
+     * @param isMute 是否禁言
+     */
     private fun muteMode(isMute: Boolean) =
         if (isMute) TeamAllMuteModeEnum.MuteALL else TeamAllMuteModeEnum.Cancel
 
+
+    /**
+     * 解散群聊
+     */
+    fun dismissTeam() {
+        _dismissTeamViewState.apply {
+            value = DismissTeamViewState.EMPTY
+            teamService.dismissTeam(id)
+                .setCallback(object : RequestCallback<Void?> {
+                    override fun onSuccess(param: Void?) {
+                        value = value.copy(
+                            info = _teamInfo.value,
+                            executionStatus = ExecutionStatus.SUCCESS
+                        )
+                    }
+
+                    override fun onFailed(code: Int) {
+                        value = value.copy(
+                            info = _teamInfo.value,
+                            message = "解散群聊失败「$code」",
+                            executionStatus = ExecutionStatus.FAIL
+                        )
+                    }
+
+                    override fun onException(exception: Throwable) {
+                        value = value.copy(
+                            info = _teamInfo.value,
+                            message = "解散群聊失败「${exception.message}」",
+                            executionStatus = ExecutionStatus.FAIL
+                        )
+                    }
+                })
+        }
+
+
+    }
 }

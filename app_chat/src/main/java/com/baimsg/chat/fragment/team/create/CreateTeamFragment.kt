@@ -14,7 +14,6 @@ import com.baimsg.chat.R
 import com.baimsg.chat.adapter.TipAdapter
 import com.baimsg.chat.base.BaseFragment
 import com.baimsg.chat.databinding.FragmentTeamCreateBinding
-import com.baimsg.chat.fragment.team.TeamViewModel
 import com.baimsg.chat.type.BatchStatus
 import com.baimsg.chat.util.extensions.message
 import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
@@ -31,7 +30,7 @@ import kotlinx.coroutines.flow.collectLatest
 @AndroidEntryPoint
 class CreateTeamFragment : BaseFragment<FragmentTeamCreateBinding>(R.layout.fragment_team_create) {
 
-    private val teamViewModel by viewModels<TeamViewModel>()
+    private val createTeamViewModel by viewModels<CreateTeamViewModel>()
 
     private val tipAdapter by lazy {
         TipAdapter()
@@ -49,11 +48,11 @@ class CreateTeamFragment : BaseFragment<FragmentTeamCreateBinding>(R.layout.frag
 
         binding.fabQuit.setOnClickListener {
             tipAdapter.setList(null)
-            teamViewModel.stopBatchCreateTeam()
+            createTeamViewModel.stopBatchCreateTeam()
         }
 
         binding.ivCreate.setOnClickListener {
-            teamViewModel.startBatchCreateTeam()
+            createTeamViewModel.startBatchCreateTeam()
         }
 
         binding.ryContent.apply {
@@ -67,11 +66,12 @@ class CreateTeamFragment : BaseFragment<FragmentTeamCreateBinding>(R.layout.frag
 
         binding.tvTeamName.setOnClickListener {
             MaterialDialog(requireContext())
-                .cancelOnTouchOutside(false)
                 .show {
                     title(R.string.team_name)
-                    input(hint = "请输入群聊名称") { _, sequence ->
-                        teamViewModel.apply {
+                    input(
+                        hint = "请输入群聊名称"
+                    ) { _, sequence ->
+                        createTeamViewModel.apply {
                             TeamFieldEnum.Name set sequence.toString()
                         }
                     }
@@ -88,7 +88,7 @@ class CreateTeamFragment : BaseFragment<FragmentTeamCreateBinding>(R.layout.frag
                         inputType = InputType.TYPE_CLASS_NUMBER,
                         maxLength = 4
                     ) { _, sequence ->
-                        teamViewModel + sequence.toString().toInt()
+                        createTeamViewModel + sequence.toString().toInt()
                     }
                 }
         }
@@ -105,7 +105,7 @@ class CreateTeamFragment : BaseFragment<FragmentTeamCreateBinding>(R.layout.frag
                         )
                     ) { dialog, index, _ ->
                         dialog.dismiss()
-                        teamViewModel.apply {
+                        createTeamViewModel.apply {
                             TeamFieldEnum.VerifyType set when (index) {
                                 0 -> VerifyTypeEnum.Apply
                                 1 -> VerifyTypeEnum.Free
@@ -118,19 +118,19 @@ class CreateTeamFragment : BaseFragment<FragmentTeamCreateBinding>(R.layout.frag
         }
 
         binding.scBeInviteMode.setOnCheckedChangeListener { _, isChecked ->
-            teamViewModel.apply {
+            createTeamViewModel.apply {
                 TeamFieldEnum.BeInviteMode set if (isChecked) TeamBeInviteModeEnum.NoAuth else TeamBeInviteModeEnum.NeedAuth
             }
         }
 
         binding.scInviteMode.setOnCheckedChangeListener { _, isChecked ->
-            teamViewModel.apply {
+            createTeamViewModel.apply {
                 TeamFieldEnum.InviteMode set if (isChecked) TeamInviteModeEnum.Manager else TeamInviteModeEnum.All
             }
         }
 
         binding.scTeamUpdateMode.setOnCheckedChangeListener { _, isChecked ->
-            teamViewModel.apply {
+            createTeamViewModel.apply {
                 TeamFieldEnum.TeamUpdateMode set if (isChecked) TeamUpdateModeEnum.Manager else TeamUpdateModeEnum.All
             }
         }
@@ -140,7 +140,7 @@ class CreateTeamFragment : BaseFragment<FragmentTeamCreateBinding>(R.layout.frag
 
     override fun initLiveData() {
         repeatOnLifecycleStarted {
-            teamViewModel.observeCreateTeamState.collectLatest { viewState ->
+            createTeamViewModel.observeViewState.collectLatest { viewState ->
                 viewState.apply {
                     binding.proLoading.show(running())
                     binding.fabQuit.show(pause() || stop())

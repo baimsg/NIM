@@ -6,7 +6,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.afollestad.materialdialogs.LayoutMode
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.bottomsheets.BottomSheet
+import com.afollestad.materialdialogs.list.listItems
+import com.afollestad.materialdialogs.list.listItemsMultiChoice
 import com.baimsg.chat.R
 import com.baimsg.chat.adapter.TeamItemAdapter
 import com.baimsg.chat.base.BaseFragment
@@ -15,12 +19,15 @@ import com.baimsg.chat.databinding.FooterTeamChatBinding
 import com.baimsg.chat.databinding.FragmentTeamBinding
 import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
 import com.baimsg.chat.util.extensions.showError
+import com.baimsg.chat.util.extensions.showWarning
 import com.baimsg.data.model.Fail
+import com.baimsg.data.model.JSON
 import com.baimsg.data.model.Loading
 import com.baimsg.data.model.Success
 import com.baimsg.data.model.entities.NIMTeam
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.serialization.builtins.ListSerializer
 
 @AndroidEntryPoint
 class TeamFragment : BaseFragment<FragmentTeamBinding>(R.layout.fragment_team) {
@@ -34,7 +41,6 @@ class TeamFragment : BaseFragment<FragmentTeamBinding>(R.layout.fragment_team) {
     private lateinit var tvCount: TextView
 
     override fun initView() {
-        teamViewModel.loadTeams()
 
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()
@@ -47,9 +53,50 @@ class TeamFragment : BaseFragment<FragmentTeamBinding>(R.layout.fragment_team) {
             }
         }
 
-        binding.tvClear.setOnClickListener {
-            teamViewModel.allTeam?.map { it.id }?.forEachIndexed { _, s ->
-                teamViewModel.dismissTeam(s)
+        binding.tvMore.setOnClickListener {
+            MaterialDialog(requireContext(), BottomSheet(LayoutMode.WRAP_CONTENT)).show {
+                listItems(items = listOf("群发消息", "解散所有群聊")) { dialog, index, _ ->
+                    dialog.dismiss()
+                    when (index) {
+                        0 -> {
+                            if (teamViewModel.allTeam.isEmpty()) {
+                                showWarning("没有群可以群发")
+                                return@listItems
+                            }
+                            MaterialDialog(
+                                requireContext(),
+                                BottomSheet(LayoutMode.WRAP_CONTENT)
+                            ).show {
+                                listItemsMultiChoice(
+                                    items = teamViewModel.allTeam.map { it.name + "-" + it.id + "[${it.memberCount}]" },
+                                    waitForPositiveButton = false,
+                                    allowEmptySelection = true,
+                                ) { _, indices, _ ->
+                                    teamViewModel.upCheckTeam(indices)
+                                }
+                                negativeButton()
+                                positiveButton {
+                                    if (teamViewModel.selectTeas.isEmpty()) {
+                                        showWarning("至少选择一个群聊")
+                                        return@positiveButton
+                                    }
+                                    findNavController().navigate(
+                                        TeamFragmentDirections.actionTeamFragmentToBulkFragment(
+                                            JSON.encodeToString(
+                                                ListSerializer(NIMTeam.serializer()),
+                                                teamViewModel.selectTeas
+                                            )
+                                        )
+                                    )
+                                }
+                            }
+                        }
+                        else -> {
+                            teamViewModel.dismissTeamAll()
+                        }
+                    }
+                }
+                negativeButton()
             }
         }
 
@@ -69,18 +116,20 @@ class TeamFragment : BaseFragment<FragmentTeamBinding>(R.layout.fragment_team) {
         }
 
         teamItemAdapter.setOnItemClickListener { adapter, _, position ->
+            val data = adapter.data[position] as NIMTeam
             findNavController().navigate(
                 TeamFragmentDirections.actionTeamFragmentToTeamDetailFragment(
-                    teamInfo = adapter.data[position] as NIMTeam
+                    teamInfo = data
                 )
             )
         }
+
     }
 
     override fun initLiveData() {
         repeatOnLifecycleStarted {
-            teamViewModel.observeViewState.collectLatest {
-                when (val teams = it.teams) {
+            teamViewModel.observeViewState.collectLatest { data ->
+                when (val teams = data.teams) {
                     is Loading -> {
                         binding.srContent.isRefreshing = true
                     }
@@ -98,6 +147,10 @@ class TeamFragment : BaseFragment<FragmentTeamBinding>(R.layout.fragment_team) {
                     }
                 }
             }
+        }
+
+        repeatOnLifecycleStarted {
+            teamViewModel.loadTeams()
         }
     }
 }

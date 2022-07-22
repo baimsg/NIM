@@ -46,12 +46,14 @@
     <string name="token_hint">请输入token</string>
     <string name="local_account">本地账号</string>
     <string name="refresh">刷新</string>
+    <string name="database">数据库</string>
     <string name="import_or_export">导入或导出</string>
     <string name="cancel">取消</string>
     <string name="sure">确定</string>
     <string name="friend">好友</string>
     <string name="team_chat_limit">群聊上限</string>
     <string name="more">更多</string>
+    <string name="retry">重试</string>
     <string name="auto_fill">自动补位</string>
     <string name="team_chat_describe">邀请描述</string>
     <string name="select_action">请选择操作</string>
@@ -59,10 +61,12 @@
     <string name="team_name">群聊名称</string>
     <string name="team_icon">群头像</string>
     <string name="be_invite_mode">直接邀请进群</string>
+    <string name="invite_mode">邀请新成员</string>
     <string name="introduce">群简介</string>
     <string name="team_update_mode">修改群聊资料</string>
     <string name="team_sum">创建数量</string>
     <string name="announcement">群公告</string>
     <string name="all_mute">全员禁言</string>
     <string name="verify_type">验证模式</string>
+    <string name="team_member">群成员</string>
 </resources>

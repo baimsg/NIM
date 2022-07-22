@@ -1,19 +1,21 @@
 package com.baimsg.chat.fragment.team.detail
 
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.LayoutMode
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.afollestad.materialdialogs.customview.customView
+import com.afollestad.materialdialogs.input.getInputField
+import com.afollestad.materialdialogs.input.getInputLayout
 import com.afollestad.materialdialogs.input.input
 import com.afollestad.materialdialogs.list.listItems
 import com.baimsg.chat.R
 import com.baimsg.chat.base.BaseFragment
 import com.baimsg.chat.databinding.FragmentTeamDetailBinding
-import com.baimsg.chat.util.extensions.loadImage
-import com.baimsg.chat.util.extensions.message
-import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
-import com.baimsg.chat.util.extensions.showWarning
+import com.baimsg.chat.fragment.team.TeamViewModel
+import com.baimsg.chat.type.ExecutionStatus
+import com.baimsg.chat.util.extensions.*
 import com.netease.nimlib.sdk.team.constant.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -27,6 +29,7 @@ class TeamDetailFragment : BaseFragment<FragmentTeamDetailBinding>(R.layout.frag
 
     private val detailViewModel by viewModels<TeamDetailViewModel>()
 
+
     private val loadDialog by lazy {
         MaterialDialog(requireContext()).cancelable(false)
             .cancelOnTouchOutside(false)
@@ -35,31 +38,55 @@ class TeamDetailFragment : BaseFragment<FragmentTeamDetailBinding>(R.layout.frag
 
     override fun initView() {
 
+        binding.ivBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
+        binding.tvMore.setOnClickListener {
+            MaterialDialog(requireContext(), BottomSheet(LayoutMode.WRAP_CONTENT)).show {
+                listItems(items = listOf("解散该群")) { dialog, _, _ ->
+                    detailViewModel.dismissTeam()
+                    dialog.dismiss()
+                }
+                negativeButton()
+            }
+        }
+
         binding.vIntroduce.setOnClickListener {
-            MaterialDialog(requireContext())
-                .cancelOnTouchOutside(false)
+            MaterialDialog(requireContext(), BottomSheet())
                 .show {
                     title(R.string.introduce)
-                    input(hint = "请输入群简介", allowEmpty = true) { _, sequence ->
+                    input(
+                        hint = "请输入群简介",
+                        prefill = detailViewModel.introduce,
+                        waitForPositiveButton = false,
+                        allowEmpty = true
+                    ) { _, sequence ->
+                        message(text = sequence)
+                    }
+                    positiveButton {
                         detailViewModel.apply {
-                            TeamFieldEnum.Introduce set sequence.toString()
+                            TeamFieldEnum.Introduce set it.getInputField().text.toString()
                         }
                     }
                 }
         }
 
         binding.vAnnouncement.setOnClickListener {
-            MaterialDialog(requireContext())
-                .cancelOnTouchOutside(false)
+            MaterialDialog(requireContext(), BottomSheet())
                 .show {
                     title(R.string.announcement)
                     input(
                         hint = "请输入群公告",
                         prefill = detailViewModel.announcement,
+                        waitForPositiveButton = false,
                         allowEmpty = true
                     ) { _, sequence ->
+                        message(text = sequence)
+                    }
+                    positiveButton {
                         detailViewModel.apply {
-                            TeamFieldEnum.Announcement set sequence.toString()
+                            TeamFieldEnum.Announcement set it.getInputField().text.toString()
                         }
                     }
                 }
@@ -163,13 +190,24 @@ class TeamDetailFragment : BaseFragment<FragmentTeamDetailBinding>(R.layout.frag
                 loadDialog.dismiss()
 
                 it.apply {
-                    binding.tvAnnouncementValue.text = announcement
 
-                    binding.tvIntroduceValue.text = introduce
+                    binding.tvAnnouncementValue.apply {
+                        show(!announcement.isNullOrEmpty())
+                        text = announcement
+                    }
+
+                    binding.tvIntroduceValue.apply {
+                        show(!introduce.isNullOrEmpty())
+                        text = introduce
+                    }
 
                     binding.tvTeamNameValue.text = name
 
+                    binding.tvTeamId.text = id
+
                     binding.ivAvatar.loadImage(icon)
+
+                    binding.tvTeamMemberValue.text = "$memberCount/$memberLimit"
 
                     binding.tvVerifyTypeValue.text = verifyType.message()
 
@@ -186,6 +224,18 @@ class TeamDetailFragment : BaseFragment<FragmentTeamDetailBinding>(R.layout.frag
 
                 }
 
+            }
+        }
+
+        repeatOnLifecycleStarted {
+            detailViewModel.observeDismissTeamViewState.collectLatest {
+                when (it.executionStatus) {
+                    ExecutionStatus.SUCCESS -> findNavController().navigateUp()
+                    ExecutionStatus.FAIL -> {
+                        showError(it.message)
+                    }
+                    else -> Unit
+                }
             }
         }
     }

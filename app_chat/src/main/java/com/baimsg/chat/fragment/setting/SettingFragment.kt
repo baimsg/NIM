@@ -124,7 +124,12 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
             MaterialDialog(requireContext(), BottomSheet(LayoutMode.WRAP_CONTENT)).show {
                 val view = View.inflate(requireContext(), R.layout.bottom_login, null)
                 BottomLoginBinding.bind(view).apply {
-                    customView(view = view)
+                    customView(
+                        view = view,
+                        scrollable = true,
+                        noVerticalPadding = false,
+                        dialogWrapContent = false
+                    )
                     tvLogout.setOnClickListener {
                         loginViewModel.logout()
                         showSuccess("已退出本账号登录")

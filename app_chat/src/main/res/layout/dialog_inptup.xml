@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="400dp">
+
+    <EditText
+        android:id="@+id/editContent"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:autofillHints="name"
+        android:background="@null"
+        android:hint="@string/team_chat"
+        android:inputType="text"
+        android:lines="40"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        android:textColor="@color/title_color"
+        android:textSize="16sp" />
+
+</FrameLayout>
