@@ -1,10 +1,8 @@
 package com.baimsg.chat.activity
 
+import android.content.Intent
 import androidx.activity.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.WhichButton
-import com.afollestad.materialdialogs.actions.setActionButtonEnabled
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.input.input
 import com.baimsg.base.util.KvUtils
@@ -12,10 +10,12 @@ import com.baimsg.chat.Constant
 import com.baimsg.chat.R
 import com.baimsg.chat.base.BaseActivity
 import com.baimsg.chat.databinding.ActivitySplashBinding
+import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
 import com.baimsg.data.model.Fail
+import com.baimsg.data.model.Loading
 import com.baimsg.data.model.Success
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collectLatest
 
 /**
  * Create by Baimsg on 2022/7/19
@@ -33,49 +33,69 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
     }
 
     override fun initView() {
-
-        lifecycleScope.launch {
-            loadDialog.show()
-            viewModel.getBaseConfig()
-            val base = viewModel.getBaseConfig()
-            loadDialog.dismiss()
-
-            when (base) {
-                is Success -> {
-                    if (base().id != Constant.ID) {
+        repeatOnLifecycleStarted {
+            viewModel.observeBaseConfig.collectLatest {
+                when (it) {
+                    is Loading -> {
+                        loadDialog.show()
+                    }
+                    is Success -> {
+                        loadDialog.dismiss()
+                        val id = it().id
+                        if (id != Constant.ID) {
+                            verifyKey()
+                        } else {
+                            nextActivity()
+                        }
+                    }
+                    is Fail -> {
+                        loadDialog.dismiss()
                         MaterialDialog(this@SplashActivity)
                             .cancelable(false)
-                            .cancelOnTouchOutside(false).show {
-                                input(
-                                    hint = "id",
-                                    waitForPositiveButton = false
-                                ) { materialDialog, charSequence ->
-                                    val isValid = charSequence.toString() == base().id
-                                    materialDialog.setActionButtonEnabled(
-                                        WhichButton.POSITIVE,
-                                        isValid
-                                    )
-                                    KvUtils.put(Constant.KEY_ID, charSequence.toString())
+                            .cancelOnTouchOutside(false)
+                            .show {
+                                title(text = "出错啦）：")
+                                message(text = "${it.error.message}\n请检查您的网络连接是否正常")
+                                negativeButton(R.string.quit) { finish() }
+                                positiveButton(R.string.retry) {
+                                    viewModel.retry()
                                 }
-                                negativeButton { finish() }
-                                positiveButton()
                             }
                     }
+                    else -> Unit
                 }
-                is Fail -> {
-                    MaterialDialog(this@SplashActivity)
-                        .cancelable(false)
-                        .cancelOnTouchOutside(false).show {
-                            title(text = "网络异常")
-                            message(text = "你的网络好像已经丢失了:)")
-                            negativeButton { finish() }
-                            positiveButton(R.string.retry) {
-                            }
-                        }
-                }
-                else -> {}
             }
-
         }
     }
+
+    private fun verifyKey() {
+        MaterialDialog(this@SplashActivity)
+            .cancelable(false)
+            .cancelOnTouchOutside(false)
+            .show {
+                input(
+                    hint = "请输入id"
+                ) { _, charSequence ->
+                    if (charSequence.toString() == viewModel.verifyKey) {
+                        KvUtils.put(Constant.KEY_ID, charSequence.toString())
+                        nextActivity()
+                    } else {
+                        verifyKey()
+                    }
+                }
+                negativeButton(R.string.quit) { finish() }
+                positiveButton()
+            }
+    }
+
+
+    private fun nextActivity() {
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
+    }
+
+    override fun finish() {
+        super.finish()
+    }
 }
+
