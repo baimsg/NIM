@@ -4,9 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.baimsg.chat.Constant
 import com.baimsg.chat.type.BatchStatus
+import com.baimsg.data.model.entities.asTeam
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.RequestCallback
 import com.netease.nimlib.sdk.team.TeamService
+import com.netease.nimlib.sdk.team.constant.TeamAllMuteModeEnum
 import com.netease.nimlib.sdk.team.constant.TeamFieldEnum
 import com.netease.nimlib.sdk.team.constant.TeamTypeEnum
 import com.netease.nimlib.sdk.team.model.CreateTeamResult
@@ -39,6 +41,9 @@ class CreateTeamViewModel @Inject constructor() : ViewModel() {
 
     private val fields: Map<TeamFieldEnum, Serializable>
         get() = _viewState.value.fields
+
+    private val allMute =
+        fields[TeamFieldEnum.AllMute] as TeamAllMuteModeEnum == TeamAllMuteModeEnum.MuteALL
 
     /**
      * 中缀函数改变群聊参数
@@ -98,9 +103,17 @@ class CreateTeamViewModel @Inject constructor() : ViewModel() {
                     .setCallback(object : RequestCallback<CreateTeamResult> {
                         override fun onSuccess(result: CreateTeamResult?) {
                             _viewState.apply {
-                                value = value.copy(message = "创建成功", index = value.index + 1)
+                                value = value.copy(
+                                    message = "创建成功",
+                                    team = result?.team.asTeam(),
+                                    index = if (allMute) value.index else value.index + 1
+                                )
                             }
-                            batchCreateTeam()
+                            if (allMute) {
+                                batchAllMute()
+                            } else {
+                                batchCreateTeam()
+                            }
                         }
 
                         override fun onFailed(code: Int) {
@@ -118,6 +131,39 @@ class CreateTeamViewModel @Inject constructor() : ViewModel() {
                         }
                     })
             }
+        }
+    }
+
+    /**
+     * 批量执行全体禁言
+     */
+    fun batchAllMute() {
+        _viewState.apply {
+            teamService.muteAllTeamMember(value.team.id, true)
+                .setCallback(object : RequestCallback<Void> {
+                    override fun onSuccess(p0: Void?) {
+                        value = value.copy(
+                            message = "设置禁言成功",
+                            index = value.index + 1
+                        )
+                        batchCreateTeam()
+                    }
+
+                    override fun onFailed(code: Int) {
+                        _viewState.apply {
+                            value = value.copy(message = "设置禁言失败「$code」")
+                        }
+                        batchAllMute()
+                    }
+
+                    override fun onException(e: Throwable?) {
+                        _viewState.apply {
+                            value = value.copy(message = "设置禁言失败「${e?.message}」")
+                        }
+                        batchAllMute()
+                    }
+
+                })
         }
     }
 }

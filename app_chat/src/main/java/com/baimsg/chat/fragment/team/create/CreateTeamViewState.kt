@@ -1,18 +1,26 @@
 package com.baimsg.chat.fragment.team.create
 
 import com.baimsg.chat.type.BatchStatus
+import com.baimsg.data.model.entities.NIMTeam
 import com.netease.nimlib.sdk.team.constant.*
 import java.io.Serializable
 
 /**
  * Create by Baimsg on 2022/7/21
- *
+ * 创建群状态参数
+ * @param status 运行状态
+ * @param index 当前执行下标
+ * @param limit 创建数量
+ * @param message 执行结果提示
+ * @param team 创建成功后群信息
+ * @param fields 提交参数
  **/
 data class CreateTeamViewState(
     val status: BatchStatus,
     val index: Int,
     val limit: Int,
     val message: String,
+    val team: NIMTeam,
     val fields: MutableMap<TeamFieldEnum, Serializable>
 ) {
     companion object {
@@ -22,6 +30,7 @@ data class CreateTeamViewState(
                 index = 0,
                 limit = 1,
                 message = "",
+                team = NIMTeam(),
                 fields = mutableMapOf(
                     TeamFieldEnum.Announcement to "",
                     TeamFieldEnum.Introduce to "",

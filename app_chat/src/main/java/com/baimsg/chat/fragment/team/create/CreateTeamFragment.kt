@@ -135,6 +135,12 @@ class CreateTeamFragment : BaseFragment<FragmentTeamCreateBinding>(R.layout.frag
             }
         }
 
+        binding.scAllMute.setOnCheckedChangeListener { _, isChecked ->
+            createTeamViewModel.apply {
+                TeamFieldEnum.AllMute set if (isChecked) TeamAllMuteModeEnum.MuteALL else TeamAllMuteModeEnum.Cancel
+            }
+        }
+
 
     }
 
