@@ -11,6 +11,7 @@ import com.baimsg.chat.R
 import com.baimsg.chat.base.BaseActivity
 import com.baimsg.chat.databinding.ActivitySplashBinding
 import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
+import com.baimsg.chat.util.extensions.setFullScreen
 import com.baimsg.data.model.Fail
 import com.baimsg.data.model.Loading
 import com.baimsg.data.model.Success
@@ -96,6 +97,6 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
 
     override fun finish() {
         super.finish()
+        overridePendingTransition(R.anim.fragment_open_enter, R.anim.fragment_open_exit)
     }
 }
-

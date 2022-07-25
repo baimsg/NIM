@@ -9,8 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.LayoutMode
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
-import com.afollestad.materialdialogs.list.listItems
-import com.afollestad.materialdialogs.list.listItemsMultiChoice
+import com.afollestad.materialdialogs.list.*
 import com.baimsg.chat.R
 import com.baimsg.chat.adapter.TeamItemAdapter
 import com.baimsg.chat.base.BaseFragment
@@ -67,19 +66,15 @@ class TeamFragment : BaseFragment<FragmentTeamBinding>(R.layout.fragment_team) {
                                 requireContext(),
                                 BottomSheet(LayoutMode.WRAP_CONTENT)
                             ).show {
+                                message(text = "快捷操作&emsp;<a href=\"\">全部</a>") {
+                                    html {
+                                        toggleAllItemsChecked()
+                                    }
+                                }
                                 listItemsMultiChoice(
                                     items = teamViewModel.allTeam.map { it.name + "-" + it.id + "[${it.memberCount}]" },
-                                    waitForPositiveButton = false,
-                                    allowEmptySelection = true,
                                 ) { _, indices, _ ->
                                     teamViewModel.upCheckTeam(indices)
-                                }
-                                negativeButton()
-                                positiveButton {
-                                    if (teamViewModel.selectTeas.isEmpty()) {
-                                        showWarning("至少选择一个群聊")
-                                        return@positiveButton
-                                    }
                                     findNavController().navigate(
                                         TeamFragmentDirections.actionTeamFragmentToBulkFragment(
                                             JSON.encodeToString(
@@ -89,6 +84,8 @@ class TeamFragment : BaseFragment<FragmentTeamBinding>(R.layout.fragment_team) {
                                         )
                                     )
                                 }
+                                negativeButton()
+                                positiveButton()
                             }
                         }
                         else -> {
