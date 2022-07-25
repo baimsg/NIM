@@ -45,6 +45,7 @@ repositories {
 dependencies {
     implementation("org.ow2.asm:asm-all:6.0_BETA")
     implementation("com.android.tools.build:gradle-api:7.2.1")
+    implementation("com.google.guava:guava:31.1-jre")
     implementation(kotlin("stdlib"))
     gradleApi()
     localGroovy()
