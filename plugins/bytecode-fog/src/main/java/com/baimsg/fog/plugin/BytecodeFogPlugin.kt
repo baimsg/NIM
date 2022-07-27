@@ -1,4 +1,4 @@
-package com.baimsg.fog
+package com.baimsg.fog.plugin
 
 import com.android.build.api.instrumentation.*
 import com.android.build.api.variant.AndroidComponentsExtension
@@ -17,7 +17,7 @@ class BytecodeFogPlugin : Plugin<Project> {
 
         val androidComponents = project.extensions.getByType(AndroidComponentsExtension::class.java)
         androidComponents.apply {
-            onVariants(selector().withName("release")) { variant ->
+            onVariants(selector().withName("debug")) { variant ->
                 variant.instrumentation.transformClassesWith(
                     ExampleClassVisitorFactory::class.java,
                     InstrumentationScope.ALL

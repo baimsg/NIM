@@ -17,7 +17,7 @@ gradlePlugin {
         create("bytecodeFogPlugin") {
             id = "bytecode-fog"
             version = "1.0.0"
-            implementationClass = "com.baimsg.fog.BytecodeFogPlugin"
+            implementationClass = "com.baimsg.fog.plugin.BytecodeFogPlugin"
         }
     }
 }
@@ -43,9 +43,12 @@ repositories {
 }
 
 dependencies {
-    implementation("org.ow2.asm:asm-all:6.0_BETA")
     implementation("com.android.tools.build:gradle-api:7.2.1")
+    implementation("org.ow2.asm:asm-all:6.0_BETA")
+    implementation("com.squareup:javawriter:2.5.1")
+    implementation("commons-io:commons-io:2.11.0")
     implementation("com.google.guava:guava:31.1-jre")
+    implementation(project(":plugins:bytecode-fog-ext"))
     implementation(kotlin("stdlib"))
     gradleApi()
     localGroovy()

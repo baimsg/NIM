@@ -10,15 +10,16 @@ import javax.lang.model.element.Modifier
 
 /**
  * Create by Baimsg on 2022/7/25
- *
+ * 生成加密解密 java 文件
  **/
 object StringFogClassGenerator {
+
     @Throws(IOException::class)
     fun generate(
         outputFile: File,
-        packageName: String?,
-        className: String?,
-        kg: IKeyGenerator?,
+        packageName: String,
+        className: String,
+        kg: IKeyGenerator,
         implementation: String
     ) {
         val outputDir = outputFile.parentFile
@@ -39,14 +40,14 @@ object StringFogClassGenerator {
         javaWriter.emitEmptyLine()
         javaWriter.emitJavadoc("Generated code from StringFog gradle plugin. Do not modify!")
         javaWriter.beginType(
-            className, "class", ImmutableSet.of<Modifier>(
+            className, "class", ImmutableSet.of(
                 Modifier.PUBLIC,
                 Modifier.FINAL
             )
         )
         javaWriter.emitField(
             implementationSimpleClassName, "IMPL",
-            ImmutableSet.of<Modifier>(
+            ImmutableSet.of(
                 Modifier.PRIVATE,
                 Modifier.STATIC,
                 Modifier.FINAL
@@ -56,7 +57,7 @@ object StringFogClassGenerator {
         javaWriter.emitEmptyLine()
         javaWriter.beginMethod(
             String::class.java.simpleName, "decrypt",
-            ImmutableSet.of<Modifier>(Modifier.PUBLIC, Modifier.STATIC),
+            ImmutableSet.of(Modifier.PUBLIC, Modifier.STATIC),
             ByteArray::class.java.simpleName, "value",
             ByteArray::class.java.simpleName, "key"
         )

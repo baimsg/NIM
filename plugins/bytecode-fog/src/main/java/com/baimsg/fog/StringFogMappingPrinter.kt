@@ -1,6 +1,6 @@
 package com.baimsg.fog
 
-import com.github.javaparser.utils.Log
+import com.baimsg.fog.util.Log
 import org.apache.commons.io.IOUtils
 import java.io.BufferedWriter
 import java.io.File
@@ -29,7 +29,7 @@ import java.io.IOException
             mWriter?.write("stringFog impl: $implementation")
             mWriter?.newLine()
         } catch (e: IOException) {
-            Log.error("创建 stringFog 映射文件失败")
+            Log.e("创建 stringFog 映射文件失败")
         }
     }
 

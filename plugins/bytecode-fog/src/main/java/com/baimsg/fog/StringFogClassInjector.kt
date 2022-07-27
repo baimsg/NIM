@@ -9,29 +9,37 @@ import java.util.zip.ZipOutputStream
 
 /**
  * Create by Baimsg on 2022/7/25
- *
+ * 字符串加密注入类
+ * @param fogPackages 需要字符串加密的包名集合
+ * @param kg 密钥生成器
+ * @param implementation 加密实现的类路径
+ * @param fogClassName
+ * @param mappingPrinter 映射文件输出对象
  **/
 class StringFogClassInjector(
-    fogPackages: Array<String>, kg: IKeyGenerator, implementation: String,
-    fogClassName: String, mappingPrinter: StringFogMappingPrinter
+    private val fogPackages: Array<String>,
+    private val kg: IKeyGenerator,
+    implementation: String,
+    private val fogClassName: String,
+    private val mappingPrinter: StringFogMappingPrinter
 ) {
-    private val mFogPackages: Array<String>
-    private val mFogClassName: String
-    private val mKeyGenerator: IKeyGenerator
     private val mStringFogImpl: IStringFog
-    private val mMappingPrinter: StringFogMappingPrinter
+
+    init {
+        mStringFogImpl = StringFogWrapper(implementation)
+    }
 
     @Throws(IOException::class)
     fun doFog2Class(fileIn: File, fileOut: File) {
-        var `is`: InputStream? = null
-        var os: OutputStream? = null
+        var inputStream: InputStream? = null
+        var outputStream: OutputStream? = null
         try {
-            `is` = BufferedInputStream(FileInputStream(fileIn))
-            os = BufferedOutputStream(FileOutputStream(fileOut))
-            processClass(`is`, os)
+            inputStream = BufferedInputStream(FileInputStream(fileIn))
+            outputStream = BufferedOutputStream(FileOutputStream(fileOut))
+            processClass(inputStream, outputStream)
         } finally {
-            closeQuietly(os)
-            closeQuietly(`is`)
+            closeQuietly(outputStream)
+            closeQuietly(inputStream)
         }
     }
 
@@ -85,8 +93,8 @@ class StringFogClassInjector(
         } else {
             val cw = ClassWriter(ClassWriter.COMPUTE_MAXS)
             val cv = ClassVisitorFactory.create(
-                mStringFogImpl, mMappingPrinter, mFogPackages,
-                mKeyGenerator, mFogClassName, cr.className, cw
+                mStringFogImpl, mappingPrinter, fogPackages,
+                kg, fogClassName, cr.className, cw
             )
             cr.accept(cv, 0)
             classOut.write(cw.toByteArray())
@@ -131,11 +139,5 @@ class StringFogClassInjector(
         }
     }
 
-    init {
-        mFogPackages = fogPackages
-        mKeyGenerator = kg
-        mStringFogImpl = StringFogWrapper(implementation)
-        mFogClassName = fogClassName
-        mMappingPrinter = mappingPrinter
-    }
+
 }

@@ -5,7 +5,17 @@ package com.baimsg.fog
  *
  **/
 internal object WhiteLists {
-    private val CLASS_WHITE_LIST: MutableList<String> = ArrayList()
+
+    private val CLASS_WHITE_LIST: MutableList<String> = mutableListOf()
+
+    init {
+        // default classes short name in white list.
+        addWhiteList("BuildConfig")
+        addWhiteList("R")
+        addWhiteList("R2")
+        addWhiteList("StringFog")
+    }
+
     fun inWhiteList(name: String): Boolean {
         return name.isNotBlank() && checkClass(shortClassName(name))
     }
@@ -28,15 +38,9 @@ internal object WhiteLists {
     }
 
     private fun shortClassName(className: String): String {
-        val spiltArrays = trueClassName(className).split("[.]").toTypedArray()
+        val spiltArrays = trueClassName(className).split(".").toTypedArray()
         return spiltArrays[spiltArrays.size - 1]
     }
 
-    init {
-        // default classes short name in white list.
-        addWhiteList("BuildConfig")
-        addWhiteList("R")
-        addWhiteList("R2")
-        addWhiteList("StringFog")
-    }
+
 }
