@@ -10,6 +10,7 @@ import kotlinx.serialization.builtins.serializer
  *
  **/
 object Constant {
+    const val TEST = ""
 
     const val KEY_ID = "key_id"
 
