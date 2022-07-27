@@ -1,8 +1,8 @@
 pluginManagement {
     repositories {
         maven {
-            name = "localPluginRepository"
-            url = uri("./local-plugin-repository")
+            name = "local-maven"
+            url = uri("./plugins/local-maven")
         }
         google()
         mavenCentral()
@@ -19,5 +19,5 @@ include(":common-data")
 include(":qmui")
 
 //插件
-include(":plugins:decompile-crasher")
 include(":plugins:bytecode-fog")
+//include(":plugins:decompile-crasher")

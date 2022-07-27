@@ -30,8 +30,8 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
 publishing {
     repositories {
         maven {
-            name = "localPluginRepository"
-            url = uri(rootProject.rootDir.path + "/local-plugin-repository")
+            name = "local-maven"
+            url = uri(rootProject.rootDir.path + "/plugins/local-maven")
         }
     }
 }
