@@ -21,4 +21,3 @@ include(":qmui")
 //插件
 include(":plugins:decompile-crasher")
 include(":plugins:bytecode-fog")
-include(":plugins:bytecode-fog-ext")

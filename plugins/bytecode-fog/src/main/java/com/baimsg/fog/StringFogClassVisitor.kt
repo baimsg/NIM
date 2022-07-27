@@ -1,5 +1,7 @@
 package com.baimsg.fog
 
+import com.baimsg.fog.ext.IKeyGenerator
+import com.baimsg.fog.ext.IStringFog
 import org.objectweb.asm.*
 
 

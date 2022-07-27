@@ -50,7 +50,6 @@ class BytecodeFogPlugin : Plugin<Project> {
         }
 
         override fun isInstrumentable(classData: ClassData): Boolean {
-            println("classData.className   =>  " + classData.className)
             return classData.className.startsWith("com.baimsg")
         }
     }

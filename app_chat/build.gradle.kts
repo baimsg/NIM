@@ -9,7 +9,7 @@ plugins {
     id("kotlin-parcelize")
     id("androidx.navigation.safeargs.kotlin")
     kotlin("plugin.serialization")
-//    id("bytecode-fog") version "1.0.0"
+    id("bytecode-fog") version "1.0.0"
 }
 
 android {

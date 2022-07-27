@@ -1,5 +1,6 @@
 package com.baimsg.fog
 
+import com.baimsg.fog.ext.IKeyGenerator
 import com.google.common.collect.ImmutableSet
 import com.squareup.javawriter.JavaWriter
 import java.io.File

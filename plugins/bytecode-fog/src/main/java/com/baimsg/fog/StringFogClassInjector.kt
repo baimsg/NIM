@@ -1,5 +1,8 @@
 package com.baimsg.fog
 
+import com.baimsg.fog.ext.IKeyGenerator
+import com.baimsg.fog.ext.IStringFog
+import com.baimsg.fog.ext.StringFogWrapper
 import org.objectweb.asm.ClassReader
 import org.objectweb.asm.ClassWriter
 import java.io.*

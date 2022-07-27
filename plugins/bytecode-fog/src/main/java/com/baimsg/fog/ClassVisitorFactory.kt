@@ -1,5 +1,7 @@
 package com.baimsg.fog
 
+import com.baimsg.fog.ext.IKeyGenerator
+import com.baimsg.fog.ext.IStringFog
 import com.baimsg.fog.util.Log
 import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.ClassWriter
