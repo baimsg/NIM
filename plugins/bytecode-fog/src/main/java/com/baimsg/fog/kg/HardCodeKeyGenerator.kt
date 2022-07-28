@@ -1,6 +1,6 @@
 package com.baimsg.fog.kg
 
-import com.baimsg.fog.ext.IKeyGenerator
+import com.baimsg.fog.IKeyGenerator
 import java.nio.charset.StandardCharsets
 
 /**

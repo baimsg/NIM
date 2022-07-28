@@ -3,11 +3,11 @@ pluginManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
-        mavenLocal()
         maven {
             name = "local-maven"
             url = uri("./plugins/local-maven")
         }
+        mavenLocal()
     }
 }
 
@@ -19,5 +19,5 @@ include(":app_chat")
 include(":common-data")
 include(":qmui")
 
-//插件
 include(":plugins:bytecode-fog")
+include(":plugins:bytecode-fog-ext")

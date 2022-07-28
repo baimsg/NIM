@@ -1,4 +1,4 @@
-package com.baimsg.fog.ext.annotation
+package com.baimsg.fog.annotation
 
 /**
  * Create by Baimsg on 2022/7/27

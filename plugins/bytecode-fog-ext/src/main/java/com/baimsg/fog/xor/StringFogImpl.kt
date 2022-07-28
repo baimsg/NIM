@@ -1,6 +1,6 @@
-package com.baimsg.fog.ext.xor
+package com.baimsg.fog.xor
 
-import com.baimsg.fog.ext.IStringFog
+import com.baimsg.fog.IStringFog
 import java.nio.charset.StandardCharsets
 import kotlin.experimental.xor
 

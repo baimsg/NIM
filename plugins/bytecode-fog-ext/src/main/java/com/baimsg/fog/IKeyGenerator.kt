@@ -1,4 +1,4 @@
-package com.baimsg.fog.ext
+package com.baimsg.fog
 
 /**
  * Create by Baimsg on 2022/7/25

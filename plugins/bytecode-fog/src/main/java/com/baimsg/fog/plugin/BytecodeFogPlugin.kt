@@ -1,15 +1,12 @@
 package com.baimsg.fog.plugin
 
-import com.android.build.api.instrumentation.*
+import com.android.build.api.instrumentation.FramesComputationMode
+import com.android.build.api.instrumentation.InstrumentationScope
 import com.android.build.api.variant.AndroidComponentsExtension
+import com.baimsg.fog.kg.RandomKeyGenerator
+import com.baimsg.fog.xor.StringFogImpl
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.provider.Property
-import org.gradle.api.tasks.Input
-import org.objectweb.asm.ClassVisitor
-import org.objectweb.asm.util.TraceClassVisitor
-import java.io.File
-import java.io.PrintWriter
 
 class BytecodeFogPlugin : Plugin<Project> {
 
@@ -19,10 +16,13 @@ class BytecodeFogPlugin : Plugin<Project> {
         androidComponents.apply {
             onVariants(selector().withName("debug")) { variant ->
                 variant.instrumentation.transformClassesWith(
-                    ExampleClassVisitorFactory::class.java,
+                    StringFogAsmClassVisitorFactory::class.java,
                     InstrumentationScope.ALL
                 ) {
-                    it.writeToStdout.set(true)
+                    it.fogClassName.set(StringFogImpl::class.simpleName)
+                    it.fogPackages.set(listOf("com.baimsg"))
+                    it.kg.set(RandomKeyGenerator())
+                    it.stringFogImpl.set(StringFogImpl())
                 }
                 variant.instrumentation.setAsmFramesComputationMode(FramesComputationMode.COPY_FRAMES)
             }
@@ -30,28 +30,5 @@ class BytecodeFogPlugin : Plugin<Project> {
 
     }
 
-    interface ExampleParams : InstrumentationParameters {
-        @get:Input
-        val writeToStdout: Property<Boolean>
-    }
-
-    abstract class ExampleClassVisitorFactory : AsmClassVisitorFactory<ExampleParams> {
-
-        override fun createClassVisitor(
-            classContext: ClassContext,
-            nextClassVisitor: ClassVisitor
-        ): ClassVisitor {
-            println("classContext.currentClassData.className  =>  " + classContext.currentClassData.className)
-            return if (parameters.get().writeToStdout.get()) {
-                TraceClassVisitor(nextClassVisitor, null)
-            } else {
-                TraceClassVisitor(nextClassVisitor, PrintWriter(File("trace_out")))
-            }
-        }
-
-        override fun isInstrumentable(classData: ClassData): Boolean {
-            return classData.className.startsWith("com.baimsg")
-        }
-    }
 
 }

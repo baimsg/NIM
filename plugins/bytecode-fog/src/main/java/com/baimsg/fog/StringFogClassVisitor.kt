@@ -1,7 +1,5 @@
 package com.baimsg.fog
 
-import com.baimsg.fog.ext.IKeyGenerator
-import com.baimsg.fog.ext.IStringFog
 import org.objectweb.asm.*
 
 
@@ -13,9 +11,9 @@ class StringFogClassVisitor(
     private val mStringFogImpl: IStringFog,
     private val mMappingPrinter: StringFogMappingPrinter,
     fogClassName: String,
-    cw: ClassWriter,
+    cv: ClassVisitor,
     private val mKeyGenerator: IKeyGenerator
-) : ClassVisitor(Opcodes.ASM6, cw) {
+) : ClassVisitor(Opcodes.ASM9, cv) {
 
     companion object {
         private const val IGNORE_ANNOTATION =

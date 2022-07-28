@@ -70,5 +70,6 @@ dependencies {
     api(Dep.Libs.mmkv)
     api(Dep.Libs.PinYin.library)
     api(Dep.Libs.PinYin.android)
+    api(project(":plugins:bytecode-fog-ext"))
     coreLibraryDesugaring(Dep.Libs.desugar)
 }
