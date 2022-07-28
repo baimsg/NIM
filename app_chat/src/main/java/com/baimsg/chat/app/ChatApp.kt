@@ -2,16 +2,8 @@ package com.baimsg.chat.app
 
 import android.app.Application
 import android.content.Context
-import android.content.res.Configuration
 import androidx.multidex.MultiDex
 import com.baimsg.base.util.inititializer.AppInitializers
-import com.baimsg.chat.Constant
-import com.netease.nimlib.sdk.NIMClient
-import com.netease.nimlib.sdk.SDKOptions
-import com.netease.nimlib.sdk.auth.LoginInfo
-import com.tencent.bugly.Bugly
-import com.tencent.mmkv.MMKV
-import com.umeng.commonsdk.UMConfigure
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 

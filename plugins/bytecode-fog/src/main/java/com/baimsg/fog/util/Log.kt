@@ -5,7 +5,7 @@ package com.baimsg.fog.util
  *
  **/
 object Log {
-    var isDebug = false
+    var isDebug = true
 
     fun v(msg: String?) {
         if (isDebug) {

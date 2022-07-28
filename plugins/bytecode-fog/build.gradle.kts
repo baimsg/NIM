@@ -23,14 +23,6 @@ gradlePlugin {
 }
 
 publishing {
-    publications {
-        create<MavenPublication>("local-maven") {
-            groupId = "com.baimsg.fog"
-            artifactId = "library"
-            version = "1.0.0"
-            from(components["java"])
-        }
-    }
     repositories {
         maven {
             name = "local-maven"
@@ -55,5 +47,4 @@ dependencies {
     implementation("commons-io:commons-io:2.11.0")
     implementation("org.ow2.asm:asm-util:9.2")
     implementation(kotlin("stdlib"))
-    implementation(project(":plugins:bytecode-fog-ext"))
 }

@@ -9,7 +9,7 @@ plugins {
     id("kotlin-parcelize")
     id("androidx.navigation.safeargs.kotlin")
     kotlin("plugin.serialization")
-//    id("bytecode-fog") version "1.0.0"
+    id("bytecode-fog") version "1.0.0"
 }
 
 android {
@@ -100,6 +100,7 @@ dependencies {
     implementation(project(":base-android"))
     implementation(project(":common-data"))
     implementation(project(":qmui"))
+    implementation(project(":plugins:bytecode-fog-ext"))
 
     implementation(Dep.Hilt.library)
     //hilt
