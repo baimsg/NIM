@@ -105,7 +105,7 @@ class StringFogClassVisitor(
         if ("<clinit>" == name) {
             isClInitExists = true
             // 如果 clinit 存在意味着静态字段（非最终字段）将在此处初始化。
-            mv = object : StubMethodVisitor(Opcodes.ASM6, mv) {
+            mv = object : StubMethodVisitor(Opcodes.ASM9, mv) {
 
                 private var lastStashCst: String? = null
                 override fun visitCode() {
@@ -165,7 +165,7 @@ class StringFogClassVisitor(
             }
         } else if ("<init>" == name) {
             // Here init final(not static) and normal fields
-            mv = object : StubMethodVisitor(Opcodes.ASM6, mv) {
+            mv = object : StubMethodVisitor(Opcodes.ASM9, mv) {
                 override fun visitLdcInsn(cst: Any) {
                     // We don't care about whether the field is final or normal
                     if (cst is String && canEncrypted(cst)) {
@@ -176,7 +176,7 @@ class StringFogClassVisitor(
                 }
             }
         } else {
-            mv = object : StubMethodVisitor(Opcodes.ASM6, mv) {
+            mv = object : StubMethodVisitor(Opcodes.ASM9, mv) {
                 override fun visitLdcInsn(cst: Any) {
                     if (cst is String && canEncrypted(cst)) {
                         // If the value is a static final field
@@ -219,7 +219,7 @@ class StringFogClassVisitor(
     override fun visitEnd() {
         if (!mIgnoreClass && !isClInitExists && mStaticFinalFields.isNotEmpty()) {
             val mv = StubMethodVisitor(
-                Opcodes.ASM6,
+                Opcodes.ASM9,
                 super.visitMethod(Opcodes.ACC_STATIC, "<clinit>", "()V", null, null)
             )
             mv.visitCode()

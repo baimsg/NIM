@@ -3,6 +3,7 @@ package com.baimsg.fog.plugin
 import com.android.build.api.instrumentation.FramesComputationMode
 import com.android.build.api.instrumentation.InstrumentationScope
 import com.android.build.api.variant.AndroidComponentsExtension
+import com.baimsg.fog.StringFog
 import com.baimsg.fog.kg.RandomKeyGenerator
 import com.baimsg.fog.xor.StringFogImpl
 import org.gradle.api.Plugin
@@ -19,7 +20,7 @@ class BytecodeFogPlugin : Plugin<Project> {
                     StringFogAsmClassVisitorFactory::class.java,
                     InstrumentationScope.ALL
                 ) {
-                    it.fogClassName.set(StringFogImpl::class.simpleName)
+                    it.fogClassName.set(StringFog::class.simpleName)
                     it.fogPackages.set(listOf("com.baimsg"))
                     it.kg.set(RandomKeyGenerator())
                     it.stringFogImpl.set(StringFogImpl())

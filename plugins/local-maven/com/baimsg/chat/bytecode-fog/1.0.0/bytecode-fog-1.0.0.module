@@ -29,11 +29,11 @@
         {
           "name": "bytecode-fog-1.0.0.jar",
           "url": "bytecode-fog-1.0.0.jar",
-          "size": 35919,
-          "sha512": "c978a6117f2fee77bd982ef434d5a6f9c867b2f4d30db33eb51c5c3284b50bd7c98959a38c3924cec77fdd50cb281f045428eb56bcf7736db4522dfc31872c91",
-          "sha256": "8b2b54015b3202c764164ddb801be221bcf76608b018632976a20bf971c81312",
-          "sha1": "8604ecd10822e8be861c69b45bde3b17764985d1",
-          "md5": "c4301f3496559fe3fd82fb2fbbea6993"
+          "size": 37896,
+          "sha512": "7da0061b7236fa66fe55d921cdbdc3a7072e4171062aa0629fe3b90758e4744e879c15dabbad0d4145cb91fd2dbe817eb91553c8793534162514e778a823ae77",
+          "sha256": "14756b4ccaaf3408bd74e8f9dc5e13f9d93915132cec580e61457ccbb12584dd",
+          "sha1": "2071f234968d3e8af5a5e986cd249bca8a45f0c6",
+          "md5": "cfea72f8700c63091fede7efeb7364b8"
         }
       ]
     },
@@ -96,11 +96,11 @@
         {
           "name": "bytecode-fog-1.0.0.jar",
           "url": "bytecode-fog-1.0.0.jar",
-          "size": 35919,
-          "sha512": "c978a6117f2fee77bd982ef434d5a6f9c867b2f4d30db33eb51c5c3284b50bd7c98959a38c3924cec77fdd50cb281f045428eb56bcf7736db4522dfc31872c91",
-          "sha256": "8b2b54015b3202c764164ddb801be221bcf76608b018632976a20bf971c81312",
-          "sha1": "8604ecd10822e8be861c69b45bde3b17764985d1",
-          "md5": "c4301f3496559fe3fd82fb2fbbea6993"
+          "size": 37896,
+          "sha512": "7da0061b7236fa66fe55d921cdbdc3a7072e4171062aa0629fe3b90758e4744e879c15dabbad0d4145cb91fd2dbe817eb91553c8793534162514e778a823ae77",
+          "sha256": "14756b4ccaaf3408bd74e8f9dc5e13f9d93915132cec580e61457ccbb12584dd",
+          "sha1": "2071f234968d3e8af5a5e986cd249bca8a45f0c6",
+          "md5": "cfea72f8700c63091fede7efeb7364b8"
         }
       ]
     }

@@ -36,9 +36,13 @@ abstract class StringFogAsmClassVisitorFactory : AsmClassVisitorFactory<StringFo
         classContext: ClassContext,
         nextClassVisitor: ClassVisitor
     ): ClassVisitor {
-         return StringFogClassVisitor(
+        val file =
+            File("/Users/yueranzhishang/AndroidStudioProjects/nim/base/build/testMapping.txt")
+        file.mkdirs()
+
+        return StringFogClassVisitor(
             mStringFogImpl = parameters.get().stringFogImpl.get(),
-            mMappingPrinter = StringFogMappingPrinter(File("")),
+            mMappingPrinter = StringFogMappingPrinter(file).apply { startMappingOutput(parameters.get().fogClassName.get()) },
             fogClassName = parameters.get().fogClassName.get(),
             cv = nextClassVisitor,
             mKeyGenerator = parameters.get().kg.get(),
