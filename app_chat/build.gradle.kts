@@ -12,8 +12,6 @@ plugins {
     id("bytecode-fog") version "1.0.0"
 }
 
-apply<com.baimsg.buildsrc.fog.plugin.BytecodeFogPlugin>()
-
 android {
 
     compileSdk = Dep.compileSdk

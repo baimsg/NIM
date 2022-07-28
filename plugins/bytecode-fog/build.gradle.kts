@@ -23,6 +23,14 @@ gradlePlugin {
 }
 
 publishing {
+    publications {
+        create<MavenPublication>("local-maven") {
+            groupId = "com.baimsg.fog"
+            artifactId = "library"
+            version = "1.0.0"
+            from(components["java"])
+        }
+    }
     repositories {
         maven {
             name = "local-maven"
@@ -30,6 +38,7 @@ publishing {
         }
     }
 }
+
 
 repositories {
     google()
