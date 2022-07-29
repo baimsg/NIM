@@ -1,4 +1,8 @@
 import com.baimsg.build.Dep
+import com.baimsg.fog.kg.RandomKeyGenerator
+import com.baimsg.fog.annotation.BytecodeFogIgnore
+import com.baimsg.fog.plugin.BytecodeFogExtension
+import com.baimsg.fog.plugin.BytecodeFogPlugin
 import java.util.*
 
 plugins {
@@ -9,10 +13,20 @@ plugins {
     id("kotlin-parcelize")
     id("androidx.navigation.safeargs.kotlin")
     kotlin("plugin.serialization")
-    id("bytecode-fog") version "1.0.0"
 }
 
+apply<BytecodeFogPlugin>()
+
 android {
+
+    the<BytecodeFogExtension>().apply {
+        enable = true
+        debug = true
+        ignoreFogClassName = BytecodeFogIgnore::class.java.name
+        implementation = "com.baimsg.fog.xor.BytecodeFogImpl"
+        fogPackages = listOf("com.baimsg")
+        kg = RandomKeyGenerator()
+    }
 
     compileSdk = Dep.compileSdk
 
@@ -100,7 +114,6 @@ dependencies {
     implementation(project(":base-android"))
     implementation(project(":common-data"))
     implementation(project(":qmui"))
-    implementation(project(":plugins:bytecode-fog-ext"))
 
     implementation(Dep.Hilt.library)
     //hilt
