@@ -1,15 +1,21 @@
 #----------------------基本指令区-----------------
 # 设置混淆的压缩比率 0 ~ 7
--optimizationpasses 5
+-optimizationpasses 7
 # 混淆后类名都为小写   Aa aA
 -dontusemixedcaseclassnames
 # 不优化输入的类文件
 -dontoptimize
 #不混淆泛型
 -keepattributes Signature
+#保持反射不被混淆
+-keepattributes EnclosingMethod
+#保持异常不被混淆
+-keepattributes Exceptions
 #避免混淆注解类
 -dontwarn android.annotation
 -keepattributes *Annotation*
+#将文件来源重命名为“SourceFile”字符串
+-renamesourcefileattribute SourceFile
 #避免混淆内部类
 -keepattributes InnerClasses
 # 混淆时不记录日志
@@ -17,7 +23,7 @@
 # 保留代码行号，方便异常信息的追踪
 -keepattributes SourceFile,LineNumberTable
 # 混淆采用的算法.
--optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
+-optimizations !code/simplification/arithmetic,!field/,!class/merging/,!code/allocation/variable
 # seeds.txt文件列出未混淆的类和成员
 -printseeds seeds.txt
 # usage.txt文件列出从apk中删除的代码

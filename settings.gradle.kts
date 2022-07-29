@@ -19,3 +19,4 @@ include(":app_chat")
 include(":common-data")
 include(":qmui")
 
+include(":bytecode-fog-ext")

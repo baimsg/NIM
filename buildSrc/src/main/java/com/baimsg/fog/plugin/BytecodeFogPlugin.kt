@@ -15,7 +15,7 @@ class BytecodeFogPlugin : Plugin<Project> {
 
         val androidComponents = project.extensions.getByType(AndroidComponentsExtension::class.java)
         androidComponents.apply {
-            onVariants(selector().withName("debug")) { variant ->
+            onVariants(selector().all()) { variant ->
                 variant.instrumentation.transformClassesWith(
                     BytecodeFogAsmClassVisitorFactory::class.java,
                     InstrumentationScope.ALL

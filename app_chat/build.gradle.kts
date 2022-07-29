@@ -1,5 +1,6 @@
 import com.baimsg.build.Dep
 import com.baimsg.fog.kg.RandomKeyGenerator
+import com.baimsg.fog.xor.BytecodeFogImpl
 import com.baimsg.fog.annotation.BytecodeFogIgnore
 import com.baimsg.fog.plugin.BytecodeFogExtension
 import com.baimsg.fog.plugin.BytecodeFogPlugin
@@ -22,10 +23,10 @@ android {
     the<BytecodeFogExtension>().apply {
         enable = true
         debug = true
-        ignoreFogClassName = BytecodeFogIgnore::class.java.name
-        implementation = "com.baimsg.fog.xor.BytecodeFogImpl"
-        fogPackages = listOf("com.baimsg")
         kg = RandomKeyGenerator()
+        ignoreFogClassName = BytecodeFogIgnore::class.java.name
+        implementation = BytecodeFogImpl::class.java.name
+        fogPackages = listOf("com.baimsg")
     }
 
     compileSdk = Dep.compileSdk

@@ -71,5 +71,5 @@ dependencies {
     api(Dep.Libs.PinYin.library)
     api(Dep.Libs.PinYin.android)
     coreLibraryDesugaring(Dep.Libs.desugar)
-
+    api(project(":bytecode-fog-ext"))
 }
