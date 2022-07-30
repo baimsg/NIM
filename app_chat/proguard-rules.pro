@@ -145,27 +145,28 @@
 }
 
 #kotlin 相关
--dontwarn kotlin.**
--keep class kotlin.** { *; }
--keep interface kotlin.** { *; }
--keepclassmembers class kotlin.Metadata {
-    public <methods>;
-}
--keepclasseswithmembers @kotlin.Metadata class * { *; }
--keepclassmembers class **.WhenMappings {
-    <fields>;
-}
--assumenosideeffects class kotlin.jvm.internal.Intrinsics {
-    static void checkParameterIsNotNull(java.lang.Object, java.lang.String);
-}
-
--keep class kotlinx.** { *; }
--keep interface kotlinx.** { *; }
--dontwarn kotlinx.**
--dontnote kotlinx.serialization.SerializationKt
--keep class org.jetbrains.** { *; }
--keep interface org.jetbrains.** { *; }
--dontwarn org.jetbrains.**
+#-dontwarn kotlin.**
+#-keep class kotlin.** { *; }
+#-keep interface kotlin.** { *; }
+#-keep class kotlin.Metadata { *; }
+#-keepclassmembers class **$WhenMappings {
+#    <fields>;
+#}
+#-keepclassmembers class kotlin.Metadata {
+#    public <methods>;
+#}
+#-assumenosideeffects class kotlin.jvm.internal.Intrinsics {
+#    static void checkParameterIsNotNull(java.lang.Object, java.lang.String);
+#}
+#-keepclasseswithmembers @kotlin.Metadata class * { *; }
+#
+#-keep class kotlinx.** { *; }
+#-keep interface kotlinx.** { *; }
+#-dontwarn kotlinx.**
+#-dontnote kotlinx.serialization.SerializationKt
+#-keep class org.jetbrains.** { *; }
+#-keep interface org.jetbrains.** { *; }
+#-dontwarn org.jetbrains.**
 
 #viewbind
 -keep class * implements androidx.viewbinding.ViewBinding {
