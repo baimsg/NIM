@@ -16,6 +16,12 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import java.io.File
+import java.io.IOException
+import java.net.Proxy
+import java.net.ProxySelector
+import java.net.SocketAddress
+import java.net.URI
+import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
@@ -33,6 +39,13 @@ class NetworkModule {
                 sslSocketFactory = SSLSocketClient.getSSLSocketFactory(),
                 trustManager = SSLSocketClient.X509TrustManager
             )
+            .proxySelector(object : ProxySelector() {
+                override fun select(uri: URI?): MutableList<Proxy> {
+                    return Collections.singletonList(Proxy.NO_PROXY)
+                }
+
+                override fun connectFailed(uri: URI?, sa: SocketAddress?, ioe: IOException?) = Unit
+            })
             .hostnameVerifier { _, _ -> true }
             .cache(cache)
             .connectTimeout(Config.API_TIMEOUT, TimeUnit.SECONDS)

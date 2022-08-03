@@ -12,7 +12,7 @@ object Dep {
     const val targetSdk = 30
     const val group = "com.baimsg.chat"
     const val packageName = "com.baimsg.chat"
-    const val version = "1.0.8"
+    const val version = "1.0.9"
 
     object MaterialDesign {
         const val material = "com.google.android.material:material:1.4.0"
