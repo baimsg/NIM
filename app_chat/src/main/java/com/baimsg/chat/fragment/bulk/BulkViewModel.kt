@@ -1,4 +1,4 @@
-package com.baimsg.chat.fragment.team.bulk
+package com.baimsg.chat.fragment.bulk
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.baimsg.chat.Constant
 import com.baimsg.chat.type.BatchStatus
 import com.baimsg.data.model.JSON
-import com.baimsg.data.model.entities.NIMTeam
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.RequestCallback
 import com.netease.nimlib.sdk.msg.MessageBuilder
@@ -36,10 +35,16 @@ class BulkViewModel @Inject constructor(
         NIMClient.getService(MsgService::class.java)
     }
 
-    private val allTeam: MutableList<NIMTeam> = JSON.decodeFromString(
-        ListSerializer(NIMTeam.serializer()),
-        handle["teams"] ?: ""
-    ).toMutableList()
+    private val sessionType by lazy {
+        handle["sessionType"] ?: SessionTypeEnum.Team
+    }
+
+    private val allTeam: MutableList<BulkData> by lazy {
+        JSON.decodeFromString(
+            ListSerializer(BulkData.serializer()),
+            handle["bulks"] ?: ""
+        ).toMutableList()
+    }
 
     private val _viewState by lazy {
         MutableStateFlow(BulkViewState.EMPTY)
@@ -79,10 +84,10 @@ class BulkViewModel @Inject constructor(
                     allTeam.removeAt(0)
                     val textMessage = MessageBuilder.createTextMessage(
                         team.id,
-                        SessionTypeEnum.Team,
+                        sessionType,
                         _viewState.value.message
                     )
-                    value = value.copy(team = team, status = BatchStatus.RUNNING)
+                    value = value.copy(bulkData = team, status = BatchStatus.RUNNING)
                     msgService.sendMessage(textMessage, false)
                         .setCallback(object : RequestCallback<Void> {
                             override fun onSuccess(p0: Void?) {

@@ -1,8 +1,8 @@
-package com.baimsg.chat.fragment.team.bulk
+package com.baimsg.chat.fragment.bulk
 
 import com.baimsg.chat.type.BatchStatus
 import com.baimsg.chat.type.ExecutionStatus
-import com.baimsg.data.model.entities.NIMTeam
+import java.io.Serializable
 
 /**
  * Create by Baimsg on 2022/7/22
@@ -10,7 +10,7 @@ import com.baimsg.data.model.entities.NIMTeam
  **/
 data class BulkViewState(
     val executionStatus: ExecutionStatus,
-    val team: NIMTeam,
+    val bulkData: BulkData,
     val message: String,
     val status: BatchStatus,
     val tip: String
@@ -19,7 +19,7 @@ data class BulkViewState(
         val EMPTY =
             BulkViewState(
                 executionStatus = ExecutionStatus.UNKNOWN,
-                team = NIMTeam(),
+                bulkData = BulkData("", ""),
                 message = "",
                 status = BatchStatus.UNKNOWN,
                 tip = ""
@@ -34,3 +34,6 @@ data class BulkViewState(
 
     fun stop() = status == BatchStatus.STOP
 }
+
+@kotlinx.serialization.Serializable
+data class BulkData(val id: String, val name: String) : Serializable

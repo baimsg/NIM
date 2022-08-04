@@ -1,6 +1,7 @@
 package com.baimsg.chat.fragment.team
 
 import androidx.lifecycle.ViewModel
+import com.baimsg.chat.fragment.bulk.BulkData
 import com.baimsg.data.model.Fail
 import com.baimsg.data.model.Loading
 import com.baimsg.data.model.Success
@@ -33,9 +34,8 @@ class TeamViewModel @Inject constructor(
     val allTeam: List<NIMTeam>
         get() = _viewState.value.teams.invoke() ?: listOf()
 
-    var selectTeas: MutableList<NIMTeam> = mutableListOf()
+    var selectBulks: MutableList<BulkData> = mutableListOf()
         private set
-
 
     /**
      * 加载群群列表
@@ -70,9 +70,10 @@ class TeamViewModel @Inject constructor(
      * 更新选择中群聊
      */
     fun upCheckTeam(indices: IntArray) {
-        selectTeas = mutableListOf<NIMTeam>().apply {
+        selectBulks = mutableListOf<BulkData>().apply {
             indices.forEach { i ->
-                add(allTeam[i])
+                val team = allTeam[i]
+                add(BulkData(id = team.id, name = team.name))
             }
         }
     }

@@ -1,48 +1,83 @@
 package com.baimsg.chat.fragment.friend
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.baimsg.chat.fragment.bulk.BulkData
 import com.baimsg.chat.type.ExecutionStatus
+import com.baimsg.data.model.entities.NIMUserInfo
 import com.baimsg.data.model.entities.asUser
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.RequestCallback
 import com.netease.nimlib.sdk.friend.FriendService
+import com.netease.nimlib.sdk.friend.model.Friend
 import com.netease.nimlib.sdk.uinfo.UserService
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 @HiltViewModel
 class FriendViewModel @Inject constructor() : ViewModel() {
 
+    /**
+     * 用户服务
+     */
     private val userService by lazy {
         NIMClient.getService(UserService::class.java)
     }
 
+    /**
+     * 好友服务
+     */
     private val friendService by lazy {
         NIMClient.getService(FriendService::class.java)
     }
 
+    /**
+     * 好友列表状态
+     */
     private val _viewState by lazy {
         MutableStateFlow(FriendViewState.EMPTY)
     }
 
+    /**
+     * 用于监听的状态
+     */
     val observeViewState: StateFlow<FriendViewState> = _viewState
 
-    val allAccounts: List<String> = _viewState.value.allAccounts
+    /**
+     * 所有好友
+     */
+    val allAccounts: List<Friend>
+        get() = _viewState.value.allFriends
 
-    private val page: Int = _viewState.value.page
+    /**
+     * 所有用户信息
+     */
+    val allUsers: List<NIMUserInfo>
+        get() = _viewState.value.allUsers
+
+    /**
+     * 当前页码
+     */
+    private val page: Int
+        get() = _viewState.value.page
+
+
+    /**
+     * 选择的好友列表
+     */
+    var selectBulks: MutableList<BulkData> = mutableListOf()
+        private set
+
 
     /**
      * 加载好友列表
      */
     fun loadFriends() {
         _viewState.apply {
-            value = FriendViewState.EMPTY.copy(allAccounts = friendService.friendAccounts)
+            value = FriendViewState.EMPTY.copy(allFriends = friendService.friends)
         }
         getUserInfo()
     }
@@ -61,12 +96,12 @@ class FriendViewModel @Inject constructor() : ViewModel() {
      * 获取好友列表信息
      * @param limit 返回数量
      */
-    private fun getUserInfo(limit: Int = 20) {
+    private fun getUserInfo(limit: Int = 100) {
         val start = page * limit
         val end = start + limit
         val accounts = mutableListOf<String?>().apply {
             (start until end).forEachIndexed { _, i ->
-                if (i in allAccounts.indices) add(allAccounts[i])
+                if (i in allAccounts.indices) add(allAccounts[i].account)
             }
         }
 
@@ -105,5 +140,15 @@ class FriendViewModel @Inject constructor() : ViewModel() {
             })
     }
 
-
+    /**
+     * 更新选择中群聊
+     */
+    fun upCheckTeam(indices: IntArray) {
+        selectBulks = mutableListOf<BulkData>().apply {
+            indices.forEach { i ->
+                val user = allUsers[i]
+                add(BulkData(id = user.account, user.name))
+            }
+        }
+    }
 }

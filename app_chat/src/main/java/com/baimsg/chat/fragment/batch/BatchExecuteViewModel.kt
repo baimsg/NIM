@@ -186,12 +186,9 @@ class BatchExecuteViewModel @Inject constructor(
                         value =
                             value.copy(task = nimTaskAccount, updateStatus = UpdateStatus.UPDATE)
                     }
-                    friendService.addFriend(
-                        AddFriendData(
-                            account,
-                            if (Constant.ADD_DIRECT) VerifyType.DIRECT_ADD else VerifyType.VERIFY_REQUEST,
-                            Constant.ADD_FRIEND_DESCRIBE
-                        )
+                    friendService.ackAddFriendRequest(
+                        account,
+                        true
                     ).setCallback(object : RequestCallback<Void> {
                         override fun onSuccess(a: Void?) {
                             viewModelScope.launch(Dispatchers.IO) {

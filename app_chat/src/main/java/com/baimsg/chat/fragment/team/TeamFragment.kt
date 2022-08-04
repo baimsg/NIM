@@ -9,13 +9,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.LayoutMode
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
-import com.afollestad.materialdialogs.list.*
+import com.afollestad.materialdialogs.list.listItems
+import com.afollestad.materialdialogs.list.listItemsMultiChoice
+import com.afollestad.materialdialogs.list.toggleAllItemsChecked
 import com.baimsg.chat.R
 import com.baimsg.chat.adapter.TeamItemAdapter
 import com.baimsg.chat.base.BaseFragment
 import com.baimsg.chat.databinding.EmptyBaseBinding
 import com.baimsg.chat.databinding.FooterTeamChatBinding
 import com.baimsg.chat.databinding.FragmentTeamBinding
+import com.baimsg.chat.fragment.bulk.BulkData
 import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
 import com.baimsg.chat.util.extensions.showError
 import com.baimsg.chat.util.extensions.showWarning
@@ -24,6 +27,7 @@ import com.baimsg.data.model.JSON
 import com.baimsg.data.model.Loading
 import com.baimsg.data.model.Success
 import com.baimsg.data.model.entities.NIMTeam
+import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.serialization.builtins.ListSerializer
@@ -77,10 +81,11 @@ class TeamFragment : BaseFragment<FragmentTeamBinding>(R.layout.fragment_team) {
                                     teamViewModel.upCheckTeam(indices)
                                     findNavController().navigate(
                                         TeamFragmentDirections.actionTeamFragmentToBulkFragment(
-                                            JSON.encodeToString(
-                                                ListSerializer(NIMTeam.serializer()),
-                                                teamViewModel.selectTeas
-                                            )
+                                            bulks = JSON.encodeToString(
+                                                ListSerializer(BulkData.serializer()),
+                                                teamViewModel.selectBulks
+                                            ),
+                                            sessionType = SessionTypeEnum.Team
                                         )
                                     )
                                 }

@@ -1,4 +1,4 @@
-package com.baimsg.chat.fragment.team.bulk
+package com.baimsg.chat.fragment.bulk
 
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -65,7 +65,7 @@ class BulkFragment : BaseFragment<FragmentBulkBinding>(R.layout.fragment_bulk) {
                     when (status) {
                         BatchStatus.RUNNING -> {
                             if (tip.isNotBlank()) {
-                                tipAdapter.addData("${team.name}「${team.id}」 -> $tip")
+                                tipAdapter.addData("${bulkData.name}「${bulkData.id}」 -> $tip")
                             }
                         }
                         else -> Unit
