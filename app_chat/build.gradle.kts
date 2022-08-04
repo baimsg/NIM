@@ -55,7 +55,7 @@ android {
         applicationId = Dep.packageName
         minSdk = Dep.minSdk
         targetSdk = Dep.targetSdk
-        versionCode = 10
+        versionCode = 11
         versionName = Dep.version
 
         ndk {
@@ -92,6 +92,27 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
             signingConfig = signingConfigs.getByName("release")
+        }
+    }
+
+
+    android.applicationVariants.all {
+        outputs.all {
+            if (this is com.android.build.gradle.internal.api.ApkVariantOutputImpl)
+                outputFileName =
+                    "nim助手_${defaultConfig.versionName}-${defaultConfig.versionCode}-${buildType.name}.apk"
+        }
+    }
+
+    flavorDimensions += "nim"
+    productFlavors {
+        create("lite") {
+            dimension = "nim"
+            resValue("string", "app_name", "nim助手")
+        }
+        create("pro") {
+            dimension = "nim"
+            resValue("string", "app_name", "nim助手Pro")
         }
     }
 

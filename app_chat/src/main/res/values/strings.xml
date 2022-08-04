@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">NIM助手</string>
     <string name="back">返回</string>
     <string name="account">account</string>
     <string name="token">token</string>
