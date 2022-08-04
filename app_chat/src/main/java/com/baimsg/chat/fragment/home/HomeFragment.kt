@@ -41,7 +41,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                             findNavController().navigate(R.id.action_homeFragment_to_createTeamFragment)
                         }
                         else -> {
-
+                            showInfo("unknown 该功能待开发")
                         }
                     }
                 }

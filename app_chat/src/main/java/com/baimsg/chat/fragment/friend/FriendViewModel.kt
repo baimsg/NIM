@@ -104,7 +104,6 @@ class FriendViewModel @Inject constructor() : ViewModel() {
                 if (i in allAccounts.indices) add(allAccounts[i].account)
             }
         }
-
         if (accounts.isEmpty()) {
             _viewState.apply {
                 value = value.copy(executionStatus = ExecutionStatus.EMPTY)

@@ -21,6 +21,7 @@ import com.baimsg.chat.databinding.FragmentFriendBinding
 import com.baimsg.chat.fragment.bulk.BulkData
 import com.baimsg.chat.type.ExecutionStatus
 import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
+import com.baimsg.chat.util.extensions.showInfo
 import com.baimsg.chat.util.extensions.showWarning
 import com.baimsg.data.model.JSON
 import com.chad.library.adapter.base.animation.AlphaInAnimation
@@ -48,6 +49,7 @@ class FriendFragment : BaseFragment<FragmentFriendBinding>(R.layout.fragment_fri
         binding.srContent.apply {
             setColorSchemeResources(R.color.color_primary)
             setOnRefreshListener {
+                accountSmallAdapter.setList(null)
                 friendViewModel.loadFriends()
             }
         }
@@ -58,7 +60,7 @@ class FriendFragment : BaseFragment<FragmentFriendBinding>(R.layout.fragment_fri
                     dialog.dismiss()
                     when (index) {
                         0 -> {
-                            if (friendViewModel.allAccounts.isEmpty()) {
+                            if (friendViewModel.allUsers.isEmpty()) {
                                 showWarning("没有好友可以群发")
                                 return@listItems
                             }
@@ -72,7 +74,7 @@ class FriendFragment : BaseFragment<FragmentFriendBinding>(R.layout.fragment_fri
                                     }
                                 }
                                 listItemsMultiChoice(
-                                    items = accountSmallAdapter.data.map { it.name + "-" + it.account },
+                                    items = friendViewModel.allUsers.map { it.name + "-" + it.account },
                                 ) { _, indices, _ ->
                                     friendViewModel.upCheckTeam(indices)
                                     findNavController().navigate(
@@ -90,7 +92,7 @@ class FriendFragment : BaseFragment<FragmentFriendBinding>(R.layout.fragment_fri
                             }
                         }
                         else -> {
-
+                            showInfo("unknown 该功能待开发")
                         }
                     }
                 }
