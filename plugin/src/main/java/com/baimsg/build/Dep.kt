@@ -126,13 +126,6 @@ object Dep {
         }
     }
 
-    object Umeng {
-        //友盟基础组件库（所有友盟业务SDK都依赖基础组件库）
-        const val common = "com.umeng.umsdk:common:9.4.7"
-        const val asms = "com.umeng.umsdk:asms:1.5.0"
-        const val abtest = "com.umeng.umsdk:abtest:1.0.0"
-        const val apm = "com.umeng.umsdk:apm:1.5.2"
-    }
 
     object Bugly {
         private const val version = "latest.release"

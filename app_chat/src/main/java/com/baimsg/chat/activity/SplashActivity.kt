@@ -4,14 +4,15 @@ import android.content.Intent
 import androidx.activity.viewModels
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
-import com.afollestad.materialdialogs.input.input
+import com.baidu.mobstat.StatService
 import com.baimsg.base.util.KvUtils
 import com.baimsg.chat.Constant
 import com.baimsg.chat.R
 import com.baimsg.chat.base.BaseActivity
 import com.baimsg.chat.databinding.ActivitySplashBinding
+import com.baimsg.chat.util.extensions.androidId
+import com.baimsg.chat.util.extensions.copy
 import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
-import com.baimsg.chat.util.extensions.setFullScreen
 import com.baimsg.data.model.Fail
 import com.baimsg.data.model.Loading
 import com.baimsg.data.model.Success
@@ -34,19 +35,30 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
     }
 
     override fun initView() {
+        StatService.start(this)
+
         repeatOnLifecycleStarted {
-            viewModel.observeBaseConfig.collectLatest {
+            viewModel.observeConfig.collectLatest {
                 when (it) {
                     is Loading -> {
                         loadDialog.show()
                     }
                     is Success -> {
                         loadDialog.dismiss()
-                        val id = it().id
-                        if (id != Constant.ID) {
-                            verifyKey()
+                        if (Constant.STATEMENT) {
+                            verify()
                         } else {
-                            nextActivity()
+                            MaterialDialog(this@SplashActivity)
+                                .cancelable(false)
+                                .cancelOnTouchOutside(false).show {
+                                    title(R.string.statement)
+                                    message(text = it().statement)
+                                    negativeButton(R.string.disagree) { finish() }
+                                    positiveButton(R.string.agree) {
+                                        KvUtils.put(Constant.KEY_STATEMENT, true)
+                                        verify()
+                                    }
+                                }
                         }
                     }
                     is Fail -> {
@@ -69,26 +81,24 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
         }
     }
 
-    private fun verifyKey() {
-        MaterialDialog(this@SplashActivity)
-            .cancelable(false)
-            .cancelOnTouchOutside(false)
-            .show {
-                input(
-                    hint = "请输入id"
-                ) { _, charSequence ->
-                    if (charSequence.toString() == viewModel.verifyKey) {
-                        KvUtils.put(Constant.KEY_ID, charSequence.toString())
-                        nextActivity()
-                    } else {
-                        verifyKey()
+    private fun verify() {
+        val androidId = applicationContext.androidId()
+        if (viewModel.users.any { it.id == androidId }) {
+
+        } else {
+            MaterialDialog(this@SplashActivity)
+                .cancelable(false)
+                .cancelOnTouchOutside(false)
+                .show {
+                    title(text = "设备未激活）：")
+                    message(text = "神奇的卡密:$androidId")
+                    negativeButton(R.string.quit) { finish() }
+                    positiveButton(R.string.copy) {
+                        applicationContext.copy(androidId)
                     }
                 }
-                negativeButton(R.string.quit) { finish() }
-                positiveButton()
-            }
+        }
     }
-
 
     private fun nextActivity() {
         startActivity(Intent(this, MainActivity::class.java))

@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">NIM助手</string>
     <string name="back">返回</string>
     <string name="account">account</string>
     <string name="token">token</string>
@@ -69,4 +68,8 @@
     <string name="all_mute">全员禁言</string>
     <string name="verify_type">验证模式</string>
     <string name="team_member">群成员</string>
+    <string name="disagree">不同意</string>
+    <string name="agree">同意</string>
+    <string name="copy">复制</string>
+    <string name="statement">使用声明</string>
 </resources>

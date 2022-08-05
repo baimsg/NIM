@@ -19,14 +19,14 @@ class AppViewModel @Inject constructor(
     private val baseEndpoints: BaseEndpoints
 ) : ViewModel() {
 
-    private val _baseConfig: MutableStateFlow<Async<BaseConfig>> by lazy {
+    private val _config: MutableStateFlow<Async<ConfigBean>> by lazy {
         MutableStateFlow(Uninitialized)
     }
 
-    val observeBaseConfig: StateFlow<Async<BaseConfig>> = _baseConfig
+    val observeConfig: StateFlow<Async<ConfigBean>> = _config
 
-    val verifyKey: String
-        get() = _baseConfig.value.invoke()?.id ?: ""
+    val users: List<User>
+        get() = _config.value.invoke()?.users ?: emptyList()
 
     init {
         initBaseConfig()
@@ -41,14 +41,21 @@ class AppViewModel @Inject constructor(
      */
     private fun initBaseConfig() {
         viewModelScope.launch {
-            _baseConfig.apply {
+            _config.apply {
                 value = Loading()
                 value = try {
-                    Success(baseEndpoints.getKey())
+                    Success(
+                        baseEndpoints.getPersonal(
+                            fileId = "f0bc4b8ad2bb6ce1ace2e3d0bf48d703",
+                            shareKey = "f07c493ac7be7334d45a32fb8509fe98"
+                        )
+                    )
                 } catch (e: Exception) {
                     Fail(e)
                 }
             }
         }
     }
+
+
 }

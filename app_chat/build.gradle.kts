@@ -1,9 +1,9 @@
 import com.baimsg.build.Dep
-import com.baimsg.fog.kg.RandomKeyGenerator
-import com.baimsg.fog.xor.BytecodeFogImpl
 import com.baimsg.fog.annotation.BytecodeFogIgnore
+import com.baimsg.fog.kg.RandomKeyGenerator
 import com.baimsg.fog.plugin.BytecodeFogExtension
 import com.baimsg.fog.plugin.BytecodeFogPlugin
+import com.baimsg.fog.xor.BytecodeFogImpl
 import java.util.*
 
 plugins {
@@ -66,14 +66,6 @@ android {
         }
     }
 
-    android.applicationVariants.all {
-        outputs.all {
-            if (this is com.android.build.gradle.internal.api.ApkVariantOutputImpl) {
-                outputFileName = "chat_${versionName}_${versionCode}-${buildType.name}.apk"
-            }
-        }
-    }
-
     buildTypes {
         getByName("release") {
             // 启用代码压缩、优化和混淆（由R8或者ProGuard执行）
@@ -95,6 +87,23 @@ android {
         }
     }
 
+    android.applicationVariants.all {
+        outputs.all {
+            if (this is com.android.build.gradle.internal.api.ApkVariantOutputImpl)
+                outputFileName =
+                    "nim助手Lite_${defaultConfig.versionName}-${defaultConfig.versionCode}-${buildType.name}.apk"
+        }
+    }
+
+    flavorDimensions += "nim"
+    productFlavors {
+        create("lite") {
+            dimension = "nim"
+            resValue("string", "app_name", "nim助手Lite")
+            applicationIdSuffix = ".lite"
+        }
+    }
+
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
 
@@ -105,7 +114,6 @@ android {
     kotlinOptions {
         jvmTarget = Dep.kotlinJvmTarget
     }
-
 
 }
 

@@ -2,8 +2,9 @@ package com.baimsg.chat.di
 
 import android.app.Application
 import android.content.Context
-import android.view.Gravity
+import com.baidu.mobstat.StatService
 import com.baimsg.base.util.inititializer.AppInitializer
+import com.baimsg.chat.BuildConfig
 import com.baimsg.chat.Constant
 import com.baimsg.data.db.daos.LoginRecordDao
 import com.baimsg.data.model.entities.NIMLoginRecord
@@ -12,8 +13,6 @@ import com.netease.nimlib.sdk.SDKOptions
 import com.netease.nimlib.sdk.auth.LoginInfo
 import com.tencent.bugly.Bugly
 import com.tencent.mmkv.MMKV
-import com.umeng.commonsdk.UMConfigure
-import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -29,29 +28,14 @@ class SDKAppInitializer @Inject constructor(
          * mmkv
          */
         MMKV.initialize(application)
-        initUmeng(application)
-        Bugly.init(application, Constant.BUGLY_KEY, false)
+        StatService.setAuthorizedState(application, true)
+        StatService.enableDeviceMac(application, true)
+        StatService.setDebugOn(BuildConfig.DEBUG)
+        StatService.setOn(application, StatService.EXCEPTION_LOG)
+        Bugly.init(application, Constant.BUGLY_KEY, BuildConfig.DEBUG)
         initIM(application)
-
     }
 
-    /**
-     * 初始化Umeng
-     */
-    private fun initUmeng(context: Context) {
-        UMConfigure.preInit(
-            context,
-            Constant.UMENG_APP_KEY,
-            Constant.getChannel()
-        )
-        UMConfigure.init(
-            context,
-            Constant.UMENG_APP_KEY,
-            Constant.getChannel(),
-            UMConfigure.DEVICE_TYPE_PHONE,
-            ""
-        )
-    }
 
     /**
      * IM

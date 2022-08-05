@@ -207,9 +207,9 @@
 -keep class net.sqlcipher.** {*;}
 
 
-#Umeng
--keep class com.umeng.** {*;}
--keep class org.repackage.** {*;}
+#百度统计
+-keep class com.baidu.mobstat.** { *; }
+-keep class com.baidu.bottom.** { *; }
 
 #Bugly
 -dontwarn com.tencent.bugly.**

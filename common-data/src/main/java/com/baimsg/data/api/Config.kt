@@ -7,6 +7,6 @@ import java.time.Duration
  *
  **/
 object Config {
-    const val BASE_URL: String = "http://42.194.200.29:2345/"
+    const val BASE_URL: String = "https://note.youdao.com/"
     val API_TIMEOUT = Duration.ofSeconds(40).toMillis()
 }

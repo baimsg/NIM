@@ -10,9 +10,8 @@ import kotlinx.serialization.builtins.serializer
  *
  **/
 object Constant {
-    const val TEST = ""
 
-    const val KEY_ID = "key_id"
+    const val KEY_STATEMENT = "key_statement"
 
     const val KEY_FILTER = "key_filter"
 
@@ -32,12 +31,10 @@ object Constant {
 
     const val KEY_TEAM_DESCRIBE = "key_team_describe"
 
-    const val UMENG_APP_KEY = "62b2829b88ccdf4b7ea53d64"
+    const val BUGLY_KEY = "84f02b15ed"
 
-    const val BUGLY_KEY = "10ced88958"
-
-    val ID: String
-        get() = KvUtils.getString(KEY_ID, "")
+    val STATEMENT: Boolean
+        get() = KvUtils.getBoolean(KEY_STATEMENT, false)
 
     val SEARCH_COUNT: Long
         get() = KvUtils.getLong(KEY_SEARCH_COUNT, 100000)
