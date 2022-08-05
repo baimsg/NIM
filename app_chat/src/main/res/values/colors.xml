@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="color_primary">#F06292</color>
-    <color name="color_primary_translucent">#80F06292</color>
+    <color name="color_primary">#FFD44848</color>
+    <color name="color_primary_translucent">#80D44848</color>
     <color name="color_primary_variant">#FF94C2</color>
     <color name="color_secondary">#5C6BC0</color>
     <color name="color_secondary_variant">#26418f</color>

@@ -28,6 +28,21 @@ class AppViewModel @Inject constructor(
     val users: List<User>
         get() = _config.value.invoke()?.users ?: emptyList()
 
+    val noticeVersion: Int
+        get() = _config.value.invoke()?.noticeVersion ?: 0
+
+    val noticeTitle: String
+        get() = _config.value.invoke()?.noticeTitle ?: ""
+
+    val noticeContent: String
+        get() = _config.value.invoke()?.noticeContent ?: ""
+
+    val stopUsing: Boolean
+        get() = _config.value.invoke()?.stopUsing ?: false
+
+    val noticeLink: String
+        get() = _config.value.invoke()?.noticeLink ?: ""
+
     init {
         initBaseConfig()
     }

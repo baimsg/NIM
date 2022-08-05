@@ -11,6 +11,7 @@ import android.provider.Settings
 import android.telephony.TelephonyManager
 import com.baimsg.base.util.KvUtils
 import com.baimsg.base.util.extensions.logD
+import com.baimsg.base.util.extensions.toMd5String
 import java.util.*
 
 fun Context.copy(message: String) {
@@ -37,14 +38,14 @@ fun Context.androidId(): String {
         e.printStackTrace()
     }
     if (androidId.isNullOrBlank() && tmDevice.isBlank() && macAd.isBlank() && serialNum.isBlank()) {
-        val uuid = UUID.randomUUID().toString().replace("-", "")
+        val uuid = UUID.randomUUID().toString().toMd5String()
         KvUtils.put("KEY_ANDROID_ID", uuid)
         return uuid
     }
     val deviceUuid = UUID(
         androidId.hashCode().toLong(),
         (tmDevice.hashCode() or macAd.hashCode() or serialNum.hashCode()).toLong()
-    ).toString().replace("-", "")
+    ).toString().toMd5String()
     KvUtils.put("KEY_ANDROID_ID", deviceUuid)
     return deviceUuid
 }
