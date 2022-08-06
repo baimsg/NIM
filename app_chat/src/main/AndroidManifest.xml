@@ -70,14 +70,6 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="true">
 
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="um.62b2829b88ccdf4b7ea53d64" />
-            </intent-filter>
         </activity>
         <activity
             android:name="com.tencent.bugly.beta.ui.BetaActivity"
