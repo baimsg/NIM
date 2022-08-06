@@ -10,8 +10,6 @@ import kotlinx.serialization.builtins.serializer
  *
  **/
 object Constant {
-    const val TEST = ""
-
     const val KEY_ID = "key_id"
 
     const val KEY_FILTER = "key_filter"
@@ -31,8 +29,6 @@ object Constant {
     const val KEY_TEAM_LIMIT = "key_team_limit"
 
     const val KEY_TEAM_DESCRIBE = "key_team_describe"
-
-    const val UMENG_APP_KEY = "62b2829b88ccdf4b7ea53d64"
 
     const val BUGLY_KEY = "10ced88958"
 
@@ -72,8 +68,6 @@ object Constant {
             FILTER
         )
         else emptyList()
-
-    fun getChannel(): String = "default"
 
     fun appKeyRemark(appKey: String): String = KvUtils.getString(appKey, "无备注")
 

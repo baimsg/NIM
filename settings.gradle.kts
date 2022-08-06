@@ -3,10 +3,6 @@ pluginManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
-        maven {
-            name = "local-maven"
-            url = uri("./plugins/local-maven")
-        }
         mavenLocal()
     }
 }
