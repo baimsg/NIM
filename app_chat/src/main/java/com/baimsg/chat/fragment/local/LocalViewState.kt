@@ -17,3 +17,12 @@ data class LocalViewState(
         )
     }
 }
+
+data class LocalOperateViewState(
+    val executionStatus: ExecutionStatus,
+    val tip: String
+) {
+    companion object {
+        val EMPTY = LocalOperateViewState(executionStatus = ExecutionStatus.UNKNOWN, "")
+    }
+}

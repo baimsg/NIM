@@ -20,10 +20,7 @@ import com.baimsg.chat.databinding.EmptyBaseBinding
 import com.baimsg.chat.databinding.FragmentLocalBinding
 import com.baimsg.chat.type.ExecutionStatus
 import com.baimsg.chat.type.UpdateStatus
-import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
-import com.baimsg.chat.util.extensions.showError
-import com.baimsg.chat.util.extensions.showSuccess
-import com.baimsg.chat.util.extensions.showWarning
+import com.baimsg.chat.util.extensions.*
 import com.baimsg.data.model.entities.NIMUserInfo
 import com.chad.library.adapter.base.animation.AlphaInAnimation
 import dagger.hilt.android.AndroidEntryPoint
@@ -59,6 +56,7 @@ class LocalFragment : BaseFragment<FragmentLocalBinding>(R.layout.fragment_local
 
             override fun afterTextChanged(editable: Editable?) {
                 val keyWord = editable?.toString()
+                binding.ivClear.show(!keyWord.isNullOrEmpty())
                 binding.srContent.isEnabled = keyWord.isNullOrBlank()
                 when {
                     keyWord.isNullOrBlank() -> {
@@ -94,6 +92,7 @@ class LocalFragment : BaseFragment<FragmentLocalBinding>(R.layout.fragment_local
                         "导入数据",
                         "导出全部数据",
                         "导出列表数据",
+                        "导出账号信息",
                         "全部加入任务"
                     )
                 ) { dialog, index, _ ->
@@ -101,12 +100,6 @@ class LocalFragment : BaseFragment<FragmentLocalBinding>(R.layout.fragment_local
                     if (isEmpty()) return@listItems
                     when (index) {
                         0 -> {
-                            showWarning("导入功能待完善")
-                        }
-                        1 -> {
-                            showWarning("导出功能待完善")
-                        }
-                        2 -> {
                             lifecycleScope.launch {
                                 loadDialog.show()
                                 localViewModel.deleteAllByAppKey()
@@ -115,7 +108,19 @@ class LocalFragment : BaseFragment<FragmentLocalBinding>(R.layout.fragment_local
                                 showSuccess("已将数据库清空")
                             }
                         }
+                        1 -> {
+                            showWarning("导入功能待完善")
+                        }
+                        2 -> {
+                            showWarning("导出功能待完善")
+                        }
                         3 -> {
+                            showWarning("导出功能待完善")
+                        }
+                        4 -> {
+                            showWarning("导出功能待完善")
+                        }
+                        else -> {
                             lifecycleScope.launch {
                                 loadDialog.show()
                                 localViewModel.addTaskAll()
@@ -158,11 +163,15 @@ class LocalFragment : BaseFragment<FragmentLocalBinding>(R.layout.fragment_local
                     dialog.dismiss()
                     when (index) {
                         0 -> {
-
+                            findNavController().navigate(
+                                LocalFragmentDirections.actionLocalFragmentToUserDetailFragment(
+                                    userInfo = data
+                                )
+                            )
                         }
                         1 -> {
                             localViewModel.addTask(data)
-                            showSuccess("已将[${data.name}-${data.account}]添加到任务")
+                            showSuccess("[${data.name}-${data.account}]添加成功")
                         }
                         else -> {
                             localViewModel.deleteAccountById(data)
@@ -178,6 +187,11 @@ class LocalFragment : BaseFragment<FragmentLocalBinding>(R.layout.fragment_local
             removeTextChangedListener(keyWordsTextWatcher)
             addTextChangedListener(keyWordsTextWatcher)
         }
+
+        binding.ivClear.setOnClickListener {
+            binding.editSearch.text = null
+        }
+
     }
 
     override fun initLiveData() {
@@ -200,6 +214,27 @@ class LocalFragment : BaseFragment<FragmentLocalBinding>(R.layout.fragment_local
                     }
                     else -> {
                         binding.srContent.isRefreshing = false
+                    }
+                }
+            }
+        }
+
+        repeatOnLifecycleStarted {
+            localViewModel.observeOperateViewState.collectLatest {
+                when (it.executionStatus) {
+                    ExecutionStatus.LOADING -> {
+                        loadDialog.show()
+                    }
+                    ExecutionStatus.SUCCESS -> {
+                        loadDialog.dismiss()
+                        showSuccess(it.tip)
+                    }
+                    ExecutionStatus.FAIL -> {
+                        loadDialog.dismiss()
+                        showError(it.tip)
+                    }
+                    else -> {
+                        loadDialog.dismiss()
                     }
                 }
             }

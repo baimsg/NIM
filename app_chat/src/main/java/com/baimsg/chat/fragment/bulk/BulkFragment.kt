@@ -1,5 +1,6 @@
 package com.baimsg.chat.fragment.bulk
 
+import android.text.InputType
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -38,7 +39,10 @@ class BulkFragment : BaseFragment<FragmentBulkBinding>(R.layout.fragment_bulk) {
         MaterialDialog(requireContext(), BottomSheet())
             .cancelable(false).cancelOnTouchOutside(false).show {
                 title(text = "群发消息")
-                input(hint = "请输入群发内容") { _, charSequence ->
+                input(
+                    hint = "请输入群发内容",
+                    inputType = InputType.TYPE_TEXT_FLAG_IME_MULTI_LINE
+                ) { _, charSequence ->
                     bulkViewModel.setMessage(charSequence.toString())
                 }
                 negativeButton { findNavController().navigateUp() }

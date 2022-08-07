@@ -47,6 +47,12 @@ class LocalViewModel @Inject constructor(
     val allAccounts: List<NIMUserInfo>
         get() = _viewState.value.allAccounts
 
+    private val _localOperateViewState by lazy {
+        MutableStateFlow(LocalOperateViewState.EMPTY)
+    }
+
+    val observeOperateViewState: StateFlow<LocalOperateViewState> = _localOperateViewState
+
 
     /**
      * 加载数据库数据
@@ -61,14 +67,13 @@ class LocalViewModel @Inject constructor(
                     allAccounts = allAccounts,
                     updateStatus = UpdateStatus.REFRESH
                 )
-                delay(1000)
-                value = value.copy(executionStatus = ExecutionStatus.UNKNOWN)
+                recover()
             }
         }
     }
 
     /**
-     * 数据一条删除
+     * 删除一条数据
      * @param nimUserInfo 删除对象
      */
     fun deleteAccountById(nimUserInfo: NIMUserInfo) {
@@ -100,7 +105,14 @@ class LocalViewModel @Inject constructor(
      */
     fun addTask(nimUserInfo: NIMUserInfo) {
         viewModelScope.launch(Dispatchers.IO) {
-            taskAccountDao.updateOrInsert(nimUserInfo.asTask())
+            _localOperateViewState.apply {
+                try {
+                    taskAccountDao.updateOrInsert(nimUserInfo.asTask())
+                } catch (e: Exception) {
+
+                }
+            }
+
         }
     }
 
@@ -111,6 +123,16 @@ class LocalViewModel @Inject constructor(
         withContext(Dispatchers.IO) {
             val tasks = allAccounts.filter { !it.name.verifySensitiveWords() }.map { it.asTask() }
             taskAccountDao.updateOrInsert(tasks)
+        }
+    }
+
+    private suspend fun recover() {
+        delay(250)
+        _viewState.apply {
+            value = value.copy(executionStatus = ExecutionStatus.UNKNOWN)
+        }
+        _localOperateViewState.apply {
+            value = value.copy(executionStatus = ExecutionStatus.UNKNOWN)
         }
     }
 

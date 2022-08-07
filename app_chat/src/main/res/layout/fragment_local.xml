@@ -71,6 +71,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ivBack" />
 
+    <ImageView
+        android:id="@+id/ivClear"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:contentDescription="@string/remove"
+        android:elevation="2dp"
+        android:padding="8dp"
+        android:src="@drawable/ic_close"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/editSearch"
+        app:layout_constraintEnd_toEndOf="@id/editSearch"
+        app:layout_constraintTop_toTopOf="@id/editSearch" />
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/srContent"
         android:layout_width="match_parent"
