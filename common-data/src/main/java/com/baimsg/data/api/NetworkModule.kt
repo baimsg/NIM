@@ -3,6 +3,7 @@ package com.baimsg.data.api
 import android.app.Application
 import com.baimsg.data.BuildConfig
 import com.baimsg.data.api.converter.ToStringConverterFactory
+import com.baimsg.data.api.interceptor.DynamicURLInterceptor
 import com.baimsg.data.model.DEFAULT_JSON_FORMAT
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
@@ -48,9 +49,9 @@ class NetworkModule {
             })
             .hostnameVerifier { _, _ -> true }
             .cache(cache)
-            .connectTimeout(Config.API_TIMEOUT, TimeUnit.SECONDS)
-            .readTimeout(Config.API_TIMEOUT, TimeUnit.MILLISECONDS)
-            .writeTimeout(Config.API_TIMEOUT, TimeUnit.MILLISECONDS)
+            .connectTimeout(NetConfig.API_TIMEOUT, TimeUnit.SECONDS)
+            .readTimeout(NetConfig.API_TIMEOUT, TimeUnit.MILLISECONDS)
+            .writeTimeout(NetConfig.API_TIMEOUT, TimeUnit.MILLISECONDS)
             .connectionPool(ConnectionPool(10, 2, TimeUnit.MINUTES))
             .dispatcher(
                 Dispatcher().apply {
@@ -91,6 +92,7 @@ class NetworkModule {
         loggingInterceptor: HttpLoggingInterceptor,
     ): OkHttpClient = getBaseBuilder(cache)
         .addInterceptor(loggingInterceptor)
+        .addInterceptor(DynamicURLInterceptor())
         .build()
 
     @Provides
@@ -102,5 +104,5 @@ class NetworkModule {
     @ExperimentalSerializationApi
     @Named("base")
     fun retrofitBase(client: OkHttpClient, json: Json): Retrofit =
-        createRetrofit(Config.BASE_URL, client, json)
+        createRetrofit(NetConfig.BASE_URL, client, json)
 }

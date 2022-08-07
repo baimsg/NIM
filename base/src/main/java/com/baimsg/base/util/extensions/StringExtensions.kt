@@ -1,5 +1,6 @@
 package com.baimsg.base.util.extensions
 
+import android.util.Base64
 import java.nio.charset.Charset
 
 /**
@@ -167,3 +168,9 @@ fun String.toMd5String(charset: Charset = Charsets.UTF_8): String =
 
 fun String.toMd5Bytes(charset: Charset = Charsets.UTF_8): ByteArray =
     toByteArray(charset).toMd5Bytes()
+
+fun String.encodeBase64(charset: Charset = Charsets.UTF_8): String =
+    Base64.encode(this.toByteArray(charset), Base64.DEFAULT).toString(charset)
+
+fun String.decodeBase64(charset: Charset = Charsets.UTF_8): String =
+    Base64.decode(this.toByteArray(charset), Base64.DEFAULT).toString(charset)

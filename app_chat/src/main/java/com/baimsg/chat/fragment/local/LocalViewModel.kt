@@ -3,6 +3,7 @@ package com.baimsg.chat.fragment.local
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.baimsg.chat.type.ExecutionStatus
 import com.baimsg.chat.type.UpdateStatus
 import com.baimsg.chat.util.verifySensitiveWords
 import com.baimsg.data.db.daos.TaskAccountDao
@@ -11,6 +12,7 @@ import com.baimsg.data.model.entities.NIMUserInfo
 import com.baimsg.data.model.entities.asTask
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -27,20 +29,24 @@ class LocalViewModel @Inject constructor(
     private val userInfoDao: UserInfoDao,
     private val taskAccountDao: TaskAccountDao
 ) : ViewModel() {
+
     private val initAppKey = handle["appKey"] ?: ""
 
     private val _viewState by lazy {
         MutableStateFlow(LocalViewState.EMPTY)
     }
 
+    /**
+     * 可观察状态对象
+     */
     val observeViewState: StateFlow<LocalViewState> = _viewState
 
+    /**
+     * 所有用户列表
+     */
     val allAccounts: List<NIMUserInfo>
         get() = _viewState.value.allAccounts
 
-    init {
-        loadAllAccount()
-    }
 
     /**
      * 加载数据库数据
@@ -48,10 +54,15 @@ class LocalViewModel @Inject constructor(
     fun loadAllAccount() {
         viewModelScope.launch(Dispatchers.IO) {
             _viewState.apply {
+                value = LocalViewState.EMPTY.copy(executionStatus = ExecutionStatus.LOADING)
+                val allAccounts = userInfoDao.entriesByAppKey(appKey = initAppKey)
                 value = value.copy(
-                    allAccounts = userInfoDao.entriesByAppKey(appKey = initAppKey),
+                    executionStatus = ExecutionStatus.SUCCESS,
+                    allAccounts = allAccounts,
                     updateStatus = UpdateStatus.REFRESH
                 )
+                delay(1000)
+                value = value.copy(executionStatus = ExecutionStatus.UNKNOWN)
             }
         }
     }

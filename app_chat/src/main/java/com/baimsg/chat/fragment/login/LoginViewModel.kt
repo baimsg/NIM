@@ -2,6 +2,7 @@ package com.baimsg.chat.fragment.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.baimsg.base.util.extensions.logE
 import com.baimsg.chat.type.ExecutionStatus
 import com.baimsg.data.db.daos.LoginRecordDao
 import com.baimsg.data.model.entities.NIMLoginRecord
@@ -12,6 +13,10 @@ import com.netease.nimlib.sdk.RequestCallback
 import com.netease.nimlib.sdk.StatusCode
 import com.netease.nimlib.sdk.auth.AuthService
 import com.netease.nimlib.sdk.auth.LoginInfo
+import com.netease.nimlib.sdk.msg.MsgService
+import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
+import com.netease.nimlib.sdk.msg.model.CustomNotification
+import com.netease.nimlib.sdk.msg.model.CustomNotificationConfig
 import com.netease.nimlib.sdk.uinfo.UserService
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +25,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
 import javax.inject.Inject
+
 
 /**
  * Create by Baimsg on 2022/6/14
@@ -75,6 +82,55 @@ internal class LoginViewModel @Inject constructor(
 
     init {
         refreshData()
+    }
+
+    private val msgService by lazy {
+        NIMClient.getService(MsgService::class.java)
+    }
+
+    fun test() {
+        val you = "30925171"
+        val mi = "25912729"
+        val fanno = "378339350"
+        val content = JSONObject().apply {
+            put("id", 2)
+            put(
+                "content",
+                "学习进行时】习近平总书记对航天事业发展高度重视。酒泉卫星发射中心是我国航天事业的发祥地之一，党的十八大以来，习近平总书记两次来到这里。新华社《学习进行时》原创品牌栏目“讲习所”今天推出文章，与您一同学习感悟。\n" +
+                        "\n" +
+                        "探索浩瀚宇宙，发展航天事业，建设航天强国，是中华民族不懈追求的航天梦。航天梦是强国梦的重要组成部分。\n" +
+                        "\n" +
+                        "党的十八大以来，习近平总书记多次视察卫星发射中心、会见航天员和航天工作者，多次作出重要指示，就我国航天事业发展作出一系列重要论述，充分体现了对航天事业的关心和重视。\n" +
+                        "\n" +
+                        "酒泉卫星发射中心是我国航天事业的发祥地之一，党的十八大以来，习近平总书记两次来到这里。"
+            )
+        }.toString()
+        // 自定义消息配置选项
+        val config = CustomNotificationConfig()
+        val notification = CustomNotification().apply {
+            fromAccount = currentAccount
+            sessionId = you
+            sessionType = SessionTypeEnum.P2P
+            isSendToOnlineUserOnly = false
+            this.config = config
+            this.apnsText = content
+            this.content = content
+        }
+
+        msgService.sendCustomNotification(notification)
+            .setCallback(object : RequestCallback<Void> {
+                override fun onSuccess(p0: Void?) {
+                    logE("操作成功")
+                }
+
+                override fun onFailed(p0: Int) {
+                    logE("操作失败：$p0")
+                }
+
+                override fun onException(p0: Throwable?) {
+                    logE("操作失败：${p0?.message}")
+                }
+            })
     }
 
     fun login(appKey: String, account: String, token: String) {

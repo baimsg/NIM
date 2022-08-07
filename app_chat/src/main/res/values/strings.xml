@@ -68,4 +68,5 @@
     <string name="all_mute">全员禁言</string>
     <string name="verify_type">验证模式</string>
     <string name="team_member">群成员</string>
+    <string name="key_words_hint">请输入关键词</string>
 </resources>

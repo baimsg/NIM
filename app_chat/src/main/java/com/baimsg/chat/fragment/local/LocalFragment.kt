@@ -1,5 +1,7 @@
 package com.baimsg.chat.fragment.local
 
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -16,6 +18,7 @@ import com.baimsg.chat.adapter.AccountMediumAdapter
 import com.baimsg.chat.base.BaseFragment
 import com.baimsg.chat.databinding.EmptyBaseBinding
 import com.baimsg.chat.databinding.FragmentLocalBinding
+import com.baimsg.chat.type.ExecutionStatus
 import com.baimsg.chat.type.UpdateStatus
 import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
 import com.baimsg.chat.util.extensions.showError
@@ -24,7 +27,9 @@ import com.baimsg.chat.util.extensions.showWarning
 import com.baimsg.data.model.entities.NIMUserInfo
 import com.chad.library.adapter.base.animation.AlphaInAnimation
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.launch
 
 /**
@@ -46,7 +51,33 @@ class LocalFragment : BaseFragment<FragmentLocalBinding>(R.layout.fragment_local
             .customView(R.layout.dialog_loading)
     }
 
+    private val keyWordsTextWatcher by lazy {
+        object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
+
+            override fun afterTextChanged(editable: Editable?) {
+                val keyWord = editable?.toString()
+                binding.srContent.isEnabled = keyWord.isNullOrBlank()
+                when {
+                    keyWord.isNullOrBlank() -> {
+                        accountMediumAdapter.setList(localViewModel.allAccounts)
+                    }
+                    else -> {
+                        accountMediumAdapter.setList(localViewModel.allAccounts.filter {
+                            it.name.contains(
+                                keyWord
+                            )
+                        })
+                    }
+                }
+            }
+        }
+    }
+
     override fun initView() {
+
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()
         }
@@ -57,7 +88,15 @@ class LocalFragment : BaseFragment<FragmentLocalBinding>(R.layout.fragment_local
 
         binding.ivMore.setOnClickListener {
             MaterialDialog(requireContext(), BottomSheet(LayoutMode.WRAP_CONTENT)).show {
-                listItems(items = listOf("导入数据", "导出数据", "清空数据", "一键加入任务")) { dialog, index, _ ->
+                listItems(
+                    items = listOf(
+                        "清空数据",
+                        "导入数据",
+                        "导出全部数据",
+                        "导出列表数据",
+                        "全部加入任务"
+                    )
+                ) { dialog, index, _ ->
                     dialog.dismiss()
                     if (isEmpty()) return@listItems
                     when (index) {
@@ -95,7 +134,6 @@ class LocalFragment : BaseFragment<FragmentLocalBinding>(R.layout.fragment_local
             setColorSchemeResources(R.color.color_primary)
             setOnRefreshListener {
                 localViewModel.loadAllAccount()
-                isRefreshing = false
             }
         }
 
@@ -115,11 +153,14 @@ class LocalFragment : BaseFragment<FragmentLocalBinding>(R.layout.fragment_local
 
         accountMediumAdapter.setOnItemClickListener { adapter, _, position ->
             val data = adapter.data[position] as NIMUserInfo
-            MaterialDialog(requireContext()).show {
-                listItems(items = listOf("加入任务", "删除数据")) { dialog, index, _ ->
+            MaterialDialog(requireContext(), BottomSheet(LayoutMode.WRAP_CONTENT)).show {
+                listItems(items = listOf("账号信息", "加入任务", "删除数据")) { dialog, index, _ ->
                     dialog.dismiss()
                     when (index) {
                         0 -> {
+
+                        }
+                        1 -> {
                             localViewModel.addTask(data)
                             showSuccess("已将[${data.name}-${data.account}]添加到任务")
                         }
@@ -132,23 +173,42 @@ class LocalFragment : BaseFragment<FragmentLocalBinding>(R.layout.fragment_local
                 negativeButton(R.string.cancel)
             }
         }
+
+        binding.editSearch.apply {
+            removeTextChangedListener(keyWordsTextWatcher)
+            addTextChangedListener(keyWordsTextWatcher)
+        }
     }
 
     override fun initLiveData() {
         repeatOnLifecycleStarted {
-            localViewModel.observeViewState.collectLatest {
+            localViewModel.observeViewState.collect {
                 val allAccounts = it.allAccounts
                 binding.tvCount.text = "(${allAccounts.size})"
-                when (it.updateStatus) {
-                    UpdateStatus.REFRESH -> {
-                        accountMediumAdapter.setList(allAccounts)
+                when (it.executionStatus) {
+                    ExecutionStatus.LOADING -> {
+                        binding.srContent.isRefreshing = true
                     }
-                    else -> {}
+                    ExecutionStatus.SUCCESS -> {
+                        binding.srContent.isRefreshing = false
+                        when (it.updateStatus) {
+                            UpdateStatus.REFRESH -> {
+                                accountMediumAdapter.setList(allAccounts)
+                            }
+                            else -> Unit
+                        }
+                    }
+                    else -> {
+                        binding.srContent.isRefreshing = false
+                    }
                 }
             }
         }
     }
 
+    override fun initData() {
+        localViewModel.loadAllAccount()
+    }
 
     private fun isEmpty(): Boolean {
         return if (localViewModel.allAccounts.isEmpty()) {

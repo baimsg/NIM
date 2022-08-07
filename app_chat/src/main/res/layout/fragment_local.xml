@@ -43,19 +43,41 @@
         android:id="@+id/ivMore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/import_or_export"
+        android:contentDescription="@string/more"
         android:padding="16dp"
         android:src="@drawable/ic_headlines"
         app:layout_constraintBottom_toBottomOf="@id/ivBack"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/ivBack" />
 
+
+    <EditText
+        android:id="@+id/editSearch"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:layout_marginHorizontal="16dp"
+        android:autofillHints="name"
+        android:background="@drawable/bg_edit_search"
+        android:elevation="1dp"
+        android:hint="@string/key_words_hint"
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        android:maxLines="1"
+        android:paddingHorizontal="4dp"
+        android:textColor="@color/title_color"
+        android:textCursorDrawable="@drawable/bg_cursor"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivBack" />
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/srContent"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ivBack">
+        app:layout_constraintTop_toBottomOf="@id/editSearch">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/ryContent"

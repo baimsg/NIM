@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:indeterminate="true"
-        android:padding="12dp"
+        android:padding="18dp"
         app:indicatorColor="@color/color_primary"
         app:indicatorSize="42dp"
         app:layout_constraintBottom_toBottomOf="@id/ivStart"

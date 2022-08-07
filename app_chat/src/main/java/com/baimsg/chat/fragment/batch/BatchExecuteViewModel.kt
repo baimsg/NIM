@@ -133,7 +133,7 @@ class BatchExecuteViewModel @Inject constructor(
         _batchExecuteViewState.apply {
             value = value.copy(teams = teams)
         }
-        start(BatchType.TEAM)
+        start(BatchType.INVITE_TO_TEAM)
     }
 
     /**
@@ -159,7 +159,7 @@ class BatchExecuteViewModel @Inject constructor(
                 value = value.copy(status = BatchStatus.PAUSE, batchType = batchType)
             } else {
                 value = value.copy(status = BatchStatus.RUNNING, batchType = batchType)
-                if (batchType == BatchType.FRIEND) addFriend() else addMember()
+                if (batchType == BatchType.ADD_FRIEND) addFriend() else addMember()
             }
         }
     }

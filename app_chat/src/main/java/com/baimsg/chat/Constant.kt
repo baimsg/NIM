@@ -10,6 +10,16 @@ import kotlinx.serialization.builtins.serializer
  *
  **/
 object Constant {
+    /**
+     * 通知版本号
+     */
+    const val KEY_NOTICE_VERSION = "key_notice_version"
+
+    /**
+     * 同意用户声明
+     */
+    const val KEY_STATEMENT = "key_statement"
+
     const val KEY_ID = "key_id"
 
     const val KEY_FILTER = "key_filter"
@@ -31,6 +41,13 @@ object Constant {
     const val KEY_TEAM_DESCRIBE = "key_team_describe"
 
     const val BUGLY_KEY = "10ced88958"
+
+    val NOTICE_VERSION: Int
+        get() = KvUtils.getInt(KEY_NOTICE_VERSION, 0)
+
+    val STATEMENT: Boolean
+        get() = KvUtils.getBoolean(KEY_STATEMENT, false)
+
 
     val ID: String
         get() = KvUtils.getString(KEY_ID, "")

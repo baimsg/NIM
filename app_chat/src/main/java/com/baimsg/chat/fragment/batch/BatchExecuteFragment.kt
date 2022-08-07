@@ -115,7 +115,7 @@ class BatchExecuteFragment :
                         dialog.dismiss()
                         when (index) {
                             0 -> {
-                                batchExecuteViewModel.start(batchType = BatchType.FRIEND)
+                                batchExecuteViewModel.start(batchType = BatchType.ADD_FRIEND)
                             }
                             else -> {
                                 val allTeam = batchExecuteViewModel.allTeam

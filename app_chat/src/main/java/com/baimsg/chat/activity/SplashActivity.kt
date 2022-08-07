@@ -5,13 +5,13 @@ import androidx.activity.viewModels
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.input.input
+import com.baidu.mobstat.StatService
 import com.baimsg.base.util.KvUtils
 import com.baimsg.chat.Constant
 import com.baimsg.chat.R
 import com.baimsg.chat.base.BaseActivity
 import com.baimsg.chat.databinding.ActivitySplashBinding
 import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
-import com.baimsg.chat.util.extensions.setFullScreen
 import com.baimsg.data.model.Fail
 import com.baimsg.data.model.Loading
 import com.baimsg.data.model.Success
@@ -34,6 +34,8 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
     }
 
     override fun initView() {
+        StatService.start(this)
+
         repeatOnLifecycleStarted {
             viewModel.observeBaseConfig.collectLatest {
                 when (it) {
@@ -44,7 +46,8 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
                         loadDialog.dismiss()
                         val id = it().id
                         if (id != Constant.ID) {
-                            verifyKey()
+                            nextActivity()
+//                            verifyKey()
                         } else {
                             nextActivity()
                         }
