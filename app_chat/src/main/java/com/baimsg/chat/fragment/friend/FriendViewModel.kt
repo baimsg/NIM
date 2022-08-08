@@ -52,11 +52,6 @@ class FriendViewModel @Inject constructor() : ViewModel() {
     val allAccounts: List<Friend>
         get() = _viewState.value.allFriends
 
-    /**
-     * 所有用户信息
-     */
-    val allUsers: List<NIMUserInfo>
-        get() = _viewState.value.allUsers
 
     /**
      * 当前页码
@@ -145,8 +140,8 @@ class FriendViewModel @Inject constructor() : ViewModel() {
     fun upCheckTeam(indices: IntArray) {
         selectBulks = mutableListOf<BulkData>().apply {
             indices.forEach { i ->
-                val user = allUsers[i]
-                add(BulkData(id = user.account, user.name))
+                val user = allAccounts[i]
+                add(BulkData(id = user.account, user.alias))
             }
         }
     }

@@ -60,7 +60,7 @@ class FriendFragment : BaseFragment<FragmentFriendBinding>(R.layout.fragment_fri
                     dialog.dismiss()
                     when (index) {
                         0 -> {
-                            if (friendViewModel.allUsers.isEmpty()) {
+                            if (friendViewModel.allAccounts.isEmpty()) {
                                 showWarning("没有好友可以群发")
                                 return@listItems
                             }
@@ -74,7 +74,7 @@ class FriendFragment : BaseFragment<FragmentFriendBinding>(R.layout.fragment_fri
                                     }
                                 }
                                 listItemsMultiChoice(
-                                    items = friendViewModel.allUsers.map { it.name + "-" + it.account },
+                                    items = friendViewModel.allAccounts.map { it.alias + "-" + it.account },
                                 ) { _, indices, _ ->
                                     friendViewModel.upCheckTeam(indices)
                                     findNavController().navigate(
