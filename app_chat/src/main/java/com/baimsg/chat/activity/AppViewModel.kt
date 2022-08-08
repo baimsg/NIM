@@ -19,14 +19,29 @@ class AppViewModel @Inject constructor(
     private val baseEndpoints: BaseEndpoints
 ) : ViewModel() {
 
-    private val _baseConfig: MutableStateFlow<Async<BaseConfig>> by lazy {
+    private val _config: MutableStateFlow<Async<ConfigBean>> by lazy {
         MutableStateFlow(Uninitialized)
     }
 
-    val observeBaseConfig: StateFlow<Async<BaseConfig>> = _baseConfig
+    val observeConfig: StateFlow<Async<ConfigBean>> = _config
 
-    val verifyKey: String
-        get() = _baseConfig.value.invoke()?.id ?: ""
+    val users: List<User>
+        get() = _config.value.invoke()?.users ?: emptyList()
+
+    val noticeVersion: Int
+        get() = _config.value.invoke()?.noticeVersion ?: 0
+
+    val noticeTitle: String
+        get() = _config.value.invoke()?.noticeTitle ?: ""
+
+    val noticeContent: String
+        get() = _config.value.invoke()?.noticeContent ?: ""
+
+    val stopUsing: Boolean
+        get() = _config.value.invoke()?.stopUsing ?: false
+
+    val noticeLink: String
+        get() = _config.value.invoke()?.noticeLink ?: ""
 
     init {
         initBaseConfig()
@@ -41,14 +56,20 @@ class AppViewModel @Inject constructor(
      */
     private fun initBaseConfig() {
         viewModelScope.launch {
-            _baseConfig.apply {
+            _config.apply {
                 value = Loading()
                 value = try {
-                    Success(baseEndpoints.getKey())
+                    Success(
+                        baseEndpoints.getPersonal(
+                            fileId = "WEBb5303e081c2d5acb3e331db169757f02",
+                            shareKey = "4d6f75dad573cd3590ad7d8b2177a546"
+                        )
+                    )
                 } catch (e: Exception) {
                     Fail(e)
                 }
             }
         }
     }
+
 }

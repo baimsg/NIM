@@ -70,4 +70,11 @@
     <string name="team_member">群成员</string>
     <string name="key_words_hint">请输入关键词</string>
     <string name="client_type">登录模式</string>
+    <string name="statement">使用声明</string>
+    <string name="disagree">不同意</string>
+    <string name="agree">同意</string>
+    <string name="copy">复制</string>
+    <string name="go_now">马上前往</string>
+    <string name="know">知道了</string>
+    <string name="not_again_hint">不再提示</string>
 </resources>

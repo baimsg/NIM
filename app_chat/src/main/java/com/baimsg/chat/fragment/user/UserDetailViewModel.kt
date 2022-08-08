@@ -3,7 +3,6 @@ package com.baimsg.chat.fragment.user
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.baimsg.base.util.extensions.encodeBase64
 import com.baimsg.data.api.BaseEndpoints
 import com.baimsg.data.api.NetConfig
 import com.baimsg.data.model.Fail
@@ -46,11 +45,11 @@ class UserDetailViewModel @Inject constructor(
                 value = try {
                     val headers = mutableMapOf(
                         NetConfig.DYNAMIC_URL to baseUrl,
-                        "auth" to "",
+                        "auth" to "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ3eCIsImF1ZCI6ImltX2FwcCIsImlhdCI6MTY1OTc5OTE2MCwibmJmIjoxNjU5Nzk5MTYwLCJleHAiOjE2NzUzNTExNjAsInVpZCI6MTMwNTQ1NTcsIm5hbWUiOiJiYWltc2cifQ.AKBcyXRHqCKXA-2Pi53GSjBE0ltrrWiCCBMXaDJ8d_s",
                         "appkey" to sign,
                     )
                     val fields = mutableMapOf(
-                        "uid" to initUserInfo.account,
+                        "userid" to initUserInfo.account,
                         "sign" to sign,
                         "timestamp" to System.currentTimeMillis().toString(),
                     )
