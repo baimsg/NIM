@@ -10,7 +10,6 @@ import com.baimsg.data.db.daos.LoginRecordDao
 import com.baimsg.data.model.entities.NIMLoginRecord
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.SDKOptions
-import com.netease.nimlib.sdk.auth.LoginInfo
 import com.tencent.bugly.Bugly
 import com.tencent.mmkv.MMKV
 import kotlinx.coroutines.CoroutineScope
@@ -44,7 +43,8 @@ class SDKAppInitializer @Inject constructor(
     private fun initIM(context: Context) {
         runBlocking {
             val loginRecord = loginRecord()
-            val loginInfo = LoginInfo(loginRecord.account, loginRecord.token)
+            val loginInfo =
+                Constant.getLoginInfo(loginRecord.account, loginRecord.token, loginRecord.appKey)
             val sdkOptions = SDKOptions().apply {
                 sdkStorageRootPath = context.externalCacheDir?.canonicalPath
                     ?: context.getExternalFilesDir("nim")?.canonicalPath

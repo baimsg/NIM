@@ -2,6 +2,8 @@ package com.baimsg.chat
 
 import com.baimsg.base.util.KvUtils
 import com.baimsg.data.model.DEFAULT_JSON_FORMAT
+import com.netease.nimlib.sdk.auth.ClientType
+import com.netease.nimlib.sdk.auth.LoginInfo
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.serializer
 
@@ -19,6 +21,8 @@ object Constant {
      * 同意用户声明
      */
     const val KEY_STATEMENT = "key_statement"
+
+    const val KEY_LOGIN_CLIENT_TYPE = "key_login_client_type"
 
     const val KEY_ID = "key_id"
 
@@ -48,6 +52,8 @@ object Constant {
     val STATEMENT: Boolean
         get() = KvUtils.getBoolean(KEY_STATEMENT, false)
 
+    val LOGIN_CLIENT_TYPE: Int
+        get() = KvUtils.getInt(KEY_LOGIN_CLIENT_TYPE, ClientType.Android)
 
     val ID: String
         get() = KvUtils.getString(KEY_ID, "")
@@ -86,6 +92,10 @@ object Constant {
         )
         else emptyList()
 
+
     fun appKeyRemark(appKey: String): String = KvUtils.getString(appKey, "无备注")
+
+    fun getLoginInfo(account: String, token: String, appKey: String): LoginInfo =
+        LoginInfo(account, token, appKey, LOGIN_CLIENT_TYPE)
 
 }

@@ -3,6 +3,7 @@ package com.baimsg.chat.fragment.login
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.baimsg.base.util.extensions.logE
+import com.baimsg.chat.Constant
 import com.baimsg.chat.type.ExecutionStatus
 import com.baimsg.data.db.daos.LoginRecordDao
 import com.baimsg.data.model.entities.NIMLoginRecord
@@ -165,7 +166,7 @@ internal class LoginViewModel @Inject constructor(
             }
             else -> {
                 authService.login(
-                    LoginInfo(currentAccount, currentToken, currentAppKey)
+                    Constant.getLoginInfo(currentAccount, currentToken, currentAppKey)
                 )
                     .setCallback(object : RequestCallback<LoginInfo> {
                         override fun onSuccess(param: LoginInfo) {
