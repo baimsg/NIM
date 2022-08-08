@@ -45,6 +45,4 @@ data class BatchExecuteViewState(
 
     fun running() = status == BatchStatus.RUNNING
 
-    fun isDestroy() = status == BatchStatus.STOP || status == BatchStatus.UNKNOWN
-
 }

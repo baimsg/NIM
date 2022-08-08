@@ -274,6 +274,20 @@
             app:exitAnim="@anim/fragment_open_exit"
             app:popEnterAnim="@anim/fragment_open_enter"
             app:popExitAnim="@anim/slide_out_left" />
+        <action
+            android:id="@+id/action_batchExecuteFragment_to_userDetailFragment"
+            app:destination="@id/userDetailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
+            app:popExitAnim="@anim/slide_out_left" />
+        <action
+            android:id="@+id/action_batchExecuteFragment_to_bulkFragment"
+            app:destination="@id/bulkFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
+            app:popExitAnim="@anim/slide_out_left" />
     </fragment>
     <fragment
         android:id="@+id/friendFragment"
