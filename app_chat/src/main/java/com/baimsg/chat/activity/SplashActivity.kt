@@ -87,7 +87,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
             return
         }
         val androidId = applicationContext.androidId()
-        if (appViewModel.users.any { it.id == androidId }) {
+        if (appViewModel.debug || appViewModel.users.any { it.id == androidId }) {
             if (Constant.NOTICE_VERSION < appViewModel.noticeVersion) {
                 MaterialDialog(this@SplashActivity)
                     .cancelable(false)

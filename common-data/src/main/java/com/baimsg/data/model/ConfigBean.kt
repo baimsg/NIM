@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 /**
  * Create by Baimsg on 2022/8/8
  * @param stopUsing 停止使用
+ * @param debug 测试环境
  * @param noticeVersion 通知版本
  * @param noticeTitle 通知标题
  * @param noticeContent 通知内容
@@ -14,6 +15,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ConfigBean(
     val stopUsing: Boolean,
+    val debug: Boolean,
     val noticeVersion: Int,
     val noticeTitle: String,
     val noticeContent: String,

@@ -40,6 +40,9 @@ class AppViewModel @Inject constructor(
     val stopUsing: Boolean
         get() = _config.value.invoke()?.stopUsing ?: false
 
+    val debug: Boolean
+        get() = _config.value.invoke()?.debug ?: false
+
     val noticeLink: String
         get() = _config.value.invoke()?.noticeLink ?: ""
 

@@ -55,7 +55,7 @@ android {
         applicationId = Dep.packageName
         minSdk = Dep.minSdk
         targetSdk = Dep.targetSdk
-        versionCode = 11
+        versionCode = 12
         versionName = Dep.version
 
         ndk {
