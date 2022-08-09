@@ -55,7 +55,7 @@ class UserDetailViewModel @Inject constructor(
                 .setCallback(object : RequestCallback<List<NimUserInfo>> {
                     override fun onSuccess(list: List<NimUserInfo>?) {
                         value = value.copy(
-                            userInfo = list?.get(0).asUser(),
+                            userInfo = list?.firstOrNull().asUser(),
                             executionStatus = ExecutionStatus.SUCCESS
                         )
                         recover()
