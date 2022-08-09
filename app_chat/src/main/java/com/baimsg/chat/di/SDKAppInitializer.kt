@@ -6,6 +6,7 @@ import com.baidu.mobstat.StatService
 import com.baimsg.base.util.inititializer.AppInitializer
 import com.baimsg.chat.BuildConfig
 import com.baimsg.chat.Constant
+import com.baimsg.chat.util.extensions.androidId
 import com.baimsg.data.db.daos.LoginRecordDao
 import com.baimsg.data.model.entities.NIMLoginRecord
 import com.netease.nimlib.sdk.NIMClient
@@ -31,11 +32,10 @@ class SDKAppInitializer @Inject constructor(
         StatService.enableDeviceMac(application, true)
         StatService.setDebugOn(BuildConfig.DEBUG)
         StatService.setOn(application, StatService.EXCEPTION_LOG)
+        Bugly.setUserId(application, application.androidId())
         Bugly.init(application, Constant.BUGLY_KEY, BuildConfig.DEBUG)
         initIM(application)
-
     }
-
 
     /**
      * IM
