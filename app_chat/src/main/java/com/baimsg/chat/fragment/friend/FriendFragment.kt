@@ -20,9 +20,7 @@ import com.baimsg.chat.databinding.FooterTeamChatBinding
 import com.baimsg.chat.databinding.FragmentFriendBinding
 import com.baimsg.chat.fragment.bulk.BulkData
 import com.baimsg.chat.type.ExecutionStatus
-import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
-import com.baimsg.chat.util.extensions.showInfo
-import com.baimsg.chat.util.extensions.showWarning
+import com.baimsg.chat.util.extensions.*
 import com.baimsg.data.model.JSON
 import com.chad.library.adapter.base.animation.AlphaInAnimation
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
@@ -42,28 +40,26 @@ class FriendFragment : BaseFragment<FragmentFriendBinding>(R.layout.fragment_fri
     private lateinit var tvCount: TextView
 
     override fun initView() {
+
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()
         }
 
         binding.srContent.apply {
             setColorSchemeResources(R.color.color_primary)
-            setOnRefreshListener {
-                accountSmallAdapter.setList(null)
-                friendViewModel.loadFriends()
-            }
+            setOnRefreshListener { friendViewModel.loadFriends() }
         }
 
         binding.tvMore.setOnClickListener {
             MaterialDialog(requireContext(), BottomSheet(LayoutMode.WRAP_CONTENT)).show {
                 listItems(items = listOf("群发消息", "删除所有好友")) { dialog, index, _ ->
                     dialog.dismiss()
+                    if (friendViewModel.allAccounts.isEmpty()) {
+                        showWarning("您还没有好友哦：）")
+                        return@listItems
+                    }
                     when (index) {
                         0 -> {
-                            if (friendViewModel.allAccounts.isEmpty()) {
-                                showWarning("没有好友可以群发")
-                                return@listItems
-                            }
                             MaterialDialog(
                                 requireContext(),
                                 BottomSheet(LayoutMode.WRAP_CONTENT)
@@ -74,9 +70,9 @@ class FriendFragment : BaseFragment<FragmentFriendBinding>(R.layout.fragment_fri
                                     }
                                 }
                                 listItemsMultiChoice(
-                                    items = friendViewModel.allAccounts.map { it.alias + "-" + it.account },
+                                    items = friendViewModel.allUsers.map { it.name + "-" + it.account },
                                 ) { _, indices, _ ->
-                                    friendViewModel.upCheckTeam(indices)
+                                    friendViewModel.upSelectBulks(indices)
                                     findNavController().navigate(
                                         FriendFragmentDirections.actionFriendFragmentToBulkFragment(
                                             bulks = JSON.encodeToString(
@@ -100,16 +96,6 @@ class FriendFragment : BaseFragment<FragmentFriendBinding>(R.layout.fragment_fri
             }
         }
 
-        accountSmallAdapter.apply {
-            loadMoreModule.isEnableLoadMore = true
-            animationEnable = true
-            adapterAnimation = AlphaInAnimation()
-
-            loadMoreModule.setOnLoadMoreListener {
-                friendViewModel.nextPage()
-            }
-        }
-
         binding.ryContent.apply {
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             adapter = accountSmallAdapter
@@ -125,6 +111,11 @@ class FriendFragment : BaseFragment<FragmentFriendBinding>(R.layout.fragment_fri
             }
         }
 
+        accountSmallAdapter.apply {
+            animationEnable = true
+            adapterAnimation = AlphaInAnimation()
+        }
+
     }
 
     override fun initLiveData() {
@@ -134,18 +125,14 @@ class FriendFragment : BaseFragment<FragmentFriendBinding>(R.layout.fragment_fri
             friendViewModel.observeViewState.collectLatest {
                 tvCount.text = "${friendViewModel.allAccounts.size}个好友"
                 when (it.executionStatus) {
+                    ExecutionStatus.LOADING -> {
+                        binding.tvMore.hide()
+                        binding.srContent.isRefreshing = true
+                    }
                     ExecutionStatus.SUCCESS -> {
+                        binding.tvMore.show()
                         binding.srContent.isRefreshing = false
-                        accountSmallAdapter.addData(it.newUsers)
-                        accountSmallAdapter.loadMoreModule.loadMoreComplete()
-                    }
-                    ExecutionStatus.FAIL -> {
-                        binding.srContent.isRefreshing = false
-                        accountSmallAdapter.loadMoreModule.loadMoreFail()
-                    }
-                    ExecutionStatus.EMPTY -> {
-                        binding.srContent.isRefreshing = false
-                        accountSmallAdapter.loadMoreModule.loadMoreEnd()
+                        accountSmallAdapter.setList(it.allUsers)
                     }
                     else -> Unit
                 }

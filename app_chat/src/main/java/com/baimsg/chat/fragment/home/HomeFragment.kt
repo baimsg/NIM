@@ -6,7 +6,6 @@ import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.LayoutMode
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
-import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.list.listItems
 import com.baimsg.chat.R
 import com.baimsg.chat.base.BaseFragment
@@ -19,6 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
@@ -89,7 +89,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                     if (nimLoginRecord.mustEmpty() || nimLoginRecord.appKeyEmpty() || status.wontAutoLogin()) openLogin
                 }
             }
-
         }
     }
 

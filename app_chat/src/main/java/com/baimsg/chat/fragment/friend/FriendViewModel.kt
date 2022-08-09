@@ -1,6 +1,7 @@
 package com.baimsg.chat.fragment.friend
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.baimsg.chat.fragment.bulk.BulkData
 import com.baimsg.chat.type.ExecutionStatus
 import com.baimsg.data.model.entities.NIMUserInfo
@@ -12,8 +13,10 @@ import com.netease.nimlib.sdk.friend.model.Friend
 import com.netease.nimlib.sdk.uinfo.UserService
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -52,13 +55,8 @@ class FriendViewModel @Inject constructor() : ViewModel() {
     val allAccounts: List<Friend>
         get() = _viewState.value.allFriends
 
-
-    /**
-     * 当前页码
-     */
-    private val page: Int
-        get() = _viewState.value.page
-
+    val allUsers: List<NIMUserInfo>
+        get() = _viewState.value.allUsers
 
     /**
      * 选择的好友列表
@@ -66,82 +64,93 @@ class FriendViewModel @Inject constructor() : ViewModel() {
     var selectBulks: MutableList<BulkData> = mutableListOf()
         private set
 
-
     /**
      * 加载好友列表
      */
     fun loadFriends() {
         _viewState.apply {
-            value = FriendViewState.EMPTY.copy(allFriends = friendService.friends)
+            value = FriendViewState.EMPTY.copy(executionStatus = ExecutionStatus.LOADING)
+            val allFriends = friendService.friends
+            value = value.copy(
+                allFriends = allFriends,
+                executionStatus = ExecutionStatus.LOADING
+            )
+            val allUsers = userService.getUserInfoList(allFriends.map { it.account })
+            if (allFriends.size == allUsers.size) {
+                value = value.copy(
+                    allUsers = allUsers.map { it.asUser() },
+                    executionStatus = ExecutionStatus.SUCCESS
+                )
+                recover()
+                return
+            }
         }
-        getUserInfo()
+        getUserInfo(page = 0)
     }
 
-    /**
-     * 下一页数据
-     */
-    fun nextPage() {
-        _viewState.apply {
-            value = value.copy(executionStatus = ExecutionStatus.UNKNOWN, page = value.page + 1)
-        }
-        getUserInfo()
-    }
 
     /**
      * 获取好友列表信息
      * @param limit 返回数量
      */
-    private fun getUserInfo(limit: Int = 100) {
-        val start = page * limit
-        val end = start + limit
-        val accounts = mutableListOf<String?>().apply {
-            (start until end).forEachIndexed { _, i ->
-                if (i in allAccounts.indices) add(allAccounts[i].account)
+    private fun getUserInfo(page: Int, limit: Int = 15) {
+        _viewState.apply {
+            val start = page * limit
+            val end = start + limit
+            val accounts = mutableListOf<String>().apply {
+                (start until end).forEachIndexed { _, i ->
+                    if (i in allAccounts.indices) add(allAccounts[i].account)
+                }
             }
-        }
-        if (accounts.isEmpty()) {
-            _viewState.apply {
-                value = value.copy(executionStatus = ExecutionStatus.EMPTY)
+            if (accounts.isEmpty()) {
+                value = value.copy(executionStatus = ExecutionStatus.SUCCESS)
+                recover()
+                return
             }
-            return
-        }
-        userService.fetchUserInfo(accounts)
-            .setCallback(object : RequestCallback<List<NimUserInfo>> {
-                override fun onSuccess(mUsers: List<NimUserInfo>?) {
-                    val users = mUsers?.map { it.asUser() } ?: emptyList()
-                    _viewState.apply {
+            userService.fetchUserInfo(accounts)
+                .setCallback(object : RequestCallback<List<NimUserInfo>> {
+                    override fun onSuccess(mUsers: List<NimUserInfo>?) {
+                        val users = mUsers?.map { it.asUser() } ?: emptyList()
                         value = value.copy(
-                            executionStatus = ExecutionStatus.SUCCESS,
                             allUsers = value.allUsers.toMutableList().apply {
                                 addAll(users)
-                            },
-                            newUsers = users
+                            }
                         )
+                        getUserInfo(page = page + 1)
                     }
-                }
 
-                override fun onFailed(code: Int) {
-                    _viewState.apply {
-                        value = value.copy(executionStatus = ExecutionStatus.FAIL)
+                    override fun onFailed(code: Int) {
+                        getUserInfo(page = page)
                     }
-                }
 
-                override fun onException(e: Throwable?) {
-                    _viewState.apply {
-                        value = value.copy(executionStatus = ExecutionStatus.FAIL)
+                    override fun onException(e: Throwable?) {
+                        getUserInfo(page = page)
                     }
-                }
-            })
+                })
+        }
     }
 
     /**
-     * 更新选择中群聊
+     * 恢复默认状态
      */
-    fun upCheckTeam(indices: IntArray) {
+    private fun recover() {
+        viewModelScope.launch {
+            delay(250)
+            _viewState.apply {
+                value = value.copy(executionStatus = ExecutionStatus.UNKNOWN)
+            }
+        }
+    }
+
+    /**
+     * 更新选择中
+     * @param indices 选中的位置数组
+     */
+    fun upSelectBulks(indices: IntArray) {
         selectBulks = mutableListOf<BulkData>().apply {
             indices.forEach { i ->
-                val user = allAccounts[i]
-                add(BulkData(id = user.account, user.alias))
+                val user = allUsers[i]
+                add(BulkData(id = user.account, user.name))
             }
         }
     }
