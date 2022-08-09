@@ -27,4 +27,7 @@ data class UserDetailViewState(
 
     val loading: Boolean
         get() = executionStatus == ExecutionStatus.LOADING
+
+    val fail: Boolean
+        get() = executionStatus == ExecutionStatus.FAIL
 }

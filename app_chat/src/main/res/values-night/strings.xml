@@ -77,4 +77,7 @@
     <string name="go_now">马上前往</string>
     <string name="know">知道了</string>
     <string name="not_again_hint">不再提示</string>
+    <string name="black_list">黑名单</string>
+    <string name="delete_friend">删除好友</string>
+    <string name="add_friend">添加好友</string>
 </resources>

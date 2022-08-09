@@ -33,73 +33,166 @@
         app:trackThickness="2dp"
         tools:visibility="visible" />
 
-    <View
-        android:id="@+id/vTop"
+    <com.qmuiteam.qmui.widget.pullLayout.QMUIPullLayout
         android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:background="@drawable/bg_item_white"
-        app:layout_constraintBottom_toBottomOf="@id/ivAvatar"
-        app:layout_constraintTop_toTopOf="@id/ivAvatar" />
+        android:layout_height="0dp"
+        android:background="@color/background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivBack">
 
-    <ImageView
-        android:id="@+id/ivAvatar"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginVertical="8dp"
-        android:layout_marginStart="16dp"
-        android:background="@drawable/bg_avatar_round"
-        android:contentDescription="@string/avatar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ivBack" />
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:qmui_action_view_init_offset="-160dp"
+            app:qmui_can_over_pull="false"
+            app:qmui_need_receive_fling_from_target_view="false"
+            app:qmui_pull_edge="top"
+            app:qmui_pull_rate="0.1"
+            app:qmui_target_view_trigger_offset="wrap" />
 
-    <TextView
-        android:id="@+id/tvName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:maxLines="1"
-        android:textColor="@color/title_color"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@id/tvAccount"
-        app:layout_constraintStart_toEndOf="@id/ivAvatar"
-        app:layout_constraintTop_toTopOf="@id/ivAvatar"
-        tools:text="baimsg" />
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:qmui_action_view_init_offset="-120dp"
+            app:qmui_can_over_pull="true"
+            app:qmui_need_receive_fling_from_target_view="false"
+            app:qmui_pull_edge="bottom"
+            app:qmui_pull_rate="0.1"
+            app:qmui_target_view_trigger_offset="wrap" />
 
-    <TextView
-        android:id="@+id/tvAccount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:textColor="@color/subtitle_color"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@id/ivAvatar"
-        app:layout_constraintStart_toStartOf="@id/tvName"
-        app:layout_constraintTop_toBottomOf="@id/tvName"
-        tools:text="ID:2345678" />
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:qmui_is_target="true">
 
-    <TextView
-        android:id="@+id/tvGender"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="16dp"
-        android:textColor="@color/color_primary"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvName"
-        tools:text="男" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tvSignature"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_item_white"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="16dp"
-        android:textColor="@color/title_color"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/vTop"
-        tools:text="没有签名哦" />
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/groupMain"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:constraint_referenced_ids="ivAvatar,tvName,tvAccount,tvGender,tvSignature,tvBlackList,tvDeleteFriend,vTop,vLineBlackList" />
 
+                <TextView
+                    android:id="@+id/tvRetry"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_item_white"
+                    android:gravity="center_horizontal"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="16dp"
+                    android:text="@string/brvah_load_failed"
+                    android:textColor="@color/color_primary"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toTopOf="parent" />
 
+                <View
+                    android:id="@+id/vTop"
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp"
+                    android:background="@drawable/bg_item_white"
+                    app:layout_constraintBottom_toBottomOf="@id/ivAvatar"
+                    app:layout_constraintTop_toTopOf="@id/ivAvatar" />
+
+                <ImageView
+                    android:id="@+id/ivAvatar"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginVertical="8dp"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/bg_avatar_round"
+                    android:contentDescription="@string/avatar"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:maxLines="1"
+                    android:textColor="@color/title_color"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toTopOf="@id/tvAccount"
+                    app:layout_constraintStart_toEndOf="@id/ivAvatar"
+                    app:layout_constraintTop_toTopOf="@id/ivAvatar"
+                    tools:text="baimsg" />
+
+                <TextView
+                    android:id="@+id/tvAccount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:textColor="@color/subtitle_color"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="@id/ivAvatar"
+                    app:layout_constraintStart_toStartOf="@id/tvName"
+                    app:layout_constraintTop_toBottomOf="@id/tvName"
+                    tools:text="ID:2345678" />
+
+                <TextView
+                    android:id="@+id/tvGender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/shape_bg_pink"
+                    android:paddingHorizontal="16dp"
+                    android:textColor="@color/button_bg_pink_text"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/tvName"
+                    tools:text="男" />
+
+                <TextView
+                    android:id="@+id/tvSignature"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_item_white"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="16dp"
+                    android:textColor="@color/title_color"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toBottomOf="@id/vTop"
+                    tools:text="没有签名哦" />
+
+                <TextView
+                    android:id="@+id/tvBlackList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_item_white"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="16dp"
+                    android:text="@string/black_list"
+                    android:textColor="@color/title_color"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toBottomOf="@id/tvSignature" />
+
+                <View
+                    android:id="@+id/vLineBlackList"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/line_color"
+                    app:layout_constraintTop_toBottomOf="@id/tvBlackList" />
+
+                <TextView
+                    android:id="@+id/tvDeleteFriend"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_item_white"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="16dp"
+                    android:text="@string/delete_friend"
+                    android:textColor="@color/color_primary"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toBottomOf="@id/vLineBlackList" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
+    </com.qmuiteam.qmui.widget.pullLayout.QMUIPullLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

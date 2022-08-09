@@ -45,6 +45,13 @@ class UserDetailViewModel @Inject constructor(
     }
 
     init {
+        loadData()
+    }
+
+    /**
+     * 加载数据
+     */
+    fun loadData() {
         _viewState.apply {
             value = value.copy(
                 executionStatus = ExecutionStatus.LOADING,
