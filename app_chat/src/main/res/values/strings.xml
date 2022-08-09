@@ -80,4 +80,5 @@
     <string name="black_list">黑名单</string>
     <string name="delete_friend">删除好友</string>
     <string name="add_friend">添加好友</string>
+    <string name="account_info">账号信息</string>
 </resources>

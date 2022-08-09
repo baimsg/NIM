@@ -74,7 +74,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
-                    app:constraint_referenced_ids="ivAvatar,tvName,tvAccount,tvGender,tvSignature,tvBlackList,tvDeleteFriend,vTop,vLineBlackList" />
+                    app:constraint_referenced_ids="ivAvatar,tvName,tvAccount,tvGender,tvSignature,tvBlackList,tvDeleteFriend,tvAccountInfo,vTop,vLineBlackList"
+                    tools:visibility="visible" />
 
                 <TextView
                     android:id="@+id/tvRetry"
@@ -87,6 +88,7 @@
                     android:text="@string/brvah_load_failed"
                     android:textColor="@color/color_primary"
                     android:textSize="16sp"
+                    android:visibility="gone"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <View
@@ -190,6 +192,20 @@
                     android:textColor="@color/color_primary"
                     android:textSize="16sp"
                     app:layout_constraintTop_toBottomOf="@id/vLineBlackList" />
+
+                <TextView
+                    android:id="@+id/tvAccountInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_button_pink"
+                    android:gravity="center_horizontal"
+                    android:paddingVertical="12dp"
+                    android:text="@string/account_info"
+                    android:textColor="@color/button_bg_pink_text"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toBottomOf="@id/tvDeleteFriend" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
