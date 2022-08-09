@@ -58,6 +58,9 @@ class FriendViewModel @Inject constructor() : ViewModel() {
     val allUsers: List<NIMUserInfo>
         get() = _viewState.value.allUsers
 
+    val loading: Boolean
+        get() = _viewState.value.executionStatus == ExecutionStatus.LOADING
+
     /**
      * 选择的好友列表
      */

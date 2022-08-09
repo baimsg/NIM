@@ -1,16 +1,14 @@
 package com.baimsg.chat.fragment.user
 
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.baimsg.chat.R
 import com.baimsg.chat.base.BaseFragment
 import com.baimsg.chat.databinding.FragmentUserDetailBinding
-import com.baimsg.chat.fragment.login.LoginViewModel
+import com.baimsg.chat.type.ExecutionStatus
 import com.baimsg.chat.util.extensions.loadImage
+import com.baimsg.chat.util.extensions.message
 import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
-import com.baimsg.data.model.Fail
-import com.baimsg.data.model.Loading
-import com.baimsg.data.model.Success
+import com.baimsg.chat.util.extensions.show
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
@@ -23,32 +21,25 @@ class UserDetailFragment : BaseFragment<FragmentUserDetailBinding>(R.layout.frag
 
     private val userDetailViewModel by viewModels<UserDetailViewModel>()
 
-    private val loginViewModel by activityViewModels<LoginViewModel>()
-
     override fun initView() {
-        userDetailViewModel.initUserInfo.apply {
-            binding.ivAvatar.loadImage(avatar)
-            binding.tvName.text = name
-            binding.tvAccount.text = "ID:$account"
-        }
 
-        binding.editData.apply {
-            keyListener = null
-        }
     }
 
     override fun initLiveData() {
         repeatOnLifecycleStarted {
             userDetailViewModel.observeViewState.collectLatest {
-                when (it.data) {
-                    is Success -> {
-                        binding.editData.setText(it.data.invoke())
+                binding.proLoading.show(it.loading)
+                when (it.executionStatus) {
+                    ExecutionStatus.SUCCESS -> {
+                        val info = it.userInfo
+                        binding.ivAvatar.loadImage(info.avatar)
+                        binding.tvName.text = info.name
+                        binding.tvGender.text = info.genderEnum.message()
+                        binding.tvAccount.text = "ID:${info.account}"
+                        binding.tvSignature.text = info.signature ?: "没有个性签名哦！"
                     }
-                    is Loading -> {
-                        binding.editData.setText("正在加载ing")
-                    }
-                    is Fail -> {
-                        binding.editData.setText(it.data.error.message)
+                    ExecutionStatus.FAIL -> {
+
                     }
                     else -> Unit
                 }
@@ -56,8 +47,5 @@ class UserDetailFragment : BaseFragment<FragmentUserDetailBinding>(R.layout.frag
         }
     }
 
-    override fun initData() {
-        userDetailViewModel.getUserInfo("http://yuchenwangluo.xyz/", loginViewModel.currentAppKey)
-    }
 
 }

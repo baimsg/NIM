@@ -3,14 +3,16 @@ package com.baimsg.chat.fragment.user
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.baimsg.chat.type.ExecutionStatus
 import com.baimsg.data.api.BaseEndpoints
-import com.baimsg.data.api.NetConfig
-import com.baimsg.data.model.Fail
-import com.baimsg.data.model.Loading
-import com.baimsg.data.model.Success
-import com.baimsg.data.model.entities.NIMUserInfo
+import com.baimsg.data.model.entities.asUser
+import com.netease.nimlib.sdk.NIMClient
+import com.netease.nimlib.sdk.RequestCallback
+import com.netease.nimlib.sdk.friend.FriendService
+import com.netease.nimlib.sdk.uinfo.UserService
+import com.netease.nimlib.sdk.uinfo.model.NimUserInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -25,9 +27,8 @@ class UserDetailViewModel @Inject constructor(
     handle: SavedStateHandle,
     private val baseEndpoints: BaseEndpoints
 ) : ViewModel() {
-    val initFromRemote = handle["fromRemote"] ?: false
 
-    val initUserInfo = handle["userInfo"] ?: NIMUserInfo()
+    private val initAccount = handle["account"] ?: "100000"
 
     private val _viewState by lazy {
         MutableStateFlow(UserDetailViewState.EMPTY)
@@ -35,38 +36,54 @@ class UserDetailViewModel @Inject constructor(
 
     val observeViewState: StateFlow<UserDetailViewState> = _viewState
 
-    /**
-     * @param baseUrl API地址
-     */
-    fun getUserInfo(baseUrl: String, sign: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            _viewState.apply {
-                value = value.copy(data = Loading())
-                value = try {
-                    val headers = mutableMapOf(
-                        NetConfig.DYNAMIC_URL to baseUrl,
-                        "auth" to "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ3eCIsImF1ZCI6ImltX2FwcCIsImlhdCI6MTY1OTc5OTE2MCwibmJmIjoxNjU5Nzk5MTYwLCJleHAiOjE2NzUzNTExNjAsInVpZCI6MTMwNTQ1NTcsIm5hbWUiOiJiYWltc2cifQ.AKBcyXRHqCKXA-2Pi53GSjBE0ltrrWiCCBMXaDJ8d_s",
-                        "appkey" to sign,
-                    )
-                    val fields = mutableMapOf(
-                        "userid" to initUserInfo.account,
-                        "sign" to sign,
-                        "timestamp" to System.currentTimeMillis().toString(),
-                    )
-                    value.copy(
-                        data = Success(
-                            baseEndpoints.postUserDetail(
-                                headers = headers,
-                                fields = fields
-                            )
-                        )
-                    )
-                } catch (e: Exception) {
-                    value.copy(data = Fail(e))
-                }
-            }
+    private val userService by lazy {
+        NIMClient.getService(UserService::class.java)
+    }
 
+    private val friendService by lazy {
+        NIMClient.getService(FriendService::class.java)
+    }
+
+    init {
+        _viewState.apply {
+            value = value.copy(
+                executionStatus = ExecutionStatus.LOADING,
+                myFriend = friendService.isMyFriend(initAccount),
+                inBlackList = friendService.isInBlackList(initAccount)
+            )
+            userService.fetchUserInfo(listOf(initAccount))
+                .setCallback(object : RequestCallback<List<NimUserInfo>> {
+                    override fun onSuccess(list: List<NimUserInfo>?) {
+                        value = value.copy(
+                            userInfo = list?.get(0).asUser(),
+                            executionStatus = ExecutionStatus.SUCCESS
+                        )
+                        recover()
+                    }
+
+                    override fun onFailed(code: Int) {
+                        value = value.copy(
+                            executionStatus = ExecutionStatus.FAIL
+                        )
+                        recover()
+                    }
+
+                    override fun onException(e: Throwable?) {
+                        value = value.copy(
+                            executionStatus = ExecutionStatus.FAIL
+                        )
+                        recover()
+                    }
+                })
         }
     }
 
+    private fun recover() {
+        viewModelScope.launch {
+            delay(250)
+            _viewState.apply {
+                value = value.copy(executionStatus = ExecutionStatus.UNKNOWN)
+            }
+        }
+    }
 }

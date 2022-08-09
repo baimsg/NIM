@@ -22,6 +22,7 @@ import com.baimsg.chat.fragment.bulk.BulkData
 import com.baimsg.chat.type.ExecutionStatus
 import com.baimsg.chat.util.extensions.*
 import com.baimsg.data.model.JSON
+import com.baimsg.data.model.entities.NIMUserInfo
 import com.chad.library.adapter.base.animation.AlphaInAnimation
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
 import dagger.hilt.android.AndroidEntryPoint
@@ -114,6 +115,18 @@ class FriendFragment : BaseFragment<FragmentFriendBinding>(R.layout.fragment_fri
         accountSmallAdapter.apply {
             animationEnable = true
             adapterAnimation = AlphaInAnimation()
+
+            accountSmallAdapter.setOnItemClickListener { adapter, _, position ->
+                if (friendViewModel.loading) {
+                    return@setOnItemClickListener
+                }
+                val date = adapter.data[position] as NIMUserInfo
+                findNavController().navigate(
+                    FriendFragmentDirections.actionFriendFragmentToUserDetailFragment(
+                        account = date.account
+                    )
+                )
+            }
         }
 
     }

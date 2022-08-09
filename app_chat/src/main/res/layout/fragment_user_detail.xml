@@ -17,6 +17,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/proLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:padding="16dp"
+        android:visibility="gone"
+        app:indicatorColor="@color/color_primary"
+        app:indicatorSize="22dp"
+        app:layout_constraintBottom_toBottomOf="@id/ivBack"
+        app:layout_constraintStart_toEndOf="@id/ivBack"
+        app:layout_constraintTop_toTopOf="@id/ivBack"
+        app:trackColor="@color/color_primary_translucent"
+        app:trackThickness="2dp"
+        tools:visibility="visible" />
+
     <View
         android:id="@+id/vTop"
         android:layout_width="match_parent"
@@ -61,23 +77,29 @@
         app:layout_constraintTop_toBottomOf="@id/tvName"
         tools:text="ID:2345678" />
 
-    <EditText
-        android:id="@+id/editData"
-        android:layout_width="0dp"
+    <TextView
+        android:id="@+id/tvGender"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:autofillHints="name"
-        android:background="@color/item_bg_white_default"
-        android:gravity="start"
-        android:hint="@string/brvah_loading"
-        android:inputType="textMultiLine"
+        android:paddingHorizontal="16dp"
+        android:textColor="@color/color_primary"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvName"
+        tools:text="男" />
+
+    <TextView
+        android:id="@+id/tvSignature"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_item_white"
         android:paddingHorizontal="16dp"
         android:paddingVertical="16dp"
         android:textColor="@color/title_color"
-        android:textIsSelectable="true"
         android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/vTop" />
+        app:layout_constraintTop_toBottomOf="@id/vTop"
+        tools:text="没有签名哦" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

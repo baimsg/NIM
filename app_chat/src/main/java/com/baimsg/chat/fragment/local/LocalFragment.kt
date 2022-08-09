@@ -165,7 +165,7 @@ class LocalFragment : BaseFragment<FragmentLocalBinding>(R.layout.fragment_local
                         0 -> {
                             findNavController().navigate(
                                 LocalFragmentDirections.actionLocalFragmentToUserDetailFragment(
-                                    userInfo = data
+                                    account = data.account
                                 )
                             )
                         }

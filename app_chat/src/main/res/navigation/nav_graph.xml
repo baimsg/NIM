@@ -302,6 +302,13 @@
             app:exitAnim="@anim/fragment_open_exit"
             app:popEnterAnim="@anim/fragment_open_enter"
             app:popExitAnim="@anim/slide_out_left" />
+        <action
+            android:id="@+id/action_friendFragment_to_userDetailFragment"
+            app:destination="@id/userDetailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
+            app:popExitAnim="@anim/slide_out_left" />
 
     </fragment>
     <fragment
@@ -348,16 +355,9 @@
         android:name="com.baimsg.chat.fragment.user.UserDetailFragment"
         android:label="UserDetailFragment"
         tools:layout="@layout/fragment_user_detail">
-
         <argument
-            android:name="fromRemote"
-            android:defaultValue="false"
-            app:argType="boolean" />
-
-        <argument
-            android:name="userInfo"
-            android:defaultValue="@null"
-            app:argType="com.baimsg.data.model.entities.NIMUserInfo"
-            app:nullable="true" />
+            android:name="account"
+            android:defaultValue="100000"
+            app:argType="string" />
     </fragment>
 </navigation>
