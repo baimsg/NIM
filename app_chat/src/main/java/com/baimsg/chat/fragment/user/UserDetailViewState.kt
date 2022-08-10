@@ -31,3 +31,19 @@ data class UserDetailViewState(
     val fail: Boolean
         get() = executionStatus == ExecutionStatus.FAIL
 }
+
+data class UserInfoViewState(
+    val executionStatus: ExecutionStatus,
+    val url: String,
+    val forms: Map<String, String>,
+    val info: String
+) {
+    companion object {
+        val EMPTY = UserInfoViewState(
+            executionStatus = ExecutionStatus.UNKNOWN,
+            url = "",
+            forms = emptyMap(),
+            info = ""
+        )
+    }
+}

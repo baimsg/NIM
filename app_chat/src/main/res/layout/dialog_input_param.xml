@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/item_bg_white_default"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/editUrl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/url" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/editParam"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/param" />
+
+</LinearLayout>

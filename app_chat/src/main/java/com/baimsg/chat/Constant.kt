@@ -13,6 +13,10 @@ import kotlinx.serialization.builtins.serializer
  **/
 object Constant {
 
+    const val KEY_PARAM = "key_param"
+
+    const val KEY_URL = "key_url"
+
     const val KEY_APP_KEY = "key_app_key"
 
     /**
@@ -26,8 +30,6 @@ object Constant {
     const val KEY_STATEMENT = "key_statement"
 
     const val KEY_LOGIN_CLIENT_TYPE = "key_login_client_type"
-
-    const val KEY_ID = "key_id"
 
     const val KEY_FILTER = "key_filter"
 
@@ -49,6 +51,16 @@ object Constant {
 
     const val BUGLY_KEY = "10ced88958"
 
+    const val START_KEY = "B531B2A006E3C8DI"
+
+    const val END_KEY = "C7010059FA47E56I"
+
+    val PARAM: String
+        get() = KvUtils.getString(KEY_PARAM, "")
+
+    val URL: String
+        get() = KvUtils.getString(KEY_URL, "")
+
     val APP_KEY: String
         get() = KvUtils.getString(KEY_APP_KEY, "")
 
@@ -60,9 +72,6 @@ object Constant {
 
     val LOGIN_CLIENT_TYPE: Int
         get() = KvUtils.getInt(KEY_LOGIN_CLIENT_TYPE, ClientType.Android)
-
-    val ID: String
-        get() = KvUtils.getString(KEY_ID, "")
 
     val SEARCH_COUNT: Long
         get() = KvUtils.getLong(KEY_SEARCH_COUNT, 100000)

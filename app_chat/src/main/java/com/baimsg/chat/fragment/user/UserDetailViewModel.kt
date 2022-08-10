@@ -3,8 +3,13 @@ package com.baimsg.chat.fragment.user
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.baimsg.base.util.KvUtils
+import com.baimsg.base.util.extensions.toMd5String
+import com.baimsg.chat.Constant
 import com.baimsg.chat.type.ExecutionStatus
 import com.baimsg.data.api.BaseEndpoints
+import com.baimsg.data.api.NetConfig
+import com.baimsg.data.model.JSON
 import com.baimsg.data.model.entities.asUser
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.RequestCallback
@@ -16,6 +21,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.builtins.MapSerializer
+import kotlinx.serialization.builtins.serializer
+import org.json.JSONObject
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -44,7 +54,23 @@ class UserDetailViewModel @Inject constructor(
         NIMClient.getService(FriendService::class.java)
     }
 
+    private val _infoViewState by lazy {
+        MutableStateFlow(UserInfoViewState.EMPTY)
+    }
+
+    val observeInfoViewState: StateFlow<UserInfoViewState> = _infoViewState
+
+    val url: String
+        get() = _infoViewState.value.url
+
+    val forms: Map<String, String>
+        get() = _infoViewState.value.forms
+
+    val condition: Boolean
+        get() = url.isNotBlank() && forms.isNotEmpty()
+
     init {
+        loadForms()
         loadData()
     }
 
@@ -85,6 +111,60 @@ class UserDetailViewModel @Inject constructor(
         }
     }
 
+    fun loadInfo() {
+        viewModelScope.launch {
+            _infoViewState.apply {
+                value = value.copy(executionStatus = ExecutionStatus.LOADING)
+                val headers = mapOf(NetConfig.DYNAMIC_URL to url)
+                val forms = forms.toMutableMap().apply {
+                    val time = System.currentTimeMillis()
+                    remove("signature")
+                    put("time", "$time")
+                    put("user_id", initAccount)
+                    put("str", time.verify())
+                    val sb = StringBuffer()
+                    entries.sortedWith(compareBy { it.key }).forEach { (key, value) ->
+                        if (sb.isNotEmpty()) sb.append("&")
+                        sb.append("$key=$value")
+                    }
+                    put("signature", "${Constant.START_KEY}$sb${Constant.END_KEY}".toMd5String())
+                }
+                value = try {
+                    value.copy(
+                        executionStatus = ExecutionStatus.SUCCESS,
+                        info = JSONObject(
+                            baseEndpoints.postUserDetail(
+                                headers = headers,
+                                forms
+                            )
+                        ).toString()
+                    )
+                } catch (e: Exception) {
+                    value.copy(
+                        executionStatus = ExecutionStatus.SUCCESS,
+                        info = e.message ?: "未知异常"
+                    )
+                }
+            }
+        }
+    }
+
+    fun loadForms() {
+        _infoViewState.apply {
+            var forms: Map<String, String> = emptyMap()
+            val param = Constant.PARAM
+            if (param.isNotBlank()) {
+                forms = JSON.decodeFromString(
+                    MapSerializer(
+                        String.serializer(),
+                        String.serializer()
+                    ), param
+                )
+            }
+            value = value.copy(url = Constant.URL, forms = forms)
+        }
+    }
+
     private fun recover() {
         viewModelScope.launch {
             delay(250)
@@ -92,5 +172,11 @@ class UserDetailViewModel @Inject constructor(
                 value = value.copy(executionStatus = ExecutionStatus.UNKNOWN)
             }
         }
+    }
+
+    private fun Long.verify(): String {
+        val concat = Constant.START_KEY + Constant.END_KEY
+        val substring = concat.substring(8, concat.length - 8)
+        return "$this$substring".toMd5String().lowercase(Locale.getDefault())
     }
 }

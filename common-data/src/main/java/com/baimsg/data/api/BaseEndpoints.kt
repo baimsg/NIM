@@ -30,7 +30,7 @@ interface BaseEndpoints {
      * @param timestamp 时间戳
      */
     @FormUrlEncoded
-    @POST("/api/user/getFakeUid")
+    @POST("/api/user/detail")
     suspend fun postUserDetail(
         @HeaderMap headers: Map<String, String>,
         @FieldMap fields: Map<String, String>
