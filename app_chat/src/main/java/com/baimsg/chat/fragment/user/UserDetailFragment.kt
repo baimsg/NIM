@@ -20,12 +20,33 @@ class UserDetailFragment : BaseFragment<FragmentUserDetailBinding>(R.layout.frag
     private val userDetailViewModel by viewModels<UserDetailViewModel>()
 
     override fun initView() {
+        binding.pullLayout.apply {
+            setActionListener {
+                postDelayed({ finishActionRun(it) }, 250)
+            }
+        }
+
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()
         }
 
         binding.tvRetry.setOnClickListener {
             userDetailViewModel.loadData()
+        }
+
+        binding.scBlackList.apply {
+            setOnCheckedChangeListener { _, _ ->
+                this.isChecked = false
+                showWarning("暂不支持")
+            }
+        }
+
+        binding.tvDeleteFriend.setOnClickListener {
+            showWarning("暂不支持")
+        }
+
+        binding.tvAccountInfo.setOnClickListener {
+
         }
     }
 

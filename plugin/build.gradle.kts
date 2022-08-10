@@ -18,7 +18,7 @@ buildscript {
     }
 
     dependencies {
-        classpath("com.android.tools.build:gradle:7.2.1")
+        classpath("com.android.tools.build:gradle:7.2.2")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.21")
     }
 }
@@ -42,8 +42,8 @@ dependencies {
     api(gradleKotlinDsl())
     api(kotlin("gradle-plugin", version = "1.6.21"))
     api(kotlin("gradle-plugin-api", version = "1.6.21"))
-    api("com.android.tools.build:gradle-api:7.2.1")
-    api("com.android.tools.build:gradle:7.2.1")
+    api("com.android.tools.build:gradle-api:7.2.2")
+    api("com.android.tools.build:gradle:7.2.2")
     implementation(kotlin("stdlib-jdk8"))
 }
 

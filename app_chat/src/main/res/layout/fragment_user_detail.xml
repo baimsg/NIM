@@ -34,35 +34,19 @@
         tools:visibility="visible" />
 
     <com.qmuiteam.qmui.widget.pullLayout.QMUIPullLayout
-        android:layout_width="match_parent"
+        android:id="@+id/pull_layout"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/background"
+        android:background="#FF6Ec7"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ivBack">
-
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:qmui_action_view_init_offset="-160dp"
-            app:qmui_can_over_pull="false"
-            app:qmui_need_receive_fling_from_target_view="false"
-            app:qmui_pull_edge="top"
-            app:qmui_pull_rate="0.1"
-            app:qmui_target_view_trigger_offset="wrap" />
-
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:qmui_action_view_init_offset="-120dp"
-            app:qmui_can_over_pull="true"
-            app:qmui_need_receive_fling_from_target_view="false"
-            app:qmui_pull_edge="bottom"
-            app:qmui_pull_rate="0.1"
-            app:qmui_target_view_trigger_offset="wrap" />
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_item_white"
             app:qmui_is_target="true">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -174,6 +158,15 @@
                     android:textSize="16sp"
                     app:layout_constraintTop_toBottomOf="@id/tvSignature" />
 
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/scBlackList"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintBottom_toBottomOf="@id/tvBlackList"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/tvBlackList" />
+
                 <View
                     android:id="@+id/vLineBlackList"
                     android:layout_width="match_parent"
@@ -210,5 +203,26 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:qmui_action_view_init_offset="-20dp"
+            app:qmui_can_over_pull="false"
+            app:qmui_need_receive_fling_from_target_view="false"
+            app:qmui_pull_edge="top"
+            app:qmui_pull_rate="0.45"
+            app:qmui_target_view_trigger_offset="wrap" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:qmui_action_view_init_offset="-20dp"
+            app:qmui_can_over_pull="false"
+            app:qmui_need_receive_fling_from_target_view="true"
+            app:qmui_pull_edge="bottom"
+            app:qmui_pull_rate="0.45"
+            app:qmui_target_view_trigger_offset="wrap" />
+
     </com.qmuiteam.qmui.widget.pullLayout.QMUIPullLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
