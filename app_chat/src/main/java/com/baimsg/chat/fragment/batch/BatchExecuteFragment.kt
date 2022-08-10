@@ -49,7 +49,7 @@ class BatchExecuteFragment :
     }
 
     private val taskTypes by lazy {
-        listOf("加好友", "邀请进群", "群发消息")
+        listOf("加好友", "邀请进群", "群发消息", "强制下线")
     }
 
     override fun initView() {
@@ -105,7 +105,7 @@ class BatchExecuteFragment :
                                     }
                                 }
                             }
-                            else -> {
+                            2 -> {
                                 findNavController().navigate(
                                     BatchExecuteFragmentDirections.actionBatchExecuteFragmentToBulkFragment(
                                         bulks = JSON.encodeToString(
@@ -118,6 +118,22 @@ class BatchExecuteFragment :
                                             }
                                         ),
                                         sessionType = SessionTypeEnum.P2P
+                                    )
+                                )
+                            }
+                            else -> {
+                                findNavController().navigate(
+                                    BatchExecuteFragmentDirections.actionBatchExecuteFragmentToBulkFragment(
+                                        bulks = JSON.encodeToString(
+                                            ListSerializer(BulkData.serializer()),
+                                            batchExecuteViewModel.allTaskAccounts.map {
+                                                BulkData(
+                                                    it.account,
+                                                    it.name
+                                                )
+                                            }
+                                        ),
+                                        sessionType = SessionTypeEnum.Ysf
                                     )
                                 )
                             }
@@ -162,7 +178,11 @@ class BatchExecuteFragment :
                     dialog.dismiss()
                     when (index) {
                         0 -> {
-                            findNavController().navigate(BatchExecuteFragmentDirections.actionBatchExecuteFragmentToUserDetailFragment())
+                            findNavController().navigate(
+                                BatchExecuteFragmentDirections.actionBatchExecuteFragmentToUserDetailFragment(
+                                    account = data.account
+                                )
+                            )
                         }
                         else -> {
                             taskAccountAdapter.removeAt(position)
