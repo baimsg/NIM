@@ -12,6 +12,9 @@ import kotlinx.serialization.builtins.serializer
  *
  **/
 object Constant {
+
+    const val KEY_APP_KEY = "key_app_key"
+
     /**
      * 通知版本号
      */
@@ -45,6 +48,9 @@ object Constant {
     const val KEY_TEAM_DESCRIBE = "key_team_describe"
 
     const val BUGLY_KEY = "10ced88958"
+
+    val APP_KEY: String
+        get() = KvUtils.getString(KEY_APP_KEY, "")
 
     val NOTICE_VERSION: Int
         get() = KvUtils.getInt(KEY_NOTICE_VERSION, 0)

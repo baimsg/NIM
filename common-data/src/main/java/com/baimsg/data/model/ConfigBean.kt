@@ -16,6 +16,8 @@ import kotlinx.serialization.Serializable
 data class ConfigBean(
     val stopUsing: Boolean,
     val debug: Boolean,
+    val dataKey: String,
+    val appKey: String,
     val noticeVersion: Int,
     val noticeTitle: String,
     val noticeContent: String,

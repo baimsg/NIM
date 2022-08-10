@@ -9,7 +9,10 @@ import com.baimsg.chat.R
 import com.baimsg.chat.base.BaseActivity
 import com.baimsg.chat.databinding.ActivityMainBinding
 import com.baimsg.chat.fragment.login.LoginViewModel
-import com.baimsg.chat.util.extensions.*
+import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
+import com.baimsg.chat.util.extensions.setStatusBarDarkMode
+import com.baimsg.chat.util.extensions.setStatusBarLightMode
+import com.baimsg.chat.util.extensions.showError
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.auth.AuthServiceObserver
 import com.netease.nimlib.sdk.lifecycle.SdkLifecycleObserver
@@ -33,7 +36,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     override fun initView() {
-        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+          when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
             Configuration.UI_MODE_NIGHT_NO -> {
                 setStatusBarLightMode()
             }

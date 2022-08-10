@@ -1,6 +1,7 @@
 package com.baimsg.base.util.extensions
 
 import android.util.Base64
+import com.baimsg.base.util.SafeUtils
 import java.nio.charset.Charset
 
 /**
@@ -162,6 +163,11 @@ fun String.isEnglish(): Boolean {
         filter.matches(Regex("^[a-zA-Z0-9-]*"))
     } else false
 }
+
+fun String.decodeData(key: String, charset: Charset = Charsets.UTF_8): String =
+    String(SafeUtils.decode(key, this), charset)
+
+fun String.encodeDate(key: String): String = SafeUtils.encode(key, this)
 
 fun String.toMd5String(charset: Charset = Charsets.UTF_8): String =
     toByteArray(charset).toMd5String()

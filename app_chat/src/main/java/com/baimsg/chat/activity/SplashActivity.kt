@@ -4,9 +4,12 @@ import android.content.Intent
 import androidx.activity.viewModels
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
+import com.afollestad.materialdialogs.input.input
 import com.baidu.mobstat.StatService
 import com.baimsg.base.util.KvUtils
+import com.baimsg.base.util.extensions.decodeData
 import com.baimsg.base.util.extensions.encodeBase64
+import com.baimsg.base.util.extensions.encodeDate
 import com.baimsg.chat.Constant
 import com.baimsg.chat.R
 import com.baimsg.chat.base.BaseActivity
@@ -87,51 +90,85 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
             return
         }
         val androidId = applicationContext.androidId()
-        if (appViewModel.debug || appViewModel.users.any { it.id == androidId }) {
-            if (Constant.NOTICE_VERSION < appViewModel.noticeVersion) {
+        when {
+            appViewModel.users.any { it.id == androidId } -> {
+                if (Constant.NOTICE_VERSION < appViewModel.noticeVersion) {
+                    MaterialDialog(this@SplashActivity)
+                        .cancelable(false)
+                        .cancelOnTouchOutside(false)
+                        .show {
+                            title(text = appViewModel.noticeTitle)
+                            message(
+                                text = appViewModel.noticeContent
+                            )
+                            if (appViewModel.noticeLink.isNotBlank()) {
+                                positiveButton(R.string.go_now) {
+                                    openWeb(appViewModel.noticeLink)
+                                    finish()
+                                }
+                            } else {
+                                negativeButton(R.string.not_again_hint) {
+                                    KvUtils.put(
+                                        Constant.KEY_NOTICE_VERSION,
+                                        appViewModel.noticeVersion
+                                    )
+                                    nextActivity()
+                                }
+                                positiveButton(R.string.know) {
+                                    nextActivity()
+                                }
+                            }
+                        }
+                } else {
+                    nextActivity()
+                }
+            }
+            appViewModel.debug -> {
+                if (appViewModel.appKey.encodeDate(appViewModel.dataKey) == Constant.APP_KEY) {
+                    nextActivity()
+                } else {
+                    verifyAppKey()
+                }
+            }
+            else -> {
                 MaterialDialog(this@SplashActivity)
                     .cancelable(false)
                     .cancelOnTouchOutside(false)
                     .show {
-                        title(text = appViewModel.noticeTitle)
+                        title(text = "设备未激活）：")
                         message(
-                            text = appViewModel.noticeContent
+                            text = "神奇的卡密:\n${androidId.encodeBase64()}"
                         )
-                        if (appViewModel.noticeLink.isNotBlank()) {
-                            positiveButton(R.string.go_now) {
-                                openWeb(appViewModel.noticeLink)
-                                finish()
-                            }
-                        } else {
-                            negativeButton(R.string.not_again_hint) {
-                                KvUtils.put(Constant.KEY_NOTICE_VERSION, appViewModel.noticeVersion)
-                                nextActivity()
-                            }
-                            positiveButton(R.string.know) {
-                                nextActivity()
-                            }
+                        negativeButton(R.string.quit) { finish() }
+                        positiveButton(R.string.copy) {
+                            showSuccess("已复制卡密")
+                            applicationContext.copy(androidId.encodeBase64())
+                            finish()
                         }
                     }
-            } else {
-                nextActivity()
             }
-        } else {
-            MaterialDialog(this@SplashActivity)
-                .cancelable(false)
-                .cancelOnTouchOutside(false)
-                .show {
-                    title(text = "设备未激活）：")
-                    message(
-                        text = "神奇的卡密:\n${androidId.encodeBase64()}"
-                    )
-                    negativeButton(R.string.quit) { finish() }
-                    positiveButton(R.string.copy) {
-                        showSuccess("已复制卡密")
-                        applicationContext.copy(androidId.encodeBase64())
-                        finish()
+        }
+    }
+
+    private fun verifyAppKey() {
+        MaterialDialog(this@SplashActivity)
+            .cancelable(false)
+            .cancelOnTouchOutside(false).show {
+                input(hint = "请输入卡密") { materialDialog, charSequence ->
+                    materialDialog.dismiss()
+                    val appKey = charSequence.toString()
+                    if (appKey.decodeData(appViewModel.dataKey) == appViewModel.appKey) {
+                        KvUtils.put(Constant.KEY_APP_KEY, appKey)
+                        showSuccess("卡密使用成功！")
+                        nextActivity()
+                    } else {
+                        showError("该卡密已失效！")
+                        verifyAppKey()
                     }
                 }
-        }
+                negativeButton { finish() }
+                positiveButton { }
+            }
     }
 
     private fun nextActivity() {
