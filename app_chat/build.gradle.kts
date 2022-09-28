@@ -113,6 +113,7 @@ android {
     kotlinOptions {
         jvmTarget = Dep.kotlinJvmTarget
     }
+    namespace = "com.baimsg.chat"
 
 }
 

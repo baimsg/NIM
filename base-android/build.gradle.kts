@@ -35,6 +35,7 @@ android {
             jniLibs.srcDirs("libs")
         }
     }
+    namespace = "com.baimsg.base.android"
 }
 
 dependencies {
@@ -84,6 +85,13 @@ dependencies {
     //Bugly
     api(Dep.Bugly.upgrade)
     api(Dep.Bugly.native)
+
+    //nim
+    api(Dep.IM.base)
+    api(Dep.IM.chatroom)
+    api(Dep.IM.push)
+    api(Dep.IM.superTeam)
+    api(Dep.IM.lucene)
 
     coreLibraryDesugaring(Dep.Libs.desugar)
 }

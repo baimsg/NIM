@@ -21,6 +21,7 @@ android {
     kotlinOptions {
         jvmTarget = Dep.kotlinJvmTarget
     }
+    namespace = "com.qmuiteam.qmui"
 }
 
 

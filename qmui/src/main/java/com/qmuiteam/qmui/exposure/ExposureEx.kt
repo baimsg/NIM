@@ -81,7 +81,7 @@ fun View.registerExposure(
             checkExposure(holdTime, debounceTimeout, containerProvider, exposureChecker)
         }
 
-        override fun onViewAttachedToWindow(v: View?) {
+        override fun onViewAttachedToWindow(p0: View) {
             checkExposure(holdTime, debounceTimeout, containerProvider, exposureChecker)
             viewTreeObserver.addOnGlobalLayoutListener(onGlobalLayoutListener)
             viewTreeObserver.addOnScrollChangedListener(onScrollListener)
@@ -96,7 +96,7 @@ fun View.registerExposure(
             }
         }
 
-        override fun onViewDetachedFromWindow(v: View?) {
+        override fun onViewDetachedFromWindow(p0: View) {
             viewTreeObserver.removeOnGlobalLayoutListener(onGlobalLayoutListener)
             viewTreeObserver.removeOnScrollChangedListener(onScrollListener)
             containerProvider.provide(this@registerExposure)?.let { container ->

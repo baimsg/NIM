@@ -40,6 +40,7 @@ android {
             jniLibs.srcDirs("libs")
         }
     }
+    namespace = "com.baimsg.base"
 }
 
 dependencies {

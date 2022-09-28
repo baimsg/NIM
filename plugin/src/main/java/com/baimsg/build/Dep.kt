@@ -5,9 +5,9 @@ import org.gradle.api.JavaVersion
 object Dep {
     val javaVersion = JavaVersion.VERSION_11
     const val kotlinJvmTarget = "11"
-    const val kotlinVer = "1.6.21"
+    const val kotlinVer = "1.7.0"
 
-    const val compileSdk = 31
+    const val compileSdk = 33
     const val minSdk = 21
     const val targetSdk = 30
     const val group = "com.baimsg.chat"
@@ -77,7 +77,7 @@ object Dep {
         }
 
         object Navigation {
-            private const val version = "2.4.2"
+            private const val version = "2.5.2"
             const val fragmentKtx = "androidx.navigation:navigation-fragment-ktx:$version"
             const val uiKtx = "androidx.navigation:navigation-ui-ktx:$version"
         }
@@ -121,8 +121,8 @@ object Dep {
         const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVer"
 
         object Serialization {
-            const val json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3"
-            const val protobuf = "org.jetbrains.kotlinx:kotlinx-serialization-protobuf:1.3.3"
+            const val json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0"
+            const val protobuf = "org.jetbrains.kotlinx:kotlinx-serialization-protobuf:1.4.0"
         }
     }
 
@@ -137,9 +137,18 @@ object Dep {
     }
 
     object Hilt {
-        private const val hilt = "2.41"
+        private const val hilt = "2.43.2"
         const val library = "com.google.dagger:hilt-android:$hilt"
         const val compiler = "com.google.dagger:hilt-compiler:$hilt"
+    }
+
+    object IM {
+        private const val version = "9.6.0"
+        const val base = "com.netease.nimlib:basesdk:$version"
+        const val chatroom = "com.netease.nimlib:chatroom:$version"
+        const val push = "com.netease.nimlib:push:$version"
+        const val superTeam = "com.netease.nimlib:superteam:$version"
+        const val lucene = "com.netease.nimlib:lucene:$version"
     }
 
     //第三方库

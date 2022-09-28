@@ -39,6 +39,7 @@ android {
         freeCompilerArgs = freeCompilerArgs + "-opt-in=kotlin.RequiresOptIn"
 
     }
+    namespace = "com.baimsg.data"
 
 }
 

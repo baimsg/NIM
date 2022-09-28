@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     `kotlin-dsl`
     `java-gradle-plugin`
-    kotlin("jvm") version "1.6.21"
+    kotlin("jvm") version "1.7.0"
 }
 
 java {
@@ -26,5 +26,5 @@ dependencies {
     implementation("commons-io:commons-io:2.11.0")
     implementation("com.squareup:javawriter:2.5.1")
     implementation("com.google.guava:guava:31.1-jre")
-    implementation("com.android.tools.build:gradle-api:7.2.2")
+    implementation("com.android.tools.build:gradle-api:7.3.0")
 }
