@@ -16,7 +16,7 @@ import javax.inject.Inject
  **/
 @HiltViewModel
 class AppViewModel @Inject constructor(
-    private val baseEndpoints: BaseEndpoints
+    private val baseEndpoints: BaseEndpoints,
 ) : ViewModel() {
 
     private val _config: MutableStateFlow<Async<ConfigBean>> by lazy {
@@ -49,6 +49,9 @@ class AppViewModel @Inject constructor(
     val stopUsing: Boolean
         get() = _config.value.invoke()?.stopUsing ?: false
 
+    val quit: Boolean
+        get() = _config.value.invoke()?.quit ?: false
+
     val noticeLink: String
         get() = _config.value.invoke()?.noticeLink ?: ""
 
@@ -68,12 +71,8 @@ class AppViewModel @Inject constructor(
             _config.apply {
                 value = Loading()
                 value = try {
-                    Success(
-                        baseEndpoints.getPersonal(
-                            fileId = "WEBb5303e081c2d5acb3e331db169757f02",
-                            shareKey = "4d6f75dad573cd3590ad7d8b2177a546"
-                        )
-                    )
+                    Success(baseEndpoints.getPersonal(fileId = "WEBb5303e081c2d5acb3e331db169757f02",
+                        shareKey = "4d6f75dad573cd3590ad7d8b2177a546"))
                 } catch (e: Exception) {
                     Fail(e)
                 }

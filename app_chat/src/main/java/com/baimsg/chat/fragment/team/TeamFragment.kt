@@ -1,5 +1,6 @@
 package com.baimsg.chat.fragment.team
 
+import android.annotation.SuppressLint
 import android.view.View
 import android.widget.TextView
 import androidx.fragment.app.viewModels
@@ -19,6 +20,7 @@ import com.baimsg.chat.databinding.EmptyBaseBinding
 import com.baimsg.chat.databinding.FooterTeamChatBinding
 import com.baimsg.chat.databinding.FragmentTeamBinding
 import com.baimsg.chat.fragment.bulk.BulkData
+import com.baimsg.chat.fragment.bulk.BulkType
 import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
 import com.baimsg.chat.util.extensions.showError
 import com.baimsg.chat.util.extensions.showWarning
@@ -27,7 +29,6 @@ import com.baimsg.data.model.JSON
 import com.baimsg.data.model.Loading
 import com.baimsg.data.model.Success
 import com.baimsg.data.model.entities.NIMTeam
-import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.serialization.builtins.ListSerializer
@@ -43,6 +44,7 @@ class TeamFragment : BaseFragment<FragmentTeamBinding>(R.layout.fragment_team) {
 
     private lateinit var tvCount: TextView
 
+    @SuppressLint("CheckResult")
     override fun initView() {
 
         binding.ivBack.setOnClickListener {
@@ -66,10 +68,8 @@ class TeamFragment : BaseFragment<FragmentTeamBinding>(R.layout.fragment_team) {
                                 showWarning("没有群可以群发")
                                 return@listItems
                             }
-                            MaterialDialog(
-                                requireContext(),
-                                BottomSheet(LayoutMode.WRAP_CONTENT)
-                            ).show {
+                            MaterialDialog(requireContext(),
+                                BottomSheet(LayoutMode.WRAP_CONTENT)).show {
                                 message(text = "快捷操作&emsp;<a href=\"\">全部</a>") {
                                     html {
                                         toggleAllItemsChecked()
@@ -78,16 +78,10 @@ class TeamFragment : BaseFragment<FragmentTeamBinding>(R.layout.fragment_team) {
                                 listItemsMultiChoice(
                                     items = teamViewModel.allTeam.map { it.name + "-" + it.id + "[${it.memberCount}]" },
                                 ) { _, indices, _ ->
-                                    teamViewModel.upCheckTeam(indices)
-                                    findNavController().navigate(
-                                        TeamFragmentDirections.actionTeamFragmentToBulkFragment(
-                                            bulks = JSON.encodeToString(
-                                                ListSerializer(BulkData.serializer()),
-                                                teamViewModel.selectBulks
-                                            ),
-                                            sessionType = SessionTypeEnum.Team
-                                        )
-                                    )
+                                    teamViewModel.upCheckTeam(indices, BulkType.TeamSendMessage)
+                                    findNavController().navigate(TeamFragmentDirections.actionTeamFragmentToBulkFragment(
+                                        bulks = JSON.encodeToString(ListSerializer(BulkData.serializer()),
+                                            teamViewModel.selectBulks)))
                                 }
                                 negativeButton()
                                 positiveButton()
@@ -119,11 +113,8 @@ class TeamFragment : BaseFragment<FragmentTeamBinding>(R.layout.fragment_team) {
 
         teamItemAdapter.setOnItemClickListener { adapter, _, position ->
             val data = adapter.data[position] as NIMTeam
-            findNavController().navigate(
-                TeamFragmentDirections.actionTeamFragmentToTeamDetailFragment(
-                    teamInfo = data
-                )
-            )
+            findNavController().navigate(TeamFragmentDirections.actionTeamFragmentToTeamDetailFragment(
+                teamInfo = data))
         }
 
     }

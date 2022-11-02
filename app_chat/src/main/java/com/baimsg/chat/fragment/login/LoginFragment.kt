@@ -1,6 +1,7 @@
 package com.baimsg.chat.fragment.login
 
 
+import android.annotation.SuppressLint
 import androidx.activity.addCallback
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -42,6 +43,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
         )
     }
 
+    @SuppressLint("CheckResult")
     override fun initView() {
         updateView()
 

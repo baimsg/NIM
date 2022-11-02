@@ -1,7 +1,6 @@
 package com.baimsg.chat.fragment.friend
 
 import com.baimsg.chat.type.ExecutionStatus
-import com.baimsg.chat.type.UpdateStatus
 import com.baimsg.data.model.entities.NIMUserInfo
 import com.netease.nimlib.sdk.friend.model.Friend
 

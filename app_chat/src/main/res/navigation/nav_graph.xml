@@ -345,10 +345,6 @@
             android:defaultValue="null"
             app:argType="string"
             app:nullable="true" />
-        <argument
-            android:name="sessionType"
-            android:defaultValue="Team"
-            app:argType="com.netease.nimlib.sdk.msg.constant.SessionTypeEnum" />
     </fragment>
     <fragment
         android:id="@+id/userDetailFragment"

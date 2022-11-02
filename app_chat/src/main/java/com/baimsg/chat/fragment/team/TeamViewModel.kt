@@ -2,6 +2,7 @@ package com.baimsg.chat.fragment.team
 
 import androidx.lifecycle.ViewModel
 import com.baimsg.chat.fragment.bulk.BulkData
+import com.baimsg.chat.fragment.bulk.BulkType
 import com.baimsg.data.model.Fail
 import com.baimsg.data.model.Loading
 import com.baimsg.data.model.Success
@@ -69,11 +70,11 @@ class TeamViewModel @Inject constructor(
     /**
      * 更新选择中群聊
      */
-    fun upCheckTeam(indices: IntArray) {
+    fun upCheckTeam(indices: IntArray, bulkType: BulkType) {
         selectBulks = mutableListOf<BulkData>().apply {
             indices.forEach { i ->
                 val team = allTeam[i]
-                add(BulkData(id = team.id, name = team.name))
+                add(BulkData(id = team.id, name = team.name, bulkType = bulkType))
             }
         }
     }

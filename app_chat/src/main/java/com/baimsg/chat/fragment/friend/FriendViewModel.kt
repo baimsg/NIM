@@ -3,6 +3,7 @@ package com.baimsg.chat.fragment.friend
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.baimsg.chat.fragment.bulk.BulkData
+import com.baimsg.chat.fragment.bulk.BulkType
 import com.baimsg.chat.type.ExecutionStatus
 import com.baimsg.data.model.entities.NIMUserInfo
 import com.baimsg.data.model.entities.asUser
@@ -73,12 +74,17 @@ class FriendViewModel @Inject constructor() : ViewModel() {
     fun loadFriends() {
         _viewState.apply {
             value = FriendViewState.EMPTY.copy(executionStatus = ExecutionStatus.LOADING)
-            val allFriends = friendService.friends
+            val allFriends = friendService.friends ?: return
             value = value.copy(
                 allFriends = allFriends,
                 executionStatus = ExecutionStatus.LOADING
             )
             val allUsers = userService.getUserInfoList(allFriends.map { it.account })
+            if (allUsers.isNullOrEmpty()) {
+                value = value.copy(executionStatus = ExecutionStatus.SUCCESS)
+                recover()
+                return
+            }
             if (allFriends.size == allUsers.size) {
                 value = value.copy(
                     allUsers = allUsers.map { it.asUser() },
@@ -148,12 +154,13 @@ class FriendViewModel @Inject constructor() : ViewModel() {
     /**
      * 更新选择中
      * @param indices 选中的位置数组
+     * @param bulkType 操作类型
      */
-    fun upSelectBulks(indices: IntArray) {
+    fun upSelectBulks(indices: IntArray, bulkType: BulkType) {
         selectBulks = mutableListOf<BulkData>().apply {
             indices.forEach { i ->
                 val user = allUsers[i]
-                add(BulkData(id = user.account, user.name))
+                add(BulkData(id = user.account, user.name, bulkType))
             }
         }
     }

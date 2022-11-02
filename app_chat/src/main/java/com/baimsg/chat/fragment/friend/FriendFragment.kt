@@ -1,5 +1,6 @@
 package com.baimsg.chat.fragment.friend
 
+import android.annotation.SuppressLint
 import android.view.View
 import android.widget.TextView
 import androidx.fragment.app.viewModels
@@ -19,12 +20,12 @@ import com.baimsg.chat.databinding.EmptyBaseBinding
 import com.baimsg.chat.databinding.FooterTeamChatBinding
 import com.baimsg.chat.databinding.FragmentFriendBinding
 import com.baimsg.chat.fragment.bulk.BulkData
+import com.baimsg.chat.fragment.bulk.BulkType
 import com.baimsg.chat.type.ExecutionStatus
 import com.baimsg.chat.util.extensions.*
 import com.baimsg.data.model.JSON
 import com.baimsg.data.model.entities.NIMUserInfo
 import com.chad.library.adapter.base.animation.AlphaInAnimation
-import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.serialization.builtins.ListSerializer
@@ -53,7 +54,7 @@ class FriendFragment : BaseFragment<FragmentFriendBinding>(R.layout.fragment_fri
 
         binding.tvMore.setOnClickListener {
             MaterialDialog(requireContext(), BottomSheet(LayoutMode.WRAP_CONTENT)).show {
-                listItems(items = listOf("群发消息", "删除所有好友")) { dialog, index, _ ->
+                listItems(items = listOf("群发消息", "删除好友")) { dialog, index, _ ->
                     dialog.dismiss()
                     if (friendViewModel.allAccounts.isEmpty()) {
                         showWarning("您还没有好友哦：）")
@@ -61,38 +62,13 @@ class FriendFragment : BaseFragment<FragmentFriendBinding>(R.layout.fragment_fri
                     }
                     when (index) {
                         0 -> {
-                            MaterialDialog(
-                                requireContext(),
-                                BottomSheet(LayoutMode.WRAP_CONTENT)
-                            ).show {
-                                message(text = "快捷操作&emsp;<a href=\"\">全部</a>") {
-                                    html {
-                                        toggleAllItemsChecked()
-                                    }
-                                }
-                                listItemsMultiChoice(
-                                    items = friendViewModel.allUsers.map { it.name + "-" + it.account },
-                                ) { _, indices, _ ->
-                                    friendViewModel.upSelectBulks(indices)
-                                    findNavController().navigate(
-                                        FriendFragmentDirections.actionFriendFragmentToBulkFragment(
-                                            bulks = JSON.encodeToString(
-                                                ListSerializer(BulkData.serializer()),
-                                                friendViewModel.selectBulks
-                                            ),
-                                            sessionType = SessionTypeEnum.P2P
-                                        )
-                                    )
-                                }
-                                negativeButton()
-                                positiveButton()
-                            }
+                            choice(bulkType = BulkType.FriendSendMessage)
                         }
                         else -> {
-                            showInfo("unknown 该功能待开发")
+                            choice(bulkType = BulkType.FriendDelete)
                         }
                     }
-                }
+                }.apply { }
                 negativeButton()
             }
         }
@@ -121,16 +97,34 @@ class FriendFragment : BaseFragment<FragmentFriendBinding>(R.layout.fragment_fri
                     return@setOnItemClickListener
                 }
                 val date = adapter.data[position] as NIMUserInfo
-                findNavController().navigate(
-                    FriendFragmentDirections.actionFriendFragmentToUserDetailFragment(
-                        account = date.account
-                    )
-                )
+                findNavController().navigate(FriendFragmentDirections.actionFriendFragmentToUserDetailFragment(
+                    account = date.account))
             }
         }
 
     }
 
+    private fun choice(bulkType: BulkType) {
+        MaterialDialog(requireContext(), BottomSheet(LayoutMode.WRAP_CONTENT)).show {
+            message(text = "快捷操作&emsp;<a href=\"\">全部</a>") {
+                html {
+                    toggleAllItemsChecked()
+                }
+            }
+            listItemsMultiChoice(
+                items = friendViewModel.allUsers.map { it.name + "-" + it.account },
+            ) { _, indices, _ ->
+                friendViewModel.upSelectBulks(indices, bulkType)
+                findNavController().navigate(FriendFragmentDirections.actionFriendFragmentToBulkFragment(
+                    bulks = JSON.encodeToString(ListSerializer(BulkData.serializer()),
+                        friendViewModel.selectBulks)))
+            }.apply { }
+            negativeButton()
+            positiveButton()
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
     override fun initLiveData() {
         friendViewModel.loadFriends()
 

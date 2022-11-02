@@ -8,6 +8,7 @@ import com.baimsg.chat.type.BatchStatus
 import com.baimsg.data.model.JSON
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.RequestCallback
+import com.netease.nimlib.sdk.friend.FriendService
 import com.netease.nimlib.sdk.msg.MessageBuilder
 import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
@@ -24,29 +25,26 @@ import kotlinx.serialization.builtins.ListSerializer
 import org.json.JSONObject
 import javax.inject.Inject
 
-
 /**
  * Create by Baimsg on 2022/7/22
  *
  **/
 @HiltViewModel
 class BulkViewModel @Inject constructor(
-    handle: SavedStateHandle
+    handle: SavedStateHandle,
 ) : ViewModel() {
 
     private val msgService by lazy {
         NIMClient.getService(MsgService::class.java)
     }
 
-    private val sessionType by lazy {
-        handle["sessionType"] ?: SessionTypeEnum.Team
+    private val friendService by lazy {
+        NIMClient.getService(FriendService::class.java)
     }
 
-    private val allTeam: MutableList<BulkData> by lazy {
-        JSON.decodeFromString(
-            ListSerializer(BulkData.serializer()),
-            handle["bulks"] ?: ""
-        ).toMutableList()
+    private val allBulk: MutableList<BulkData> by lazy {
+        JSON.decodeFromString(ListSerializer(BulkData.serializer()), handle["bulks"] ?: "")
+            .toMutableList()
     }
 
     private val _viewState by lazy {
@@ -62,96 +60,100 @@ class BulkViewModel @Inject constructor(
         _viewState.apply {
             value = value.copy(message = msg)
         }
-        startSend()
+        startBulk()
     }
 
-    fun startSend() {
+    fun startBulk() {
         _viewState.apply {
             if (value.running()) {
                 value = value.copy(status = BatchStatus.PAUSE)
             } else {
                 value = value.copy(status = BatchStatus.RUNNING, tip = "")
-                if (sessionType == SessionTypeEnum.Ysf)
-                    forcedOffline()
-                else
-                    send()
+                when (allBulk.firstOrNull()?.bulkType) {
+                    BulkType.FriendSendMessage, BulkType.TeamSendMessage -> send()
+                    BulkType.FriendDelete -> deleteFriend()
+                    else -> forcedOffline()
+                }
             }
         }
     }
 
+    /**
+     * 强制下线
+     */
     fun forcedOffline() {
         viewModelScope.launch(Dispatchers.IO) {
             runBlocking {
                 _viewState.apply {
                     if (value.pause()) return@runBlocking
-                    if (allTeam.isEmpty()) {
+                    if (allBulk.isEmpty()) {
                         value = value.copy(status = BatchStatus.STOP)
                         return@runBlocking
                     }
                     delay(Constant.DELAY)
-                    val team = allTeam[0]
-                    allTeam.removeAt(0)
-                    val notification = CustomNotification()
-                    notification.sessionId = team.id
-                    notification.sessionType = SessionTypeEnum.P2P
-                    val json = JSONObject().apply {
-                        put("id", 1)
-                        put("data", JSONObject().apply { put("islogin", 0) })
-                        put("isapp", 0)
-                        put("isclear", 0)
-                        put("islogin", 0)
-                        put("issup", 1)
+                    val bulkData = allBulk[0]
+                    allBulk.removeAt(0)
+                    val notification = CustomNotification().apply {
+                        sessionId = bulkData.id
+                        sessionType = SessionTypeEnum.P2P
+                        isSendToOnlineUserOnly = false
+                        val json = JSONObject().apply {
+                            put("id", 1)
+                            put("data", JSONObject().apply { put("islogin", 0) })
+                            put("isapp", 0)
+                            put("isclear", 0)
+                            put("islogin", 0)
+                            put("issup", 1)
+                        }
+                        config = CustomNotificationConfig().apply {
+                            enablePush = true
+                            enableUnreadCount = true
+                        }
+                        apnsText = json.toString()
+                        content = json.toString()
                     }
-                    notification.isSendToOnlineUserOnly = false
-                    val config = CustomNotificationConfig()
-                    config.enablePush = true
-                    config.enableUnreadCount = true
-                    notification.config = config
-                    notification.apnsText = json.toString()
-                    notification.content = json.toString()
-                    value = value.copy(bulkData = team, status = BatchStatus.RUNNING)
-                    NIMClient.getService(MsgService::class.java)
-                        .sendCustomNotification(notification)
+                    value = value.copy(bulkData = bulkData, status = BatchStatus.RUNNING)
+                    msgService.sendCustomNotification(notification)
                         .setCallback(object : RequestCallback<Void> {
                             override fun onSuccess(p0: Void?) {
-                                value = value.copy(tip = "发送下线成功")
+                                value = value.copy(tip = "下线成功")
                                 forcedOffline()
                             }
 
                             override fun onFailed(code: Int) {
-                                value = value.copy(tip = "发送下线失败「$code」")
+                                value = value.copy(tip = "下线失败「$code」")
                                 forcedOffline()
                             }
 
                             override fun onException(e: Throwable?) {
-                                value = value.copy(tip = "发送下线失败「${e?.message}」")
+                                value = value.copy(tip = "下线失败「${e?.message}」")
                                 forcedOffline()
                             }
                         })
                 }
             }
         }
-
     }
 
+    /**
+     * 发送消息
+     */
     private fun send() {
         viewModelScope.launch(Dispatchers.IO) {
             runBlocking {
                 _viewState.apply {
                     if (value.pause()) return@runBlocking
-                    if (allTeam.isEmpty()) {
+                    if (allBulk.isEmpty()) {
                         value = value.copy(status = BatchStatus.STOP)
                         return@runBlocking
                     }
                     delay(Constant.DELAY)
-                    val team = allTeam[0]
-                    allTeam.removeAt(0)
-                    val textMessage = MessageBuilder.createTextMessage(
-                        team.id,
-                        sessionType,
-                        _viewState.value.message
-                    )
-                    value = value.copy(bulkData = team, status = BatchStatus.RUNNING)
+                    val bulkData = allBulk[0]
+                    allBulk.removeAt(0)
+                    val textMessage = MessageBuilder.createTextMessage(bulkData.id,
+                        bulkData.bulkType.toSessionTypeEnum(),
+                        _viewState.value.message)
+                    value = value.copy(bulkData = bulkData, status = BatchStatus.RUNNING)
                     msgService.sendMessage(textMessage, false)
                         .setCallback(object : RequestCallback<Void> {
                             override fun onSuccess(p0: Void?) {
@@ -166,6 +168,44 @@ class BulkViewModel @Inject constructor(
 
                             override fun onException(e: Throwable?) {
                                 value = value.copy(tip = "发送失败「${e?.message}」")
+                                send()
+                            }
+                        })
+                }
+            }
+        }
+    }
+
+    /**
+     * 删除好友
+     */
+    private fun deleteFriend() {
+        viewModelScope.launch(Dispatchers.IO) {
+            runBlocking {
+                _viewState.apply {
+                    if (value.pause()) return@runBlocking
+                    if (allBulk.isEmpty()) {
+                        value = value.copy(status = BatchStatus.STOP)
+                        return@runBlocking
+                    }
+                    delay(Constant.DELAY)
+                    val bulkData = allBulk[0]
+                    allBulk.removeAt(0)
+                    value = value.copy(bulkData = bulkData, status = BatchStatus.RUNNING)
+                    friendService.deleteFriend(bulkData.id, true)
+                        .setCallback(object : RequestCallback<Void> {
+                            override fun onSuccess(p0: Void?) {
+                                value = value.copy(tip = "删除成功")
+                                send()
+                            }
+
+                            override fun onFailed(code: Int) {
+                                value = value.copy(tip = "删除失败「$code」")
+                                send()
+                            }
+
+                            override fun onException(e: Throwable?) {
+                                value = value.copy(tip = "删除失败「${e?.message}」")
                                 send()
                             }
                         })

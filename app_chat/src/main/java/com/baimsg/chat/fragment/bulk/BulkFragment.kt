@@ -1,5 +1,6 @@
 package com.baimsg.chat.fragment.bulk
 
+import android.annotation.SuppressLint
 import android.text.InputType
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -31,18 +32,17 @@ class BulkFragment : BaseFragment<FragmentBulkBinding>(R.layout.fragment_bulk) {
         TipAdapter()
     }
 
+    @SuppressLint("CheckResult")
     override fun initView() {
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()
         }
 
-        MaterialDialog(requireContext(), BottomSheet())
-            .cancelable(false).cancelOnTouchOutside(false).show {
-                title(text = "群发消息")
-                input(
-                    hint = "请输入群发内容",
-                    inputType = InputType.TYPE_TEXT_FLAG_IME_MULTI_LINE
-                ) { _, charSequence ->
+        MaterialDialog(requireContext(), BottomSheet()).cancelable(false)
+            .cancelOnTouchOutside(false).show {
+                title(text = "消息内容")
+                input(hint = "请输入内容",
+                    inputType = InputType.TYPE_TEXT_FLAG_IME_MULTI_LINE) { _, charSequence ->
                     bulkViewModel.setMessage(charSequence.toString())
                 }
                 negativeButton { findNavController().navigateUp() }
@@ -55,7 +55,7 @@ class BulkFragment : BaseFragment<FragmentBulkBinding>(R.layout.fragment_bulk) {
         }
 
         binding.ivStart.setOnClickListener {
-            bulkViewModel.startSend()
+            bulkViewModel.startBulk()
         }
 
     }

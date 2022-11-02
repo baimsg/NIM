@@ -1,5 +1,6 @@
 package com.baimsg.chat.activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.activity.viewModels
 import com.afollestad.materialdialogs.MaterialDialog
@@ -31,8 +32,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
     private val appViewModel by viewModels<AppViewModel>()
 
     private val loadDialog by lazy {
-        MaterialDialog(this).cancelable(false)
-            .cancelOnTouchOutside(false)
+        MaterialDialog(this).cancelable(false).cancelOnTouchOutside(false)
             .customView(R.layout.dialog_loading)
     }
 
@@ -50,8 +50,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
                         if (Constant.STATEMENT) {
                             verify()
                         } else {
-                            MaterialDialog(this@SplashActivity)
-                                .cancelable(false)
+                            MaterialDialog(this@SplashActivity).cancelable(false)
                                 .cancelOnTouchOutside(false).show {
                                     title(R.string.statement)
                                     message(text = it().statement)
@@ -65,10 +64,8 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
                     }
                     is Fail -> {
                         loadDialog.dismiss()
-                        MaterialDialog(this@SplashActivity)
-                            .cancelable(false)
-                            .cancelOnTouchOutside(false)
-                            .show {
+                        MaterialDialog(this@SplashActivity).cancelable(false)
+                            .cancelOnTouchOutside(false).show {
                                 title(text = "出错啦）：")
                                 message(text = "${it.error.message}\n请检查您的网络连接是否正常")
                                 negativeButton(R.string.quit) { finish() }
@@ -85,22 +82,22 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
 
     private fun verify() {
         if (appViewModel.stopUsing) {
-            showError(appViewModel.noticeContent)
-            finish()
-            return
+            if (appViewModel.quit) {
+                showError(appViewModel.noticeContent)
+                finish()
+                return
+            } else {
+                showWarning(appViewModel.noticeContent)
+            }
         }
         val androidId = applicationContext.androidId()
         when {
             appViewModel.users.any { it.id == androidId } -> {
                 if (Constant.NOTICE_VERSION < appViewModel.noticeVersion) {
-                    MaterialDialog(this@SplashActivity)
-                        .cancelable(false)
-                        .cancelOnTouchOutside(false)
-                        .show {
+                    MaterialDialog(this@SplashActivity).cancelable(false)
+                        .cancelOnTouchOutside(false).show {
                             title(text = appViewModel.noticeTitle)
-                            message(
-                                text = appViewModel.noticeContent
-                            )
+                            message(text = appViewModel.noticeContent)
                             if (appViewModel.noticeLink.isNotBlank()) {
                                 positiveButton(R.string.go_now) {
                                     openWeb(appViewModel.noticeLink)
@@ -108,10 +105,8 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
                                 }
                             } else {
                                 negativeButton(R.string.not_again_hint) {
-                                    KvUtils.put(
-                                        Constant.KEY_NOTICE_VERSION,
-                                        appViewModel.noticeVersion
-                                    )
+                                    KvUtils.put(Constant.KEY_NOTICE_VERSION,
+                                        appViewModel.noticeVersion)
                                     nextActivity()
                                 }
                                 positiveButton(R.string.know) {
@@ -131,14 +126,10 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
                 }
             }
             else -> {
-                MaterialDialog(this@SplashActivity)
-                    .cancelable(false)
-                    .cancelOnTouchOutside(false)
+                MaterialDialog(this@SplashActivity).cancelable(false).cancelOnTouchOutside(false)
                     .show {
                         title(text = "设备未激活）：")
-                        message(
-                            text = "神奇的卡密:\n${androidId.encodeBase64()}"
-                        )
+                        message(text = "神奇的卡密:\n${androidId.encodeBase64()}")
                         negativeButton(R.string.quit) { finish() }
                         positiveButton(R.string.copy) {
                             showSuccess("已复制卡密")
@@ -150,25 +141,24 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
         }
     }
 
+    @SuppressLint("CheckResult")
     private fun verifyAppKey() {
-        MaterialDialog(this@SplashActivity)
-            .cancelable(false)
-            .cancelOnTouchOutside(false).show {
-                input(hint = "请输入卡密") { materialDialog, charSequence ->
-                    materialDialog.dismiss()
-                    val appKey = charSequence.toString()
-                    if (appKey.decodeData(appViewModel.dataKey) == appViewModel.appKey) {
-                        KvUtils.put(Constant.KEY_APP_KEY, appKey)
-                        showSuccess("卡密使用成功！")
-                        nextActivity()
-                    } else {
-                        showError("该卡密已失效！")
-                        verifyAppKey()
-                    }
+        MaterialDialog(this@SplashActivity).cancelable(false).cancelOnTouchOutside(false).show {
+            input(hint = "请输入卡密") { materialDialog, charSequence ->
+                materialDialog.dismiss()
+                val appKey = charSequence.toString()
+                if (appKey.decodeData(appViewModel.dataKey) == appViewModel.appKey) {
+                    KvUtils.put(Constant.KEY_APP_KEY, appKey)
+                    showSuccess("卡密使用成功！")
+                    nextActivity()
+                } else {
+                    showError("该卡密已失效！")
+                    verifyAppKey()
                 }
-                negativeButton { finish() }
-                positiveButton { }
             }
+            negativeButton { finish() }
+            positiveButton { }
+        }
     }
 
     private fun nextActivity() {

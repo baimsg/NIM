@@ -14,8 +14,9 @@ import kotlinx.serialization.Serializable
  **/
 @Serializable
 data class ConfigBean(
-    val stopUsing: Boolean,
-    val debug: Boolean,
+    val stopUsing: Boolean = false,
+    val quit: Boolean = false,
+    val debug: Boolean = false,
     val dataKey: String,
     val appKey: String,
     val noticeVersion: Int,
@@ -23,11 +24,11 @@ data class ConfigBean(
     val noticeContent: String,
     val noticeLink: String,
     val statement: String,
-    val users: List<User>
+    val users: List<User>,
 )
 
 @Serializable
 data class User(
     val remark: String,
-    val id: String
+    val id: String,
 )

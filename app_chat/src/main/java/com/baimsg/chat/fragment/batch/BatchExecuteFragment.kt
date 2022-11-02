@@ -1,5 +1,6 @@
 package com.baimsg.chat.fragment.batch
 
+import android.annotation.SuppressLint
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -16,6 +17,7 @@ import com.baimsg.chat.base.BaseFragment
 import com.baimsg.chat.databinding.EmptyBaseBinding
 import com.baimsg.chat.databinding.FragmentBatchExecuteBinding
 import com.baimsg.chat.fragment.bulk.BulkData
+import com.baimsg.chat.fragment.bulk.BulkType
 import com.baimsg.chat.type.BatchType
 import com.baimsg.chat.type.UpdateStatus
 import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
@@ -25,7 +27,6 @@ import com.baimsg.chat.util.extensions.showWarning
 import com.baimsg.data.model.JSON
 import com.baimsg.data.model.entities.NIMTaskAccount
 import com.chad.library.adapter.base.animation.AlphaInAnimation
-import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.serialization.builtins.ListSerializer
@@ -52,6 +53,7 @@ class BatchExecuteFragment :
         listOf("加好友", "邀请进群", "群发消息", "强制下线")
     }
 
+    @SuppressLint("CheckResult")
     override fun initView() {
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()
@@ -113,11 +115,11 @@ class BatchExecuteFragment :
                                             batchExecuteViewModel.allTaskAccounts.map {
                                                 BulkData(
                                                     it.account,
-                                                    it.name
+                                                    it.name,
+                                                    BulkType.FriendSendMessage
                                                 )
                                             }
-                                        ),
-                                        sessionType = SessionTypeEnum.P2P
+                                        )
                                     )
                                 )
                             }
@@ -129,11 +131,11 @@ class BatchExecuteFragment :
                                             batchExecuteViewModel.allTaskAccounts.map {
                                                 BulkData(
                                                     it.account,
-                                                    it.name
+                                                    it.name,
+                                                    BulkType.ForcedOffline
                                                 )
                                             }
-                                        ),
-                                        sessionType = SessionTypeEnum.Ysf
+                                        )
                                     )
                                 )
                             }
@@ -212,6 +214,7 @@ class BatchExecuteFragment :
         }
     }
 
+    @SuppressLint("SetTextI18n")
     override fun initLiveData() {
         repeatOnLifecycleStarted {
             batchExecuteViewModel.observeTaskAccountViewState.collectLatest {
