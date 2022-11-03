@@ -83,4 +83,7 @@
     <string name="account_info">账号信息</string>
     <string name="url">URL</string>
     <string name="param">参数</string>
+    <string name="result">结果</string>
+    <string name="fail">失败</string>
+    <string name="success">成功</string>
 </resources>

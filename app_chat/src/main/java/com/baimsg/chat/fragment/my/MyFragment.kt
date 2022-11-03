@@ -1,5 +1,6 @@
 package com.baimsg.chat.fragment.my
 
+import android.annotation.SuppressLint
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -45,6 +46,7 @@ class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
 
     }
 
+    @SuppressLint("SetTextI18n")
     override fun initLiveData() {
         repeatOnLifecycleStarted {
             loginViewModel.observeUserInfo.collectLatest {
@@ -53,7 +55,7 @@ class MyFragment : BaseFragment<FragmentMyBinding>(R.layout.fragment_my) {
                     if (loaded) {
                         binding.tvName.text = name
                         binding.tvSignature.text = signature ?: "没有个性签名哦！"
-                        binding.tvAccount.text = "账号:${account}"
+                        binding.tvAccount.text = "ID:${account}"
                         binding.ivAvatar.loadImage(avatar)
                     } else {
                         loginViewModel.loadUserInfo()

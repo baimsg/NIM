@@ -13,17 +13,32 @@ import com.baimsg.data.model.entities.NIMTeam
 data class TaskAccountViewState(
     val allTaskAccounts: List<NIMTaskAccount>,
     val task: NIMTaskAccount,
-    val updateStatus: UpdateStatus
+    val updateStatus: UpdateStatus,
 ) {
     companion object {
-        val EMPTY = TaskAccountViewState(
-            allTaskAccounts = emptyList(),
+        val EMPTY = TaskAccountViewState(allTaskAccounts = emptyList(),
             task = NIMTaskAccount(),
-            updateStatus = UpdateStatus.DEFAULT
-        )
+            updateStatus = UpdateStatus.DEFAULT)
     }
 }
 
+@kotlinx.serialization.Serializable
+data class TaskResult(
+    val task: NIMTaskAccount,
+    val type: BatchType,
+    val success: Boolean,
+) : java.io.Serializable {
+    override fun equals(other: Any?): Boolean {
+        return if (other is TaskResult) other.task.id == task.id else super.equals(other)
+    }
+
+    override fun hashCode(): Int {
+        var result = task.hashCode()
+        result = 31 * result + type.hashCode()
+        result = 31 * result + success.hashCode()
+        return result
+    }
+}
 
 data class BatchExecuteViewState(
     val teams: List<NIMTeam>,
@@ -32,13 +47,10 @@ data class BatchExecuteViewState(
     val status: BatchStatus,
 ) {
     companion object {
-        val EMPTY =
-            BatchExecuteViewState(
-                teams = emptyList(),
-                batchType = BatchType.UNKNOWN,
-                message = "UNKNOWN",
-                status = BatchStatus.UNKNOWN
-            )
+        val EMPTY = BatchExecuteViewState(teams = emptyList(),
+            batchType = BatchType.UNKNOWN,
+            message = "UNKNOWN",
+            status = BatchStatus.UNKNOWN)
     }
 
     fun pause() = status == BatchStatus.PAUSE

@@ -288,6 +288,13 @@
             app:exitAnim="@anim/fragment_open_exit"
             app:popEnterAnim="@anim/fragment_open_enter"
             app:popExitAnim="@anim/slide_out_left" />
+        <action
+            android:id="@+id/action_batchExecuteFragment_to_batchExecuteResultFragment"
+            app:destination="@id/batchExecuteResultFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
+            app:popExitAnim="@anim/slide_out_left" />
     </fragment>
     <fragment
         android:id="@+id/friendFragment"
@@ -355,5 +362,23 @@
             android:name="account"
             android:defaultValue="100000"
             app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/batchExecuteResultFragment"
+        android:name="com.baimsg.chat.fragment.batch.result.BatchExecuteResultFragment"
+        android:label="BatchExecuteResultFragment"
+        tools:layout="@layout/fragment_batch_execute_result">
+        <argument
+            android:name="taskResult"
+            android:defaultValue="null"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_batchExecuteResultFragment_to_userDetailFragment"
+            app:destination="@id/userDetailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
+            app:popExitAnim="@anim/slide_out_left" />
     </fragment>
 </navigation>

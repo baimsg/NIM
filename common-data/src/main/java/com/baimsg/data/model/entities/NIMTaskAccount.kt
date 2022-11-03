@@ -5,6 +5,15 @@ import androidx.room.PrimaryKey
 import com.baimsg.data.model.base.BaseEntity
 import kotlinx.serialization.Serializable
 
+/**
+ * @param id
+ * @param appKey
+ * @param account 账号
+ * @param name 昵称
+ * @param avatar 头像
+ * @param createTime 创建时间
+ * @param processed 已经处理过
+ */
 @Serializable
 @Entity(tableName = "nim_task_account")
 data class NIMTaskAccount(

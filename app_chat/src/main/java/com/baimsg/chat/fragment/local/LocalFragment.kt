@@ -1,5 +1,6 @@
 package com.baimsg.chat.fragment.local
 
+import android.annotation.SuppressLint
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -24,9 +25,7 @@ import com.baimsg.chat.util.extensions.*
 import com.baimsg.data.model.entities.NIMUserInfo
 import com.chad.library.adapter.base.animation.AlphaInAnimation
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.launch
 
 /**
@@ -74,6 +73,7 @@ class LocalFragment : BaseFragment<FragmentLocalBinding>(R.layout.fragment_local
         }
     }
 
+    @SuppressLint("CheckResult")
     override fun initView() {
 
         binding.ivBack.setOnClickListener {
@@ -194,6 +194,7 @@ class LocalFragment : BaseFragment<FragmentLocalBinding>(R.layout.fragment_local
 
     }
 
+    @SuppressLint("SetTextI18n")
     override fun initLiveData() {
         repeatOnLifecycleStarted {
             localViewModel.observeViewState.collect {

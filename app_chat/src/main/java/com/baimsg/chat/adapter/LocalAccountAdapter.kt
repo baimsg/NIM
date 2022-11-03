@@ -1,5 +1,6 @@
 package com.baimsg.chat.adapter
 
+import android.annotation.SuppressLint
 import com.baimsg.base.util.extensions.toTime
 import com.baimsg.chat.adapter.base.BaseBindingAdapter
 import com.baimsg.chat.adapter.base.VBViewHolder
@@ -17,6 +18,7 @@ import com.netease.nimlib.sdk.uinfo.model.NimUserInfo
  **/
 class LocalAccountAdapter :
     BaseBindingAdapter<ItemLocalAccountBinding, NIMLoginRecord>() {
+    @SuppressLint("SetTextI18n")
     override fun convert(holder: VBViewHolder<ItemLocalAccountBinding>, item: NIMLoginRecord) {
         holder.vb.apply {
             tvLastLogin.text = "登录于: ${item.loginTime.toTime()}"

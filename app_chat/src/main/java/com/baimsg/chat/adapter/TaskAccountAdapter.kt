@@ -1,20 +1,20 @@
 package com.baimsg.chat.adapter
 
-import com.baimsg.chat.R
+import android.annotation.SuppressLint
 import com.baimsg.chat.adapter.base.BaseBindingAdapter
 import com.baimsg.chat.adapter.base.VBViewHolder
 import com.baimsg.chat.databinding.ItemTaskAccountBinding
 import com.baimsg.chat.util.extensions.loadImage
 import com.baimsg.data.model.entities.NIMTaskAccount
 
-class TaskAccountAdapter(val a: Int = R.layout.item_task_account) :
-    BaseBindingAdapter<ItemTaskAccountBinding, NIMTaskAccount>() {
+class TaskAccountAdapter : BaseBindingAdapter<ItemTaskAccountBinding, NIMTaskAccount>() {
+    @SuppressLint("SetTextI18n")
     override fun convert(holder: VBViewHolder<ItemTaskAccountBinding>, item: NIMTaskAccount) {
         holder.vb.apply {
-            root.isEnabled = !item.processed
+            root.isSelected = item.processed
             ivAvatar.loadImage(item.avatar)
             tvName.text = item.name
-            tvAccount.text = "账号:${item.account}"
+            tvAccount.text = "ID:${item.account}"
         }
     }
 }

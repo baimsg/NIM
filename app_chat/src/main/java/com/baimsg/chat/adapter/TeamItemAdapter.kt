@@ -13,6 +13,5 @@ class TeamItemAdapter : BaseBindingAdapter<ItemTeamBinding, NIMTeam>() {
             ivAvatar.loadImage(item.icon)
             tvName.text = item.name
         }
-
     }
 }

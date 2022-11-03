@@ -30,7 +30,7 @@ import javax.inject.Inject
 @HiltViewModel
 class BatchExecuteViewModel @Inject constructor(
     handle: SavedStateHandle,
-    private val taskAccountDao: TaskAccountDao
+    private val taskAccountDao: TaskAccountDao,
 ) : ViewModel() {
 
     private val teamService by lazy {
@@ -46,6 +46,13 @@ class BatchExecuteViewModel @Inject constructor(
     private val _taskAccountViewState by lazy {
         MutableStateFlow(TaskAccountViewState.EMPTY)
     }
+
+    private val _taskResults: MutableStateFlow<MutableList<TaskResult>> by lazy {
+        MutableStateFlow(mutableListOf())
+    }
+
+    val taskResults: List<TaskResult>
+        get() = _taskResults.value
 
     val observeTaskAccountViewState: StateFlow<TaskAccountViewState> = _taskAccountViewState
 
@@ -74,18 +81,17 @@ class BatchExecuteViewModel @Inject constructor(
 
     init {
         loadAllAccount()
-        teamService.queryTeamList()
-            .setCallback(object : RequestCallback<List<Team>> {
-                override fun onSuccess(teams: List<Team>) {
-                    allTeam.addAll(teams.map { it.asTeam() })
-                }
+        teamService.queryTeamList().setCallback(object : RequestCallback<List<Team>> {
+            override fun onSuccess(teams: List<Team>) {
+                allTeam.addAll(teams.map { it.asTeam() })
+            }
 
-                override fun onFailed(code: Int) {
-                }
+            override fun onFailed(code: Int) {
+            }
 
-                override fun onException(e: Throwable?) {
-                }
-            })
+            override fun onException(e: Throwable?) {
+            }
+        })
     }
 
     fun loadAllAccount() {
@@ -94,9 +100,10 @@ class BatchExecuteViewModel @Inject constructor(
                 value = TaskAccountViewState.EMPTY
                 value = value.copy(
                     allTaskAccounts = taskAccountDao.entriesByAppKey(appKey = initAppKey),
-                    updateStatus = UpdateStatus.REFRESH
+                    updateStatus = UpdateStatus.REFRESH,
                 )
             }
+            stop()
         }
     }
 
@@ -141,11 +148,8 @@ class BatchExecuteViewModel @Inject constructor(
      */
     fun stop() {
         _batchExecuteViewState.apply {
-            value =
-                BatchExecuteViewState.EMPTY.copy(
-                    batchType = BatchType.UNKNOWN,
-                    status = BatchStatus.STOP
-                )
+            value = BatchExecuteViewState.EMPTY.copy(batchType = BatchType.UNKNOWN,
+                status = BatchStatus.STOP)
         }
     }
 
@@ -175,8 +179,7 @@ class BatchExecuteViewModel @Inject constructor(
                     if (value.pause()) return@runBlocking
                     if (processedTaskAccounts.isEmpty()) {
                         value = value.copy(batchType = BatchType.UNKNOWN, status = BatchStatus.STOP)
-                        value =
-                            value.copy(message = "END OF RUN")
+                        value = value.copy(message = "END OF RUN")
                         return@runBlocking
                     }
                     val nimTaskAccount = processedTaskAccounts[0]
@@ -186,23 +189,22 @@ class BatchExecuteViewModel @Inject constructor(
                         value =
                             value.copy(task = nimTaskAccount, updateStatus = UpdateStatus.UPDATE)
                     }
-                    friendService.addFriend(
-                        AddFriendData(
-                            account,
-                            if (Constant.ADD_DIRECT) VerifyType.DIRECT_ADD else VerifyType.VERIFY_REQUEST,
-                            Constant.ADD_FRIEND_DESCRIBE
-                        )
-                    ).setCallback(object : RequestCallback<Void> {
+                    friendService.addFriend(AddFriendData(account,
+                        if (Constant.ADD_DIRECT) VerifyType.DIRECT_ADD else VerifyType.VERIFY_REQUEST,
+                        Constant.ADD_FRIEND_DESCRIBE)).setCallback(object : RequestCallback<Void> {
                         override fun onSuccess(a: Void?) {
                             viewModelScope.launch(Dispatchers.IO) {
                                 _taskAccountViewState.apply {
-                                    value = value.copy(
-                                        allTaskAccounts = allTaskAccounts.toMutableList().apply {
-                                            remove(nimTaskAccount)
-                                        }, task = nimTaskAccount, updateStatus = UpdateStatus.REMOVE
-                                    )
+                                    value =
+                                        value.copy(allTaskAccounts = allTaskAccounts.toMutableList()
+                                            .apply {
+                                                remove(nimTaskAccount)
+                                            },
+                                            task = nimTaskAccount,
+                                            updateStatus = UpdateStatus.REMOVE)
                                     taskAccountDao.deleteById(nimTaskAccount.id)
                                 }
+                                result(nimTaskAccount, BatchType.ADD_FRIEND, true)
                                 value =
                                     value.copy(message = "${nimTaskAccount.name}-$account -> 添加成功")
                                 addFriend()
@@ -210,12 +212,14 @@ class BatchExecuteViewModel @Inject constructor(
                         }
 
                         override fun onFailed(code: Int) {
+                            result(nimTaskAccount, BatchType.ADD_FRIEND, false)
                             value =
                                 value.copy(message = "${nimTaskAccount.name}-$account -> 添加失败:$code")
                             addFriend()
                         }
 
                         override fun onException(e: Throwable?) {
+                            result(nimTaskAccount, BatchType.ADD_FRIEND, false)
                             value =
                                 value.copy(message = "${nimTaskAccount.name}-$account -> 添加失败:${e?.message}")
                             addFriend()
@@ -223,6 +227,20 @@ class BatchExecuteViewModel @Inject constructor(
                     })
                 }
             }
+        }
+    }
+
+    private fun result(
+        task: NIMTaskAccount,
+        batchType: BatchType,
+        success: Boolean,
+    ) {
+        _taskResults.apply {
+            val result = TaskResult(task, batchType, success)
+            if (value.contains(result)) {
+                value.remove(result)
+            }
+            value.add(result)
         }
     }
 
@@ -255,8 +273,7 @@ class BatchExecuteViewModel @Inject constructor(
                         value = value.copy(teams = teams.toMutableList().apply {
                             remove(team)
                         })
-                        value =
-                            value.copy(message = "$head 到达上限")
+                        value = value.copy(message = "$head 到达上限")
                         addMember()
                         return@runBlocking
                     }
@@ -265,40 +282,38 @@ class BatchExecuteViewModel @Inject constructor(
                             override fun onSuccess(accounts: List<String>?) {
                                 viewModelScope.launch(Dispatchers.IO) {
                                     _taskAccountViewState.apply {
-                                        value = value.copy(
-                                            allTaskAccounts = allTaskAccounts.toMutableList()
+                                        value =
+                                            value.copy(allTaskAccounts = allTaskAccounts.toMutableList()
                                                 .apply {
                                                     remove(nimTaskAccount)
                                                 },
-                                            task = nimTaskAccount,
-                                            updateStatus = UpdateStatus.REMOVE
-                                        )
+                                                task = nimTaskAccount,
+                                                updateStatus = UpdateStatus.REMOVE)
                                         taskAccountDao.deleteById(nimTaskAccount.id)
                                     }
-                                    value =
-                                        value.copy(message = "$head 邀请成功")
+                                    result(nimTaskAccount, BatchType.INVITE_TO_TEAM, true)
+                                    value = value.copy(message = "$head 邀请成功")
                                     team.memberCount += 1
                                     addMember()
                                 }
                             }
 
                             override fun onFailed(code: Int) {
+                                result(nimTaskAccount, BatchType.INVITE_TO_TEAM, false)
                                 if (code == 802) {
                                     value = value.copy(teams = teams.toMutableList().apply {
                                         remove(team)
                                     })
-                                    value =
-                                        value.copy(message = "$head 没有权限")
+                                    value = value.copy(message = "$head 没有权限")
                                 } else {
-                                    value =
-                                        value.copy(message = "$head 邀请失败:$code")
+                                    value = value.copy(message = "$head 邀请失败:$code")
                                 }
                                 addMember()
                             }
 
                             override fun onException(e: Throwable?) {
-                                value =
-                                    value.copy(message = "$head 邀请失败:${e?.message}")
+                                result(nimTaskAccount, BatchType.INVITE_TO_TEAM, false)
+                                value = value.copy(message = "$head 邀请失败:${e?.message}")
                                 addMember()
                             }
                         })

@@ -1,5 +1,6 @@
 package com.baimsg.chat.fragment.user
 
+import android.annotation.SuppressLint
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -68,6 +69,7 @@ class UserDetailFragment : BaseFragment<FragmentUserDetailBinding>(R.layout.frag
         }
     }
 
+    @SuppressLint("SetTextI18n")
     override fun initLiveData() {
         repeatOnLifecycleStarted {
             userDetailViewModel.observeViewState.collectLatest {
@@ -111,9 +113,7 @@ class UserDetailFragment : BaseFragment<FragmentUserDetailBinding>(R.layout.frag
     private fun inputParam() {
         val view = View.inflate(requireContext(), R.layout.dialog_input_param, null)
         DialogInputParamBinding.bind(view).apply {
-            MaterialDialog(requireContext())
-                .cancelOnTouchOutside(false)
-                .customView(view = view)
+            MaterialDialog(requireContext()).cancelOnTouchOutside(false).customView(view = view)
                 .show {
                     editUrl.setText(userDetailViewModel.url)
                     editParam.setText(userDetailViewModel.forms.run {
@@ -133,33 +133,26 @@ class UserDetailFragment : BaseFragment<FragmentUserDetailBinding>(R.layout.frag
                             showWarning("URL不合法")
                             return@positiveButton
                         }
-                        val params: Map<String, String>? =
-                            editParam.text?.toString()?.run {
-                                val forms = mutableMapOf<String, String>()
-                                if (isNotBlank()) {
-                                    split("&").forEach { s ->
-                                        if (s.contains("=")) {
-                                            val values = s.split("=")
-                                            forms[values[0]] = values[1]
-                                        }
+                        val params: Map<String, String>? = editParam.text?.toString()?.run {
+                            val forms = mutableMapOf<String, String>()
+                            if (isNotBlank()) {
+                                split("&").forEach { s ->
+                                    if (s.contains("=")) {
+                                        val values = s.split("=")
+                                        forms[values[0]] = values[1]
                                     }
                                 }
-                                forms
                             }
+                            forms
+                        }
                         if (params.isNullOrEmpty()) {
                             showWarning("参数不合法")
                             return@positiveButton
                         }
                         KvUtils.put(Constant.KEY_URL, url)
-                        KvUtils.put(
-                            Constant.KEY_PARAM,
-                            JSON.encodeToString(
-                                MapSerializer(
-                                    String.serializer(),
-                                    String.serializer()
-                                ), params
-                            )
-                        )
+                        KvUtils.put(Constant.KEY_PARAM,
+                            JSON.encodeToString(MapSerializer(String.serializer(),
+                                String.serializer()), params))
                         userDetailViewModel.loadForms()
                     }
                 }

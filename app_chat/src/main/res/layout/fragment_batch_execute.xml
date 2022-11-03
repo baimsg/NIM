@@ -45,7 +45,6 @@
         app:layout_constraintTop_toTopOf="@id/ivStart"
         tools:text="(0)" />
 
-
     <ImageView
         android:id="@+id/ivSetting"
         android:layout_width="wrap_content"
@@ -74,7 +73,6 @@
         tools:ignore="UseAppTint"
         tools:visibility="visible" />
 
-
     <ImageView
         android:id="@+id/ivStart"
         android:layout_width="wrap_content"
@@ -100,7 +98,6 @@
         app:layout_constraintTop_toBottomOf="@id/ivStart"
         tools:text="(10/100)" />
 
-
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/srContent"
         android:layout_width="match_parent"
@@ -112,16 +109,28 @@
             android:id="@+id/ryContent"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabQuit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="35dp"
+        android:layout_marginBottom="16dp"
         android:contentDescription="@string/quit"
         android:src="@drawable/ic_quit"
+        app:layout_constraintBottom_toTopOf="@id/fabResult"
+        app:layout_constraintEnd_toEndOf="@id/fabResult"
+        app:layout_constraintStart_toStartOf="@id/fabResult" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="35dp"
+        android:contentDescription="@string/result"
+        android:src="@drawable/ic_result"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

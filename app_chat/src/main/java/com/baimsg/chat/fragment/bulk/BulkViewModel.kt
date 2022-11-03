@@ -118,7 +118,7 @@ class BulkViewModel @Inject constructor(
                         apnsText = json.toString()
                         content = json.toString()
                     }
-                    value = value.copy(bulkData = bulkData, status = BatchStatus.RUNNING)
+                    value = value.copy(bulkData = bulkData, status = BatchStatus.RUNNING, tip = "")
                     msgService.sendCustomNotification(notification)
                         .setCallback(object : RequestCallback<Void> {
                             override fun onSuccess(p0: Void?) {
@@ -159,7 +159,7 @@ class BulkViewModel @Inject constructor(
                     val textMessage = MessageBuilder.createTextMessage(bulkData.id,
                         bulkData.bulkType.toSessionTypeEnum(),
                         _viewState.value.message)
-                    value = value.copy(bulkData = bulkData, status = BatchStatus.RUNNING)
+                    value = value.copy(bulkData = bulkData, status = BatchStatus.RUNNING, tip = "")
                     msgService.sendMessage(textMessage, false)
                         .setCallback(object : RequestCallback<Void> {
                             override fun onSuccess(p0: Void?) {
@@ -197,7 +197,7 @@ class BulkViewModel @Inject constructor(
                     delay(Constant.DELAY)
                     val bulkData = allBulk[0]
                     allBulk.removeAt(0)
-                    value = value.copy(bulkData = bulkData, status = BatchStatus.RUNNING)
+                    value = value.copy(bulkData = bulkData, status = BatchStatus.RUNNING, tip = "")
                     friendService.deleteFriend(bulkData.id, true)
                         .setCallback(object : RequestCallback<Void> {
                             override fun onSuccess(p0: Void?) {
@@ -235,7 +235,7 @@ class BulkViewModel @Inject constructor(
                     delay(Constant.DELAY)
                     val bulkData = allBulk[0]
                     allBulk.removeAt(0)
-                    value = value.copy(bulkData = bulkData, status = BatchStatus.RUNNING)
+                    value = value.copy(bulkData = bulkData, status = BatchStatus.RUNNING, tip = "")
                     teamService.dismissTeam(bulkData.id)
                         .setCallback(object : RequestCallback<Void> {
                             override fun onSuccess(p0: Void?) {

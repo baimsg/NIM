@@ -80,6 +80,12 @@ class BatchExecuteFragment :
             batchExecuteViewModel.stop()
         }
 
+        binding.fabResult.setOnClickListener {
+            findNavController().navigate(BatchExecuteFragmentDirections.actionBatchExecuteFragmentToBatchExecuteResultFragment(
+                JSON.encodeToString(ListSerializer(TaskResult.serializer()),
+                    batchExecuteViewModel.taskResults)))
+        }
+
         binding.ivStart.setOnClickListener {
             if (batchExecuteViewModel.batchType == BatchType.UNKNOWN) {
                 MaterialDialog(requireContext(), BottomSheet(LayoutMode.WRAP_CONTENT)).show {
@@ -94,12 +100,9 @@ class BatchExecuteFragment :
                                 if (allTeam.isEmpty()) {
                                     showWarning("您还没有群聊哦：)")
                                 } else {
-                                    MaterialDialog(
-                                        requireContext(),
-                                        BottomSheet(LayoutMode.WRAP_CONTENT)
-                                    ).show {
-                                        listItemsMultiChoice(items = allTeam.map { it.name + "-" + it.id + "[${it.memberCount}]" })
-                                        { _, indices, _ ->
+                                    MaterialDialog(requireContext(),
+                                        BottomSheet(LayoutMode.WRAP_CONTENT)).show {
+                                        listItemsMultiChoice(items = allTeam.map { it.name + "-" + it.id + "[${it.memberCount}]" }) { _, indices, _ ->
                                             batchExecuteViewModel.updateTeam(indices)
                                         }
                                         negativeButton()
@@ -108,36 +111,20 @@ class BatchExecuteFragment :
                                 }
                             }
                             2 -> {
-                                findNavController().navigate(
-                                    BatchExecuteFragmentDirections.actionBatchExecuteFragmentToBulkFragment(
-                                        bulks = JSON.encodeToString(
-                                            ListSerializer(BulkData.serializer()),
-                                            batchExecuteViewModel.allTaskAccounts.map {
-                                                BulkData(
-                                                    it.account,
-                                                    it.name,
-                                                    BulkType.FriendSendMessage
-                                                )
-                                            }
-                                        )
-                                    )
-                                )
+                                findNavController().navigate(BatchExecuteFragmentDirections.actionBatchExecuteFragmentToBulkFragment(
+                                    bulks = JSON.encodeToString(ListSerializer(BulkData.serializer()),
+                                        batchExecuteViewModel.allTaskAccounts.map {
+                                            BulkData(it.account,
+                                                it.name,
+                                                BulkType.FriendSendMessage)
+                                        })))
                             }
                             else -> {
-                                findNavController().navigate(
-                                    BatchExecuteFragmentDirections.actionBatchExecuteFragmentToBulkFragment(
-                                        bulks = JSON.encodeToString(
-                                            ListSerializer(BulkData.serializer()),
-                                            batchExecuteViewModel.allTaskAccounts.map {
-                                                BulkData(
-                                                    it.account,
-                                                    it.name,
-                                                    BulkType.ForcedOffline
-                                                )
-                                            }
-                                        )
-                                    )
-                                )
+                                findNavController().navigate(BatchExecuteFragmentDirections.actionBatchExecuteFragmentToBulkFragment(
+                                    bulks = JSON.encodeToString(ListSerializer(BulkData.serializer()),
+                                        batchExecuteViewModel.allTaskAccounts.map {
+                                            BulkData(it.account, it.name, BulkType.ForcedOffline)
+                                        })))
                             }
                         }
                     }
@@ -180,11 +167,8 @@ class BatchExecuteFragment :
                     dialog.dismiss()
                     when (index) {
                         0 -> {
-                            findNavController().navigate(
-                                BatchExecuteFragmentDirections.actionBatchExecuteFragmentToUserDetailFragment(
-                                    account = data.account
-                                )
-                            )
+                            findNavController().navigate(BatchExecuteFragmentDirections.actionBatchExecuteFragmentToUserDetailFragment(
+                                account = data.account))
                         }
                         else -> {
                             taskAccountAdapter.removeAt(position)
@@ -246,6 +230,7 @@ class BatchExecuteFragment :
                     }
                     binding.srContent.isEnabled = !running()
                     binding.proLoading.show(running())
+                    binding.fabResult.show(!running() && batchExecuteViewModel.taskResults.isNotEmpty())
                     binding.fabQuit.show(pause())
                     binding.ivBack.show(!running())
                     binding.ivSetting.show(!running())
