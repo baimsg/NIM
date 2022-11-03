@@ -46,7 +46,7 @@ data class BulkData(val id: String, val name: String, val bulkType: BulkType) : 
  * 操作类型
  */
 enum class BulkType {
-    TeamSendMessage, FriendSendMessage, FriendDelete,ForcedOffline
+    TeamSendMessage, FriendSendMessage, TeamDelete, FriendDelete, ForcedOffline
 }
 
 internal fun BulkType.toSessionTypeEnum(): SessionTypeEnum = when (this) {

@@ -37,7 +37,6 @@ class BulkFragment : BaseFragment<FragmentBulkBinding>(R.layout.fragment_bulk) {
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()
         }
-
         MaterialDialog(requireContext(), BottomSheet()).cancelable(false)
             .cancelOnTouchOutside(false).show {
                 title(text = "消息内容")
@@ -57,7 +56,6 @@ class BulkFragment : BaseFragment<FragmentBulkBinding>(R.layout.fragment_bulk) {
         binding.ivStart.setOnClickListener {
             bulkViewModel.startBulk()
         }
-
     }
 
     override fun initLiveData() {

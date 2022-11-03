@@ -79,28 +79,5 @@ class TeamViewModel @Inject constructor(
         }
     }
 
-    /**
-     * 解散所有群聊
-     */
-    fun dismissTeamAll() {
-        _viewState.apply {
-            allTeam.forEachIndexed { _, nimTeam ->
-                teamService.dismissTeam(nimTeam.id)
-                    .setCallback(object : RequestCallback<Void?> {
-                        override fun onSuccess(param: Void?) {
-                            this@apply.value =
-                                value.copy(
-                                    teams = Success(
-                                        allTeam.toMutableList().apply { remove(nimTeam) })
-                                )
-                        }
-
-                        override fun onFailed(code: Int) = Unit
-                        override fun onException(exception: Throwable) = Unit
-                    })
-            }
-        }
-    }
-
 
 }

@@ -14,6 +14,7 @@ import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
 import com.netease.nimlib.sdk.msg.model.CustomNotification
 import com.netease.nimlib.sdk.msg.model.CustomNotificationConfig
+import com.netease.nimlib.sdk.team.TeamService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -40,6 +41,10 @@ class BulkViewModel @Inject constructor(
 
     private val friendService by lazy {
         NIMClient.getService(FriendService::class.java)
+    }
+
+    private val teamService by lazy {
+        NIMClient.getService(TeamService::class.java)
     }
 
     private val allBulk: MutableList<BulkData> by lazy {
@@ -72,6 +77,7 @@ class BulkViewModel @Inject constructor(
                 when (allBulk.firstOrNull()?.bulkType) {
                     BulkType.FriendSendMessage, BulkType.TeamSendMessage -> send()
                     BulkType.FriendDelete -> deleteFriend()
+                    BulkType.TeamDelete -> deleteTeam()
                     else -> forcedOffline()
                 }
             }
@@ -213,4 +219,43 @@ class BulkViewModel @Inject constructor(
             }
         }
     }
+
+    /**
+     * 删除好友
+     */
+    private fun deleteTeam() {
+        viewModelScope.launch(Dispatchers.IO) {
+            runBlocking {
+                _viewState.apply {
+                    if (value.pause()) return@runBlocking
+                    if (allBulk.isEmpty()) {
+                        value = value.copy(status = BatchStatus.STOP)
+                        return@runBlocking
+                    }
+                    delay(Constant.DELAY)
+                    val bulkData = allBulk[0]
+                    allBulk.removeAt(0)
+                    value = value.copy(bulkData = bulkData, status = BatchStatus.RUNNING)
+                    teamService.dismissTeam(bulkData.id)
+                        .setCallback(object : RequestCallback<Void> {
+                            override fun onSuccess(p0: Void?) {
+                                value = value.copy(tip = "解散成功")
+                                send()
+                            }
+
+                            override fun onFailed(code: Int) {
+                                value = value.copy(tip = "解散失败「$code」")
+                                send()
+                            }
+
+                            override fun onException(e: Throwable?) {
+                                value = value.copy(tip = "解散失败「${e?.message}」")
+                                send()
+                            }
+                        })
+                }
+            }
+        }
+    }
+
 }

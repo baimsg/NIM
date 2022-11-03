@@ -21,6 +21,7 @@ import com.baimsg.chat.databinding.FooterTeamChatBinding
 import com.baimsg.chat.databinding.FragmentTeamBinding
 import com.baimsg.chat.fragment.bulk.BulkData
 import com.baimsg.chat.fragment.bulk.BulkType
+import com.baimsg.chat.fragment.friend.FriendFragmentDirections
 import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
 import com.baimsg.chat.util.extensions.showError
 import com.baimsg.chat.util.extensions.showWarning
@@ -60,35 +61,14 @@ class TeamFragment : BaseFragment<FragmentTeamBinding>(R.layout.fragment_team) {
 
         binding.tvMore.setOnClickListener {
             MaterialDialog(requireContext(), BottomSheet(LayoutMode.WRAP_CONTENT)).show {
-                listItems(items = listOf("群发消息", "解散所有群聊")) { dialog, index, _ ->
+                listItems(items = listOf("群发消息", "解散群聊")) { dialog, index, _ ->
                     dialog.dismiss()
                     when (index) {
                         0 -> {
-                            if (teamViewModel.allTeam.isEmpty()) {
-                                showWarning("没有群可以群发")
-                                return@listItems
-                            }
-                            MaterialDialog(requireContext(),
-                                BottomSheet(LayoutMode.WRAP_CONTENT)).show {
-                                message(text = "快捷操作&emsp;<a href=\"\">全部</a>") {
-                                    html {
-                                        toggleAllItemsChecked()
-                                    }
-                                }
-                                listItemsMultiChoice(
-                                    items = teamViewModel.allTeam.map { it.name + "-" + it.id + "[${it.memberCount}]" },
-                                ) { _, indices, _ ->
-                                    teamViewModel.upCheckTeam(indices, BulkType.TeamSendMessage)
-                                    findNavController().navigate(TeamFragmentDirections.actionTeamFragmentToBulkFragment(
-                                        bulks = JSON.encodeToString(ListSerializer(BulkData.serializer()),
-                                            teamViewModel.selectBulks)))
-                                }
-                                negativeButton()
-                                positiveButton()
-                            }
+                            choice(BulkType.TeamSendMessage)
                         }
                         else -> {
-                            teamViewModel.dismissTeamAll()
+                            choice(BulkType.TeamDelete)
                         }
                     }
                 }
@@ -119,6 +99,31 @@ class TeamFragment : BaseFragment<FragmentTeamBinding>(R.layout.fragment_team) {
 
     }
 
+    private fun choice(bulkType: BulkType) {
+        if (teamViewModel.allTeam.isEmpty()) {
+            showWarning("您还没有群聊哦：）")
+            return
+        }
+        MaterialDialog(requireContext(), BottomSheet(LayoutMode.WRAP_CONTENT)).show {
+            message(text = "快捷操作&emsp;<a href=\"\">全部</a>") {
+                html {
+                    toggleAllItemsChecked()
+                }
+            }
+            listItemsMultiChoice(
+                items = teamViewModel.allTeam.map { it.name + "-" + it.id + "[${it.memberCount}]" },
+            ) { _, indices, _ ->
+                teamViewModel.upCheckTeam(indices, bulkType)
+                findNavController().navigate(FriendFragmentDirections.actionFriendFragmentToBulkFragment(
+                    bulks = JSON.encodeToString(ListSerializer(BulkData.serializer()),
+                        teamViewModel.selectBulks)))
+            }.apply { }
+            negativeButton()
+            positiveButton()
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
     override fun initLiveData() {
         repeatOnLifecycleStarted {
             teamViewModel.observeViewState.collectLatest { data ->
