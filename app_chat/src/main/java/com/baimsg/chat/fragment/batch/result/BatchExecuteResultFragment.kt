@@ -1,5 +1,6 @@
 package com.baimsg.chat.fragment.batch.result
 
+import android.annotation.SuppressLint
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -34,10 +35,8 @@ class BatchExecuteResultFragment :
     }
 
     private val fragments by lazy {
-        listOf(
-            ContentFragment(batchExecuteResultViewModel, true),
-            ContentFragment(batchExecuteResultViewModel, false)
-        )
+        listOf(ContentFragment(batchExecuteResultViewModel, true),
+            ContentFragment(batchExecuteResultViewModel, false))
     }
 
     private var mediator: TabLayoutMediator? = null
@@ -55,7 +54,7 @@ class BatchExecuteResultFragment :
 
         binding.vpMain.apply {
             offscreenPageLimit = ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT
-
+            orientation = ViewPager2.ORIENTATION_HORIZONTAL
             adapter = object : FragmentStateAdapter(this@BatchExecuteResultFragment) {
                 override fun getItemCount(): Int = fragments.size
 
@@ -99,6 +98,7 @@ class BatchExecuteResultFragment :
             TaskAccountAdapter()
         }
 
+        @SuppressLint("SetTextI18n")
         override fun initView() {
             binding.srContent.apply {
                 setColorSchemeResources(R.color.color_primary)
@@ -109,6 +109,7 @@ class BatchExecuteResultFragment :
             }
 
             binding.ryContent.apply {
+
                 taskAccountAdapter.animationEnable = true
                 taskAccountAdapter.adapterAnimation = AlphaInAnimation()
 
@@ -118,7 +119,7 @@ class BatchExecuteResultFragment :
                 val emptyView = View.inflate(requireContext(), R.layout.empty_base, null)
                 EmptyBaseBinding.bind(emptyView).apply {
                     taskAccountAdapter.setEmptyView(emptyView)
-                    tvTip.text = "没有数据哦:)"
+                    tvTip.text = "没有[${if (success) "成功" else "失败"}]数据哦:)"
                 }
             }
 

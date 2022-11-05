@@ -3,7 +3,6 @@ package com.baimsg.chat.fragment.user
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.baimsg.base.util.KvUtils
 import com.baimsg.base.util.extensions.toMd5String
 import com.baimsg.chat.Constant
 import com.baimsg.chat.type.ExecutionStatus
@@ -21,7 +20,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
 import org.json.JSONObject
@@ -35,7 +33,7 @@ import javax.inject.Inject
 @HiltViewModel
 class UserDetailViewModel @Inject constructor(
     handle: SavedStateHandle,
-    private val baseEndpoints: BaseEndpoints
+    private val baseEndpoints: BaseEndpoints,
 ) : ViewModel() {
 
     private val initAccount = handle["account"] ?: "100000"
@@ -66,6 +64,9 @@ class UserDetailViewModel @Inject constructor(
     val forms: Map<String, String>
         get() = _infoViewState.value.forms
 
+    val headers: Map<String, String>
+        get() = _infoViewState.value.headers
+
     val condition: Boolean
         get() = url.isNotBlank() && forms.isNotEmpty()
 
@@ -79,32 +80,24 @@ class UserDetailViewModel @Inject constructor(
      */
     fun loadData() {
         _viewState.apply {
-            value = value.copy(
-                executionStatus = ExecutionStatus.LOADING,
+            value = value.copy(executionStatus = ExecutionStatus.LOADING,
                 myFriend = friendService.isMyFriend(initAccount),
-                inBlackList = friendService.isInBlackList(initAccount)
-            )
+                inBlackList = friendService.isInBlackList(initAccount))
             userService.fetchUserInfo(listOf(initAccount))
                 .setCallback(object : RequestCallback<List<NimUserInfo>> {
                     override fun onSuccess(list: List<NimUserInfo>?) {
-                        value = value.copy(
-                            userInfo = list?.firstOrNull().asUser(),
-                            executionStatus = ExecutionStatus.SUCCESS
-                        )
+                        value = value.copy(userInfo = list?.firstOrNull().asUser(),
+                            executionStatus = ExecutionStatus.SUCCESS)
                         recover()
                     }
 
                     override fun onFailed(code: Int) {
-                        value = value.copy(
-                            executionStatus = ExecutionStatus.FAIL
-                        )
+                        value = value.copy(executionStatus = ExecutionStatus.FAIL)
                         recover()
                     }
 
                     override fun onException(e: Throwable?) {
-                        value = value.copy(
-                            executionStatus = ExecutionStatus.FAIL
-                        )
+                        value = value.copy(executionStatus = ExecutionStatus.FAIL)
                         recover()
                     }
                 })
@@ -115,12 +108,24 @@ class UserDetailViewModel @Inject constructor(
         viewModelScope.launch {
             _infoViewState.apply {
                 value = value.copy(executionStatus = ExecutionStatus.LOADING)
-                val headers = mapOf(NetConfig.DYNAMIC_URL to url)
+                val headers = headers.toMutableMap().apply {
+                    put(NetConfig.DYNAMIC_URL, url)
+                }
                 val forms = forms.toMutableMap().apply {
                     val time = System.currentTimeMillis()
                     remove("signature")
+                    remove("account")
+                    remove("uid")
+                    remove("user_id")
+                    remove("userid")
+                    remove("time")
+                    remove("timestamp")
+                    put("timestamp", "$time")
                     put("time", "$time")
+                    put("account", initAccount)
+                    put("uid", initAccount)
                     put("user_id", initAccount)
+                    put("userid", initAccount)
                     put("str", time.verify())
                     val sb = StringBuffer()
                     entries.sortedWith(compareBy { it.key }).forEach { (key, value) ->
@@ -130,20 +135,12 @@ class UserDetailViewModel @Inject constructor(
                     put("signature", "${Constant.START_KEY}$sb${Constant.END_KEY}".toMd5String())
                 }
                 value = try {
-                    value.copy(
-                        executionStatus = ExecutionStatus.SUCCESS,
-                        info = JSONObject(
-                            baseEndpoints.postUserDetail(
-                                headers = headers,
-                                forms
-                            )
-                        ).toString()
-                    )
+                    value.copy(executionStatus = ExecutionStatus.SUCCESS,
+                        info = JSONObject(baseEndpoints.postUserDetail(headers = headers,
+                            forms)).toString())
                 } catch (e: Exception) {
-                    value.copy(
-                        executionStatus = ExecutionStatus.SUCCESS,
-                        info = e.message ?: "未知异常"
-                    )
+                    value.copy(executionStatus = ExecutionStatus.SUCCESS,
+                        info = e.message ?: "未知异常")
                 }
             }
         }
@@ -154,14 +151,18 @@ class UserDetailViewModel @Inject constructor(
             var forms: Map<String, String> = emptyMap()
             val param = Constant.PARAM
             if (param.isNotBlank()) {
-                forms = JSON.decodeFromString(
-                    MapSerializer(
-                        String.serializer(),
-                        String.serializer()
-                    ), param
-                )
+                forms =
+                    JSON.decodeFromString(MapSerializer(String.serializer(), String.serializer()),
+                        param)
             }
-            value = value.copy(url = Constant.URL, forms = forms)
+            var headers: Map<String, String> = emptyMap()
+            val s = Constant.HEADERS
+            if (s.isNotBlank()) {
+                headers =
+                    JSON.decodeFromString(MapSerializer(String.serializer(), String.serializer()),
+                        s)
+            }
+            value = value.copy(url = Constant.URL, forms = forms, headers = headers)
         }
     }
 

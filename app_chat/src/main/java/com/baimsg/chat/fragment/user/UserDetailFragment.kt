@@ -19,7 +19,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
-import java.lang.StringBuilder
 
 /**
  * Create by Baimsg on 2022/8/7
@@ -123,6 +122,14 @@ class UserDetailFragment : BaseFragment<FragmentUserDetailBinding>(R.layout.frag
                             }
                         }
                     })
+                    editHeard.setText(userDetailViewModel.headers.run {
+                        StringBuilder().apply {
+                            this@run.forEach { (key, value) ->
+                                if (isNotBlank()) append("\n")
+                                append("$key: $value")
+                            }
+                        }
+                    })
                     editUrl.showKeyboard(true)
                     negativeButton { }
                     positiveButton {
@@ -149,10 +156,27 @@ class UserDetailFragment : BaseFragment<FragmentUserDetailBinding>(R.layout.frag
                             showWarning("参数不合法")
                             return@positiveButton
                         }
+                        val headers: Map<String, String>? = editHeard.text?.toString()?.run {
+                            val headers = mutableMapOf<String, String>()
+                            if (isNotBlank()) {
+                                split("\n").forEach { s ->
+                                    val values = s.split(":", limit = 2)
+                                    headers[values.first()] = values.last().trim { it <= ' ' }
+                                }
+                            }
+                            headers
+                        }
+                        if (headers.isNullOrEmpty()) {
+                            showWarning("请求头不合法")
+                            return@positiveButton
+                        }
                         KvUtils.put(Constant.KEY_URL, url)
                         KvUtils.put(Constant.KEY_PARAM,
                             JSON.encodeToString(MapSerializer(String.serializer(),
                                 String.serializer()), params))
+                        KvUtils.put(Constant.KEY_HEADERS,
+                            JSON.encodeToString(MapSerializer(String.serializer(),
+                                String.serializer()), headers))
                         userDetailViewModel.loadForms()
                     }
                 }

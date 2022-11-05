@@ -12,17 +12,14 @@ data class UserDetailViewState(
     val myFriend: Boolean,
     val inBlackList: Boolean,
     val message: String,
-    val userInfo: NIMUserInfo
+    val userInfo: NIMUserInfo,
 ) {
     companion object {
-        val EMPTY =
-            UserDetailViewState(
-                executionStatus = ExecutionStatus.UNKNOWN,
-                myFriend = false,
-                inBlackList = false,
-                message = "",
-                userInfo = NIMUserInfo()
-            )
+        val EMPTY = UserDetailViewState(executionStatus = ExecutionStatus.UNKNOWN,
+            myFriend = false,
+            inBlackList = false,
+            message = "",
+            userInfo = NIMUserInfo())
     }
 
     val loading: Boolean
@@ -36,14 +33,14 @@ data class UserInfoViewState(
     val executionStatus: ExecutionStatus,
     val url: String,
     val forms: Map<String, String>,
-    val info: String
+    val headers: Map<String, String>,
+    val info: String,
 ) {
     companion object {
-        val EMPTY = UserInfoViewState(
-            executionStatus = ExecutionStatus.UNKNOWN,
+        val EMPTY = UserInfoViewState(executionStatus = ExecutionStatus.UNKNOWN,
             url = "",
             forms = emptyMap(),
-            info = ""
-        )
+            headers = emptyMap(),
+            info = "")
     }
 }

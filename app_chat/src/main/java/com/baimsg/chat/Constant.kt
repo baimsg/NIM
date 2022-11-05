@@ -13,9 +13,11 @@ import kotlinx.serialization.builtins.serializer
  **/
 object Constant {
 
+    const val KEY_URL = "key_url"
+
     const val KEY_PARAM = "key_param"
 
-    const val KEY_URL = "key_url"
+    const val KEY_HEADERS = "key_headers"
 
     const val KEY_APP_KEY = "key_app_key"
 
@@ -57,6 +59,9 @@ object Constant {
 
     val PARAM: String
         get() = KvUtils.getString(KEY_PARAM, "")
+
+    val HEADERS: String
+        get() = KvUtils.getString(KEY_HEADERS, "")
 
     val URL: String
         get() = KvUtils.getString(KEY_URL, "")
@@ -101,10 +106,8 @@ object Constant {
         get() = KvUtils.getBoolean(KEY_AUTO_FILL, true)
 
     val ADD_FILTERS: List<String>
-        get() = if (FILTER.isNotBlank()) DEFAULT_JSON_FORMAT.decodeFromString(
-            ListSerializer(String.serializer()),
-            FILTER
-        )
+        get() = if (FILTER.isNotBlank()) DEFAULT_JSON_FORMAT.decodeFromString(ListSerializer(String.serializer()),
+            FILTER)
         else emptyList()
 
 

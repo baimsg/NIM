@@ -20,19 +20,14 @@ interface BaseEndpoints {
         @Path("fd") fileId: String,
         @Query("shareKey") shareKey: String,
         @Query("method") method: String = "read",
-        @Query("read") read: Boolean = true
+        @Query("read") read: Boolean = true,
     ): ConfigBean
 
-    /**
-     * @param baseUrl API地址
-     * @param uid 用户id
-     * @param sign appKey
-     * @param timestamp 时间戳
-     */
+
     @FormUrlEncoded
-    @POST("/api/user/detail")
+    @POST("/user_s")
     suspend fun postUserDetail(
         @HeaderMap headers: Map<String, String>,
-        @FieldMap fields: Map<String, String>
+        @FieldMap fields: Map<String, String>,
     ): String
 }
