@@ -21,7 +21,6 @@ import com.baimsg.chat.databinding.FooterTeamChatBinding
 import com.baimsg.chat.databinding.FragmentTeamBinding
 import com.baimsg.chat.fragment.bulk.BulkData
 import com.baimsg.chat.fragment.bulk.BulkType
-import com.baimsg.chat.fragment.friend.FriendFragmentDirections
 import com.baimsg.chat.util.extensions.repeatOnLifecycleStarted
 import com.baimsg.chat.util.extensions.showError
 import com.baimsg.chat.util.extensions.showWarning
@@ -114,7 +113,7 @@ class TeamFragment : BaseFragment<FragmentTeamBinding>(R.layout.fragment_team) {
                 items = teamViewModel.allTeam.map { it.name + "-" + it.id + "[${it.memberCount}]" },
             ) { _, indices, _ ->
                 teamViewModel.upCheckTeam(indices, bulkType)
-                findNavController().navigate(FriendFragmentDirections.actionFriendFragmentToBulkFragment(
+                findNavController().navigate(TeamFragmentDirections.actionTeamFragmentToBulkFragment(
                     bulks = JSON.encodeToString(ListSerializer(BulkData.serializer()),
                         teamViewModel.selectBulks)))
             }.apply { }

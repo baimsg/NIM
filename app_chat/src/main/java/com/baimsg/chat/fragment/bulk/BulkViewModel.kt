@@ -156,9 +156,11 @@ class BulkViewModel @Inject constructor(
                     delay(Constant.DELAY)
                     val bulkData = allBulk[0]
                     allBulk.removeAt(0)
-                    val textMessage = MessageBuilder.createTextMessage(bulkData.id,
+                    val textMessage = MessageBuilder.createTextMessage(
+                        bulkData.id,
                         bulkData.bulkType.toSessionTypeEnum(),
-                        _viewState.value.message)
+                        _viewState.value.message
+                    )
                     value = value.copy(bulkData = bulkData, status = BatchStatus.RUNNING, tip = "")
                     msgService.sendMessage(textMessage, false)
                         .setCallback(object : RequestCallback<Void> {
@@ -202,17 +204,17 @@ class BulkViewModel @Inject constructor(
                         .setCallback(object : RequestCallback<Void> {
                             override fun onSuccess(p0: Void?) {
                                 value = value.copy(tip = "删除成功")
-                                send()
+                                deleteFriend()
                             }
 
                             override fun onFailed(code: Int) {
                                 value = value.copy(tip = "删除失败「$code」")
-                                send()
+                                deleteFriend()
                             }
 
                             override fun onException(e: Throwable?) {
                                 value = value.copy(tip = "删除失败「${e?.message}」")
-                                send()
+                                deleteFriend()
                             }
                         })
                 }
@@ -240,17 +242,17 @@ class BulkViewModel @Inject constructor(
                         .setCallback(object : RequestCallback<Void> {
                             override fun onSuccess(p0: Void?) {
                                 value = value.copy(tip = "解散成功")
-                                send()
+                                deleteTeam()
                             }
 
                             override fun onFailed(code: Int) {
                                 value = value.copy(tip = "解散失败「$code」")
-                                send()
+                                deleteTeam()
                             }
 
                             override fun onException(e: Throwable?) {
                                 value = value.copy(tip = "解散失败「${e?.message}」")
-                                send()
+                                deleteTeam()
                             }
                         })
                 }
