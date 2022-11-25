@@ -53,9 +53,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
         binding.tvDelay.setOnClickListener {
             MaterialDialog(requireContext()).show {
                 input(
-                    hint = "请输入加好友延时/单位毫秒",
-                    inputType = InputType.TYPE_CLASS_NUMBER,
-                    maxLength = 8
+                    hint = "请输入加好友延时/单位毫秒", inputType = InputType.TYPE_CLASS_NUMBER, maxLength = 8
                 ) { _, charSequence ->
                     KvUtils.put(Constant.KEY_DELAY, charSequence.toString().toLong())
                     updateView()
@@ -66,9 +64,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
         binding.tvScope.setOnClickListener {
             MaterialDialog(requireContext()).show {
                 input(
-                    hint = "请输入字典运行次数",
-                    inputType = InputType.TYPE_CLASS_NUMBER,
-                    maxLength = 8
+                    hint = "请输入字典运行次数", inputType = InputType.TYPE_CLASS_NUMBER, maxLength = 8
                 ) { _, charSequence ->
                     KvUtils.put(Constant.KEY_SEARCH_COUNT, charSequence.toString().toLong())
                     updateView()
@@ -101,9 +97,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
         binding.tvTeamLimit.setOnClickListener {
             MaterialDialog(requireContext()).show {
                 input(
-                    hint = "请输入每个群上限人数",
-                    inputType = InputType.TYPE_CLASS_NUMBER,
-                    maxLength = 8
+                    hint = "请输入每个群上限人数", inputType = InputType.TYPE_CLASS_NUMBER, maxLength = 8
                 ) { _, charSequence ->
                     KvUtils.put(Constant.KEY_TEAM_LIMIT, charSequence.toString().toLong())
                     updateView()
@@ -163,7 +157,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
 
         binding.tvTeamLimitValue.text = "${Constant.TEAM_LIMIT}人"
 
-        binding.tvDelayValue.text = "${Constant.DELAY}毫秒"
+        binding.tvDelayValue.text = "${KvUtils.getLong(Constant.KEY_DELAY, 1000)}毫秒"
 
         binding.scAddDirect.isChecked = addMode
 

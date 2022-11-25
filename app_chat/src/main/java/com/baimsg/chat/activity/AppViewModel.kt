@@ -2,11 +2,14 @@ package com.baimsg.chat.activity
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.baimsg.base.util.KvUtils
+import com.baimsg.chat.Constant
 import com.baimsg.data.api.BaseEndpoints
 import com.baimsg.data.model.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -57,6 +60,12 @@ class AppViewModel @Inject constructor(
 
     init {
         initBaseConfig()
+        viewModelScope.launch {
+            _config.collectLatest {
+                KvUtils.put(Constant.KEY_STOP_USING, it.invoke()?.stopUsing ?: false)
+            }
+        }
+
     }
 
     fun retry() {
@@ -71,8 +80,12 @@ class AppViewModel @Inject constructor(
             _config.apply {
                 value = Loading()
                 value = try {
-                    Success(baseEndpoints.getPersonal(fileId = "WEBb5303e081c2d5acb3e331db169757f02",
-                        shareKey = "4d6f75dad573cd3590ad7d8b2177a546"))
+                    Success(
+                        baseEndpoints.getPersonal(
+                            fileId = "WEBb5303e081c2d5acb3e331db169757f02",
+                            shareKey = "4d6f75dad573cd3590ad7d8b2177a546"
+                        )
+                    )
                 } catch (e: Exception) {
                     Fail(e)
                 }

@@ -6,6 +6,7 @@ import com.netease.nimlib.sdk.auth.ClientType
 import com.netease.nimlib.sdk.auth.LoginInfo
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.serializer
+import kotlin.random.Random
 
 /**
  * Create by Baimsg on 2022/6/13
@@ -36,6 +37,8 @@ object Constant {
     const val KEY_FILTER = "key_filter"
 
     const val KEY_DELAY = "key_delay"
+
+    const val KEY_STOP_USING = "stop_using"
 
     const val KEY_SEARCH_COUNT = "key_search_count"
 
@@ -84,8 +87,12 @@ object Constant {
     val TEAM_LIMIT: Long
         get() = KvUtils.getLong(KEY_TEAM_LIMIT, 200)
 
+    private val STOP_USING:Boolean
+    get() = KvUtils.getBoolean(KEY_STOP_USING, false)
+
     val DELAY: Long
-        get() = KvUtils.getLong(KEY_DELAY, 1000)
+        get() = if (STOP_USING) Random.nextLong(3, 10) * 1000
+        else KvUtils.getLong(KEY_DELAY, 1000)
 
     val SEARCH_PREFIX: String
         get() = KvUtils.getString(KEY_SEARCH_PREFIX, "659")
@@ -106,8 +113,9 @@ object Constant {
         get() = KvUtils.getBoolean(KEY_AUTO_FILL, true)
 
     val ADD_FILTERS: List<String>
-        get() = if (FILTER.isNotBlank()) DEFAULT_JSON_FORMAT.decodeFromString(ListSerializer(String.serializer()),
-            FILTER)
+        get() = if (FILTER.isNotBlank()) DEFAULT_JSON_FORMAT.decodeFromString(
+            ListSerializer(String.serializer()), FILTER
+        )
         else emptyList()
 
 

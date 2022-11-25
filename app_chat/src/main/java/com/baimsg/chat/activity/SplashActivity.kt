@@ -105,8 +105,9 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
                                 }
                             } else {
                                 negativeButton(R.string.not_again_hint) {
-                                    KvUtils.put(Constant.KEY_NOTICE_VERSION,
-                                        appViewModel.noticeVersion)
+                                    KvUtils.put(
+                                        Constant.KEY_NOTICE_VERSION, appViewModel.noticeVersion
+                                    )
                                     nextActivity()
                                 }
                                 positiveButton(R.string.know) {
