@@ -6,18 +6,17 @@ import com.baimsg.base.util.extensions.logE
 import com.baimsg.chat.Constant
 import com.baimsg.chat.type.ExecutionStatus
 import com.baimsg.data.db.daos.LoginRecordDao
-import com.baimsg.data.model.entities.NIMLoginRecord
-import com.baimsg.data.model.entities.NIMUserInfo
-import com.baimsg.data.model.entities.asUser
+import com.baimsg.data.model.JSON
+import com.baimsg.data.model.entities.*
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.RequestCallback
 import com.netease.nimlib.sdk.StatusCode
 import com.netease.nimlib.sdk.auth.AuthService
 import com.netease.nimlib.sdk.auth.LoginInfo
 import com.netease.nimlib.sdk.msg.MsgService
-import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
-import com.netease.nimlib.sdk.msg.model.CustomNotification
-import com.netease.nimlib.sdk.msg.model.CustomNotificationConfig
+import com.netease.nimlib.sdk.team.TeamService
+import com.netease.nimlib.sdk.team.model.Team
+import com.netease.nimlib.sdk.team.model.TeamMember
 import com.netease.nimlib.sdk.uinfo.UserService
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,7 +25,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.json.JSONObject
 import javax.inject.Inject
 
 
@@ -89,49 +87,40 @@ internal class LoginViewModel @Inject constructor(
         NIMClient.getService(MsgService::class.java)
     }
 
+    var a = 1;
+    var id = 8165033568
     fun test() {
-        val you = "30925171"
-        val mi = "25912729"
-        val fanno = "378339350"
-        val content = JSONObject().apply {
-            put("id", 2)
-            put(
-                "content",
-                "学习进行时】习近平总书记对航天事业发展高度重视。酒泉卫星发射中心是我国航天事业的发祥地之一，党的十八大以来，习近平总书记两次来到这里。新华社《学习进行时》原创品牌栏目“讲习所”今天推出文章，与您一同学习感悟。\n" +
-                        "\n" +
-                        "探索浩瀚宇宙，发展航天事业，建设航天强国，是中华民族不懈追求的航天梦。航天梦是强国梦的重要组成部分。\n" +
-                        "\n" +
-                        "党的十八大以来，习近平总书记多次视察卫星发射中心、会见航天员和航天工作者，多次作出重要指示，就我国航天事业发展作出一系列重要论述，充分体现了对航天事业的关心和重视。\n" +
-                        "\n" +
-                        "酒泉卫星发射中心是我国航天事业的发祥地之一，党的十八大以来，习近平总书记两次来到这里。"
-            )
-        }.toString()
-        // 自定义消息配置选项
-        val config = CustomNotificationConfig()
-        val notification = CustomNotification().apply {
-            fromAccount = currentAccount
-            sessionId = you
-            sessionType = SessionTypeEnum.P2P
-            isSendToOnlineUserOnly = false
-            this.config = config
-            this.apnsText = content
-            this.content = content
-        }
-
-        msgService.sendCustomNotification(notification)
-            .setCallback(object : RequestCallback<Void> {
-                override fun onSuccess(p0: Void?) {
-                    logE("操作成功")
+        NIMClient.getService(TeamService::class.java).queryMemberList("$id")
+            .setCallback(object : RequestCallback<List<TeamMember>> {
+                override fun onSuccess(result: List<TeamMember>?) {
+                    result?.forEachIndexed { index, teamMember ->
+                        logE("result=${teamMember.account}")
+                    }
+                    if (result.isNullOrEmpty()) logE("null")
+//                    logE("result=${JSON.encodeToString(NIMTeam.serializer(), result.asTeam())}")
+//                    next()
                 }
 
-                override fun onFailed(p0: Int) {
-                    logE("操作失败：$p0")
+                override fun onFailed(code: Int) {
+                    logE("code=$code")
+                    next()
                 }
 
-                override fun onException(p0: Throwable?) {
-                    logE("操作失败：${p0?.message}")
+                override fun onException(exception: Throwable?) {
+                    logE("exception=$exception")
+                    next()
                 }
             })
+
+    }
+
+    fun next() {
+        if (a > 10000000) {
+            logE(id)
+            a = 0
+        } else {
+            test()
+        }
     }
 
     fun login(appKey: String, account: String, token: String) {
@@ -139,9 +128,7 @@ internal class LoginViewModel @Inject constructor(
             value = value.copy(
                 executionStatus = ExecutionStatus.UNKNOWN,
                 currentLoginRecord = value.currentLoginRecord.copy(
-                    appKey = appKey,
-                    account = account,
-                    token = token
+                    appKey = appKey, account = account, token = token
                 )
             )
         }
@@ -167,32 +154,27 @@ internal class LoginViewModel @Inject constructor(
             else -> {
                 authService.login(
                     Constant.getLoginInfo(currentAccount, currentToken, currentAppKey)
-                )
-                    .setCallback(object : RequestCallback<LoginInfo> {
-                        override fun onSuccess(param: LoginInfo) {
-                            viewModelScope.launch(Dispatchers.IO) {
-                                val id =
-                                    "${currentAppKey}-${currentAccount}"
-                                loginRecordDao.cancelUsed()
-                                loginRecordDao.updateOrInsert(currentLoginRecord.run {
-                                    val t = System.currentTimeMillis()
-                                    if (loginRecordDao.countById(id) == 0) copy(
-                                        id = id,
-                                        createTIme = t,
-                                        loginTime = t,
-                                        used = true
-                                    ) else copy(loginTime = t, used = true)
-                                })
-                                _viewState.apply {
-                                    value = value.copy(executionStatus = ExecutionStatus.SUCCESS)
-                                }
-                                refreshData()
+                ).setCallback(object : RequestCallback<LoginInfo> {
+                    override fun onSuccess(param: LoginInfo) {
+                        viewModelScope.launch(Dispatchers.IO) {
+                            val id = "${currentAppKey}-${currentAccount}"
+                            loginRecordDao.cancelUsed()
+                            loginRecordDao.updateOrInsert(currentLoginRecord.run {
+                                val t = System.currentTimeMillis()
+                                if (loginRecordDao.countById(id) == 0) copy(
+                                    id = id, createTIme = t, loginTime = t, used = true
+                                ) else copy(loginTime = t, used = true)
+                            })
+                            _viewState.apply {
+                                value = value.copy(executionStatus = ExecutionStatus.SUCCESS)
                             }
+                            refreshData()
                         }
+                    }
 
-                        override fun onFailed(code: Int) = Unit
-                        override fun onException(exception: Throwable) = Unit
-                    })
+                    override fun onFailed(code: Int) = Unit
+                    override fun onException(exception: Throwable) = Unit
+                })
             }
         }
     }
@@ -266,10 +248,9 @@ internal class LoginViewModel @Inject constructor(
     /**
      * 获取账号列表
      */
-    suspend fun accounts(appKey: String) =
-        withContext(Dispatchers.IO) {
-            loginRecordDao.entriesByAppKey(appKey)
-        }
+    suspend fun accounts(appKey: String) = withContext(Dispatchers.IO) {
+        loginRecordDao.entriesByAppKey(appKey)
+    }
 
     /**
      * 切换账号
@@ -278,8 +259,7 @@ internal class LoginViewModel @Inject constructor(
     fun switchAccount(nimLoginRecord: NIMLoginRecord) {
         _viewState.apply {
             value = value.copy(
-                executionStatus = ExecutionStatus.UNKNOWN,
-                currentLoginRecord = nimLoginRecord
+                executionStatus = ExecutionStatus.UNKNOWN, currentLoginRecord = nimLoginRecord
             )
         }
         login()

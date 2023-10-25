@@ -58,6 +58,8 @@ android {
         versionCode = 15
         versionName = Dep.version
 
+        multiDexEnabled = true
+
         ndk {
             abiFilters.apply {
                 add("armeabi-v7a")

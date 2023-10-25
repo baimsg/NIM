@@ -38,7 +38,7 @@ object Dep {
         const val appcompat = "androidx.appcompat:appcompat:1.4.1"
         const val annotation = "androidx.annotation:annotation:1.3.0"
         const val recyclerview = "androidx.recyclerview:recyclerview:1.2.1"
-        const val splashscreen = "androidx.core:core-splashscreen:1.0.0-beta02"
+        const val splashscreen = "androidx.core:core-splashscreen:1.0.0"
         const val media = "androidx.media:media:1.6.0"
         const val emoji = "androidx.emoji:emoji:1.1.0"
         const val collection = "androidx.collection:collection-ktx:1.2.0"

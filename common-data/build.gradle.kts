@@ -15,6 +15,8 @@ android {
     defaultConfig {
         minSdk = Dep.minSdk
 
+        multiDexEnabled = true
+
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments += mapOf(

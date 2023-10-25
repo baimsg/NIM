@@ -9,6 +9,8 @@ android {
     compileSdk = Dep.compileSdk
 
     defaultConfig {
+        multiDexEnabled = true
+
         minSdk = Dep.minSdk
         targetSdk = Dep.targetSdk
     }
